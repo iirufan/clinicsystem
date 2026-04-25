@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MediVault | Admin Panel - Firebase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #eef2f7;
+            min-height: 100vh;
+        }
+
+        .clinic-header {
+            background: #0a2f44;
+            color: white;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn, .sync-btn {
+            background: #1e4a6e;
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.2s;
+            margin-left: 10px;
+        }
+
+        .back-btn:hover, .sync-btn:hover {
+            background: #c63d2f;
+        }
+
+        .sync-btn {
+            background: #146b3a;
+        }
+
+        .sync-btn:hover {
+            background: #0e552e;
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 28px auto;
+            padding: 0 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            padding: 28px 32px;
+            margin-bottom: 28px;
+            border: 1px solid #e2eaf0;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0a2f44;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 5px solid #0f5c7a;
+            padding-left: 18px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            font-size: 13px;
+            color: #1f5e7e;
+        }
+
+        .input-group input, .input-group select, .input-group textarea {
+            padding: 12px 14px;
+            border: 1.5px solid #e2eaf0;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: 0.2s;
+            background: white;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #0f6b8c;
+            box-shadow: 0 0 0 2px rgba(15, 107, 140, 0.1);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th, .data-table td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #e9edf2;
+            vertical-align: middle;
+        }
+
+        .data-table th {
+            background: #f4f9fe;
+            font-weight: 600;
+            color: #1f4d6e;
+        }
+
+        .btn-primary {
+            background: #0f5c7a;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #08455c;
+            transform: translateY(-1px);
+        }
+
+        .btn-sm {
+            background: #e2eaf0;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 0 4px;
+            transition: 0.2s;
+        }
+
+        .btn-danger {
+            background: #ffe9e9;
+            color: #b91c1c;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #e2eaf0;
+            padding-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 8px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 40px;
+            transition: 0.2s;
+            color: #5f7f9a;
+        }
+
+        .tab-btn.active {
+            background: #0f5c7a;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 32px;
+            padding: 28px 32px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h3 {
+            font-size: 1.5rem;
+            color: #0a2f44;
+            margin-bottom: 20px;
+        }
+
+        .modal-content .input-group {
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .message {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 28px;
+            text-align: center;
+        }
+
+        .success { background: #e0f7ef; color: #146b3a; }
+        .error { background: #ffe9e9; color: #b91c1c; }
+        .info { background: #e0f2fe; color: #075985; }
+
+        .commission-row {
+            background: #f9fbfd;
+            padding: 12px;
+            border-radius: 16px;
+            margin-bottom: 8px;
+        }
+
+        .commission-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 16px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-active { background: #e0f7ef; color: #146b3a; }
+
+        .sync-status {
+            background: #e8f0fe;
+            border-radius: 20px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #0f5c7a;
+        }
+    </style>
+</head>
+<body>
+<div class="clinic-header">
+    <div class="logo">
+        <h2>⚙️ MediVault · Admin Panel (Firebase)</h2>
+    </div>
+    <div>
+        <button class="sync-btn" id="saveToFirebaseBtn">💾 Save to Firebase</button>
+        <button class="back-btn" onclick="window.location.href='dashboard.html'">← Dashboard</button>
+    </div>
+</div>
+
+<div class="admin-container">
+    <div class="sync-status">
+        <span>🔌 Firebase Status: <strong id="firebaseStatus">Connecting...</strong></span>
+        <span>📡 Data Source: <strong id="dataSource">Firebase</strong></span>
+    </div>
+
+    <div class="tab-buttons">
+        <button class="tab-btn active" data-tab="services">📋 Services</button>
+        <button class="tab-btn" data-tab="doctors">👨‍⚕️ Doctors</button>
+        <button class="tab-btn" data-tab="insurance">🏥 Insurance Companies</button>
+        <button class="tab-btn" data-tab="discounts">🎟️ Discount Types</button>
+    </div>
+
+    <!-- Services Tab -->
+    <div id="servicesTab" class="card">
+        <div class="card-title">
+            📋 Services & Aasandha Coverage
+            <button class="btn-primary" id="addServiceBtn" style="padding: 6px 18px;">+ Add Service</button>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead><tr><th>Service</th><th>Price (MVR)</th><th>Aasandha</th><th>Aasandha Cover</th><th>Actions</th></tr></thead>
+                <tbody id="servicesList"><tr><td colspan="5" class="loading">Loading...</td></tr></tbody>
+            </table>
+        </div>
+        <div id="servicesMessage" class="message" style="display: none;"></div>
+    </div>
+
+    <!-- Doctors Tab -->
+    <div id="doctorsTab" class="card" style="display: none;">
+        <div class="card-title">
+            👨‍⚕️ Doctors & Commissions
+            <button class="btn-primary" id="addDoctorBtn" style="padding: 6px 18px;">+ Add Doctor</button>
+        </div>
+        <div class="form-row">
+            <div class="input-group">
+                <label>Select Doctor for Commission Settings</label>
+                <select id="doctorSelectForCommission"><option value="">-- Select Doctor --</option></select>
+            </div>
+        </div>
+        <div id="commissionSection" style="display: none;">
+            <h3 style="font-size: 16px;">💰 Commission by Service</h3>
+            <p style="font-size: 12px; color: #5f7f9a; margin-bottom: 12px;">Set what percentage of the service price the doctor earns as commission</p>
+            <div id="commissionList" class="commission-list"></div>
+            <button class="btn-primary" id="saveCommissionBtn" style="margin-top: 16px;">💾 Save Commissions</button>
+        </div>
+        <h3 style="font-size: 16px; margin-top: 32px;">📋 Registered Doctors</h3>
+        <div id="doctorsListContainer"><div class="loading">Loading...</div></div>
+        <div id="doctorsMessage" class="message" style="display: none;"></div>
+    </div>
+
+    <!-- Insurance Companies Tab -->
+    <div id="insuranceTab" class="card" style="display: none;">
+        <div class="card-title">
+            🏥 Insurance Companies
+            <button class="btn-primary" id="addInsuranceBtn" style="padding: 6px 18px;">+ Add Insurance</button>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead><tr><th>Company Name</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="insuranceList"><tr><td colspan="3" class="loading">Loading...</td></tr></tbody>
+            </table>
+        </div>
+        <div class="info" style="margin-top: 16px; padding: 12px; background: #e0f2fe; border-radius: 16px; font-size: 13px;">
+            💡 <strong>Note:</strong> In the memo page, staff can select any insurance company and enter the coverage percentage manually for each patient.
+        </div>
+        <div id="insuranceMessage" class="message" style="display: none;"></div>
+    </div>
+
+    <!-- Discount Types Tab -->
+    <div id="discountTab" class="card" style="display: none;">
+        <div class="card-title">
+            🎟️ Discount Types & Percentages
+            <button class="btn-primary" id="addDiscountBtn" style="padding: 6px 18px;">+ Add Discount</button>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead><tr><th>Discount Name</th><th>Percentage (%)</th><th>Description</th><th>Actions</th></tr></thead>
+                <tbody id="discountList"><tr><td colspan="4" class="loading">Loading...</td></tr></tbody>
+            </table>
+        </div>
+        <div id="discountMessage" class="message" style="display: none;"></div>
+    </div>
+</div>
+
+<!-- Add/Edit Service Modal -->
+<div id="serviceModal" class="modal">
+    <div class="modal-content">
+        <h3 id="serviceModalTitle">Add New Service</h3>
+        <div class="input-group"><label>Service Name *</label><input type="text" id="serviceName" placeholder="e.g., Consultation"></div>
+        <div class="input-group"><label>Price (MVR) *</label><input type="number" id="servicePrice" step="10" placeholder="550"></div>
+        <div class="input-group"><label><input type="checkbox" id="serviceAasandhaCovered"> Aasandha Covered</label></div>
+        <div class="input-group"><label>Aasandha Cover Amount (MVR)</label><input type="number" id="serviceAasandhaAmount" step="10" placeholder="200"></div>
+        <div class="modal-buttons"><button class="btn-primary" id="saveServiceBtn">Save</button><button class="btn-danger" id="cancelServiceBtn">Cancel</button></div>
+    </div>
+</div>
+
+<!-- Add/Edit Doctor Modal -->
+<div id="doctorModal" class="modal">
+    <div class="modal-content">
+        <h3 id="doctorModalTitle">Add New Doctor</h3>
+        <div class="input-group"><label>Doctor Name *</label><input type="text" id="doctorName" placeholder="e.g., Dr. Abdulla Irufan"></div>
+        <div class="input-group"><label>Speciality *</label><input type="text" id="doctorSpeciality" placeholder="e.g., Cardiology"></div>
+        <div class="input-group"><label>Base Commission (%) *</label><input type="number" id="doctorCommission" step="1" min="0" max="100" placeholder="15"></div>
+        <div class="modal-buttons"><button class="btn-primary" id="saveDoctorBtn">Save</button><button class="btn-danger" id="cancelDoctorBtn">Cancel</button></div>
+    </div>
+</div>
+
+<!-- Add/Edit Insurance Modal -->
+<div id="insuranceModal" class="modal">
+    <div class="modal-content">
+        <h3 id="insuranceModalTitle">Add New Insurance</h3>
+        <div class="input-group"><label>Company Name *</label><input type="text" id="insuranceName" placeholder="e.g., Allied Insurance"></div>
+        <div class="modal-buttons"><button class="btn-primary" id="saveInsuranceBtn">Save</button><button class="btn-danger" id="cancelInsuranceBtn">Cancel</button></div>
+    </div>
+</div>
+
+<!-- Add/Edit Discount Modal -->
+<div id="discountModal" class="modal">
+    <div class="modal-content">
+        <h3 id="discountModalTitle">Add New Discount</h3>
+        <div class="input-group"><label>Discount Name *</label><input type="text" id="discountName" placeholder="e.g., Special offer"></div>
+        <div class="input-group"><label>Percentage (%) *</label><input type="number" id="discountPercent" step="1" min="0" max="100" placeholder="10"></div>
+        <div class="input-group"><label>Description</label><input type="text" id="discountDesc" placeholder="Optional description"></div>
+        <div class="modal-buttons"><button class="btn-primary" id="saveDiscountBtn">Save</button><button class="btn-danger" id="cancelDiscountBtn">Cancel</button></div>
+    </div>
+</div>
+
+<script type="module">
+    import { db } from './firebase-config.js';
+    import { doc, setDoc, getDoc, collection, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    
+    // Collection references
+    const SERVICES_COLLECTION = "services";
+    const DOCTORS_COLLECTION = "doctors";
+    const INSURANCE_COLLECTION = "insurance";
+    const DISCOUNTS_COLLECTION = "discounts";
+    const COMMISSIONS_COLLECTION = "doctorCommissions";
+    
+    // Data stores
+    let services = [];
+    let doctors = [];
+    let insuranceCompanies = [];
+    let discountTypes = [];
+    let doctorCommissions = [];
+    
+    let currentEditId = null;
+    let currentEditType = null;
+    
+    async function loadAllFromFirebase() {
+        try {
+            document.getElementById('firebaseStatus').innerHTML = 'Loading...';
+            
+            // Load Services
+            const servicesSnapshot = await getDocs(collection(db, SERVICES_COLLECTION));
+            services = servicesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            // Load Doctors
+            const doctorsSnapshot = await getDocs(collection(db, DOCTORS_COLLECTION));
+            doctors = doctorsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            // Load Insurance
+            const insuranceSnapshot = await getDocs(collection(db, INSURANCE_COLLECTION));
+            insuranceCompanies = insuranceSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            // Load Discounts
+            const discountsSnapshot = await getDocs(collection(db, DISCOUNTS_COLLECTION));
+            discountTypes = discountsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            // Load Commissions
+            const commissionsSnapshot = await getDocs(collection(db, COMMISSIONS_COLLECTION));
+            doctorCommissions = commissionsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            document.getElementById('firebaseStatus').innerHTML = 'Connected ✓';
+            document.getElementById('firebaseStatus').style.color = '#146b3a';
+            
+            renderAll();
+        } catch (error) {
+            console.error("Error loading from Firebase:", error);
+            document.getElementById('firebaseStatus').innerHTML = 'Error';
+            document.getElementById('firebaseStatus').style.color = '#b91c1c';
+            showMessage('servicesMessage', 'Failed to load data from Firebase. Check console for details.', 'error');
+        }
+    }
+    
+    async function saveToFirebase() {
+        try {
+            // Save Services
+            for (const service of services) {
+                await setDoc(doc(db, SERVICES_COLLECTION, service.id), service);
+            }
+            
+            // Save Doctors
+            for (const doctor of doctors) {
+                await setDoc(doc(db, DOCTORS_COLLECTION, doctor.id), doctor);
+            }
+            
+            // Save Insurance
+            for (const insurance of insuranceCompanies) {
+                await setDoc(doc(db, INSURANCE_COLLECTION, insurance.id), insurance);
+            }
+            
+            // Save Discounts
+            for (const discount of discountTypes) {
+                await setDoc(doc(db, DISCOUNTS_COLLECTION, discount.id), discount);
+            }
+            
+            // Save Commissions
+            for (const commission of doctorCommissions) {
+                await setDoc(doc(db, COMMISSIONS_COLLECTION, commission.id), commission);
+            }
+            
+            showMessage('servicesMessage', '✅ All data saved to Firebase successfully!', 'success');
+        } catch (error) {
+            console.error("Error saving to Firebase:", error);
+            showMessage('servicesMessage', '❌ Failed to save to Firebase: ' + error.message, 'error');
+        }
+    }
+    
+    function renderAll() {
+        renderServicesList();
+        renderDoctorsList();
+        renderInsuranceList();
+        renderDiscountList();
+        populateDoctorSelect();
+    }
+    
+    function renderServicesList() {
+        const tbody = document.getElementById('servicesList');
+        if (!tbody) return;
+        
+        if (services.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:40px;">No services found. Click "Add Service" to create one.</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = services.map(s => `
+            <tr>
+                <td>${escapeHtml(s.name)}</td>
+                <td>MVR ${s.price}</td>
+                <td>${s.aasandhaCovered ? '✅ Yes' : '❌ No'}</td>
+                <td>${s.aasandhaCovered ? `MVR ${s.aasandhaCoverAmount}` : '—'}</td>
+                <td><button class="btn-sm" onclick="editService('${s.id}')">✏️ Edit</button><button class="btn-danger" onclick="deleteService('${s.id}')">Delete</button></td>
+            </tr>
+        `).join('');
+    }
+    
+    function renderDoctorsList() {
+        const container = document.getElementById('doctorsListContainer');
+        if (!container) return;
+        
+        if (doctors.length === 0) {
+            container.innerHTML = '<div class="loading">No doctors found. Click "Add Doctor" to create one.</div>';
+            return;
+        }
+        
+        container.innerHTML = doctors.map(doc => `
+            <div class="commission-row" style="display: flex; justify-content: space-between; align-items: center;">
+                <div><strong>${escapeHtml(doc.name)}</strong><br><span style="font-size: 12px;">${doc.speciality} | Base: ${doc.baseCommission}%</span></div>
+                <div><button class="btn-sm" onclick="editDoctor('${doc.id}')">✏️ Edit</button><button class="btn-danger" onclick="deleteDoctor('${doc.id}')">Delete</button></div>
+            </div>
+        `).join('');
+    }
+    
+    function renderInsuranceList() {
+        const tbody = document.getElementById('insuranceList');
+        if (!tbody) return;
+        
+        if (insuranceCompanies.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:40px;">No insurance companies found.</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = insuranceCompanies.map(ins => `
+            <tr>
+                <td>${escapeHtml(ins.name)}</td>
+                <td><span class="badge badge-active">Active</span></td>
+                <td><button class="btn-sm" onclick="editInsurance('${ins.id}')">✏️ Edit</button><button class="btn-danger" onclick="deleteInsurance('${ins.id}')">Delete</button></td>
+            </table>
+        `).join('');
+    }
+    
+    function renderDiscountList() {
+        const tbody = document.getElementById('discountList');
+        if (!tbody) return;
+        
+        if (discountTypes.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:40px;">No discount types found.</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = discountTypes.map(disc => `
+            <tr>
+                <td>${escapeHtml(disc.name)}</td>
+                <td>${disc.percent}%</td>
+                <td>${escapeHtml(disc.description || '')}</td>
+                <td><button class="btn-sm" onclick="editDiscount('${disc.id}')">✏️ Edit</button><button class="btn-danger" onclick="deleteDiscount('${disc.id}')">Delete</button></td>
+            </tr>
+        `).join('');
+    }
+    
+    function populateDoctorSelect() {
+        const select = document.getElementById('doctorSelectForCommission');
+        if (!select) return;
+        select.innerHTML = '<option value="">-- Select Doctor --</option>';
+        doctors.forEach(doc => {
+            select.appendChild(new Option(`${doc.name} (${doc.speciality})`, doc.id));
+        });
+    }
+    
+    function renderCommissionList() {
+        const doctorId = document.getElementById('doctorSelectForCommission').value;
+        const container = document.getElementById('commissionList');
+        if (!doctorId) { 
+            container.innerHTML = '<p style="color:#8ba0b0; text-align:center; padding:20px;">Select a doctor to configure commissions</p>'; 
+            return; 
+        }
+        
+        const doctor = doctors.find(d => d.id === doctorId);
+        let commissionMap = {};
+        doctorCommissions.filter(c => c.doctorId === doctorId).forEach(c => commissionMap[c.serviceId] = c.commissionPercent);
+        
+        container.innerHTML = `
+            <div class="commission-row" style="background:#e6f4ea;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span><strong>Base Commission (All Services)</strong></span>
+                    <input type="number" id="baseCommInput" value="${doctor.baseCommission}" step="1" min="0" max="100" style="width:80px; border-radius:20px; padding:4px 8px;">
+                    <span>%</span>
+                </div>
+                <p style="font-size:11px; margin-top:6px;">Base rate applies when no service-specific commission is set</p>
+            </div>
+            <h4 style="margin:16px 0 12px;">Service-Specific Commissions</h4>
+        `;
+        
+        services.forEach(service => {
+            const currentVal = commissionMap[service.id] !== undefined ? commissionMap[service.id] : '';
+            container.innerHTML += `
+                <div class="commission-row">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                        <div style="flex:2;"><strong>${escapeHtml(service.name)}</strong> <span style="font-size:11px;">(MVR ${service.price})</span></div>
+                        <div><input type="number" class="service-comm-input" data-service="${service.id}" value="${currentVal}" step="1" min="0" max="100" style="width:70px; border-radius:20px; padding:4px 8px;"> % 
+                        <button class="btn-sm clear-comm" data-service="${service.id}">Clear</button></div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        document.querySelectorAll('.service-comm-input').forEach(inp => {
+            inp.onchange = async () => {
+                const serviceId = inp.dataset.service;
+                const value = parseFloat(inp.value);
+                const existingIndex = doctorCommissions.findIndex(c => c.doctorId === doctorId && c.serviceId === serviceId);
+                
+                if (!isNaN(value) && value >= 0 && value <= 100) {
+                    if (existingIndex >= 0) {
+                        doctorCommissions[existingIndex].commissionPercent = value;
+                    } else if (value > 0) {
+                        const newId = `comm_${Date.now()}_${Math.random()}`;
+                        doctorCommissions.push({ id: newId, doctorId, serviceId, commissionPercent: value });
+                    }
+                } else if (inp.value === '' && existingIndex >= 0) {
+                    doctorCommissions.splice(existingIndex, 1);
+                }
+                await saveToFirebase();
+            };
+        });
+        
+        document.querySelectorAll('.clear-comm').forEach(btn => {
+            btn.onclick = async () => {
+                const serviceId = btn.dataset.service;
+                doctorCommissions = doctorCommissions.filter(c => !(c.doctorId === doctorId && c.serviceId === serviceId));
+                renderCommissionList();
+                await saveToFirebase();
+                showMessage('doctorsMessage', 'Commission cleared for this service', 'info');
+            };
+        });
+        
+        const baseInput = document.getElementById('baseCommInput');
+        if (baseInput) {
+            baseInput.onchange = async () => {
+                const doctor = doctors.find(d => d.id === doctorId);
+                if (doctor) {
+                    doctor.baseCommission = parseFloat(baseInput.value) || 0;
+                    renderDoctorsList();
+                    await saveToFirebase();
+                    showMessage('doctorsMessage', 'Base commission updated', 'success');
+                }
+            };
+        }
+    }
+    
+    // Service CRUD
+    window.editService = (id) => {
+        const service = services.find(s => s.id === id);
+        if (service) {
+            currentEditId = id;
+            currentEditType = 'service';
+            document.getElementById('serviceModalTitle').innerText = 'Edit Service';
+            document.getElementById('serviceName').value = service.name;
+            document.getElementById('servicePrice').value = service.price;
+            document.getElementById('serviceAasandhaCovered').checked = service.aasandhaCovered;
+            document.getElementById('serviceAasandhaAmount').value = service.aasandhaCoverAmount;
+            document.getElementById('serviceAasandhaAmount').disabled = !service.aasandhaCovered;
+            document.getElementById('serviceModal').style.display = 'flex';
+        }
+    };
+    
+    window.deleteService = async (id) => {
+        if (confirm('Delete this service? This will also remove service-specific commissions for this service.')) {
+            await deleteDoc(doc(db, SERVICES_COLLECTION, id));
+            services = services.filter(s => s.id !== id);
+            doctorCommissions = doctorCommissions.filter(c => c.serviceId !== id);
+            renderServicesList();
+            if (document.getElementById('doctorSelectForCommission').value) renderCommissionList();
+            showMessage('servicesMessage', 'Service deleted', 'info');
+        }
+    };
+    
+    function addNewService() {
+        currentEditId = null;
+        currentEditType = 'service';
+        document.getElementById('serviceModalTitle').innerText = 'Add New Service';
+        document.getElementById('serviceName').value = '';
+        document.getElementById('servicePrice').value = '';
+        document.getElementById('serviceAasandhaCovered').checked = false;
+        document.getElementById('serviceAasandhaAmount').value = '';
+        document.getElementById('serviceAasandhaAmount').disabled = false;
+        document.getElementById('serviceModal').style.display = 'flex';
+    }
+    
+    async function saveService() {
+        const name = document.getElementById('serviceName').value.trim();
+        const price = parseFloat(document.getElementById('servicePrice').value);
+        const aasandhaCovered = document.getElementById('serviceAasandhaCovered').checked;
+        const aasandhaCoverAmount = parseFloat(document.getElementById('serviceAasandhaAmount').value) || 0;
+        
+        if (!name || isNaN(price) || price <= 0) {
+            showMessage('servicesMessage', 'Please enter valid service name and price', 'error');
+            return;
+        }
+        
+        if (currentEditId) {
+            // Update existing
+            const index = services.findIndex(s => s.id === currentEditId);
+            if (index !== -1) {
+                services[index] = { ...services[index], name, price, aasandhaCovered, aasandhaCoverAmount };
+                await setDoc(doc(db, SERVICES_COLLECTION, currentEditId), services[index]);
+            }
+        } else {
+            // Create new
+            const newId = `S${Date.now()}`;
+            const newService = { id: newId, name, price, aasandhaCovered, aasandhaCoverAmount };
+            services.push(newService);
+            await setDoc(doc(db, SERVICES_COLLECTION, newId), newService);
+        }
+        
+        renderServicesList();
+        closeModal('serviceModal');
+        showMessage('servicesMessage', currentEditId ? 'Service updated' : 'Service added', 'success');
+        if (document.getElementById('doctorSelectForCommission').value) renderCommissionList();
+    }
+    
+    // Doctor CRUD
+    window.editDoctor = (id) => {
+        const doctor = doctors.find(d => d.id === id);
+        if (doctor) {
+            currentEditId = id;
+            currentEditType = 'doctor';
+            document.getElementById('doctorModalTitle').innerText = 'Edit Doctor';
+            document.getElementById('doctorName').value = doctor.name;
+            document.getElementById('doctorSpeciality').value = doctor.speciality;
+            document.getElementById('doctorCommission').value = doctor.baseCommission;
+            document.getElementById('doctorModal').style.display = 'flex';
+        }
+    };
+    
+    window.deleteDoctor = async (id) => {
+        if (confirm('Delete this doctor? Commission settings will also be removed.')) {
+            await deleteDoc(doc(db, DOCTORS_COLLECTION, id));
+            doctors = doctors.filter(d => d.id !== id);
+            doctorCommissions = doctorCommissions.filter(c => c.doctorId !== id);
+            renderDoctorsList();
+            populateDoctorSelect();
+            if (document.getElementById('commissionSection').style.display !== 'none') {
+                document.getElementById('commissionSection').style.display = 'none';
+            }
+            showMessage('doctorsMessage', 'Doctor deleted', 'info');
+        }
+    };
+    
+    function addNewDoctor() {
+        currentEditId = null;
+        currentEditType = 'doctor';
+        document.getElementById('doctorModalTitle').innerText = 'Add New Doctor';
+        document.getElementById('doctorName').value = '';
+        document.getElementById('doctorSpeciality').value = '';
+        document.getElementById('doctorCommission').value = '';
+        document.getElementById('doctorModal').style.display = 'flex';
+    }
+    
+    async function saveDoctor() {
+        const name = document.getElementById('doctorName').value.trim();
+        const speciality = document.getElementById('doctorSpeciality').value.trim();
+        const baseCommission = parseFloat(document.getElementById('doctorCommission').value);
+        
+        if (!name || !speciality || isNaN(baseCommission)) {
+            showMessage('doctorsMessage', 'Please fill all fields', 'error');
+            return;
+        }
+        
+        if (currentEditId) {
+            const index = doctors.findIndex(d => d.id === currentEditId);
+            if (index !== -1) {
+                doctors[index] = { ...doctors[index], name, speciality, baseCommission };
+                await setDoc(doc(db, DOCTORS_COLLECTION, currentEditId), doctors[index]);
+            }
+        } else {
+            const newId = `D${Date.now()}`;
+            const newDoctor = { id: newId, name, speciality, baseCommission };
+            doctors.push(newDoctor);
+            await setDoc(doc(db, DOCTORS_COLLECTION, newId), newDoctor);
+        }
+        
+        renderDoctorsList();
+        populateDoctorSelect();
+        closeModal('doctorModal');
+        showMessage('doctorsMessage', currentEditId ? 'Doctor updated' : 'Doctor added', 'success');
+    }
+    
+    // Insurance CRUD
+    window.editInsurance = (id) => {
+        const insurance = insuranceCompanies.find(i => i.id === id);
+        if (insurance) {
+            currentEditId = id;
+            currentEditType = 'insurance';
+            document.getElementById('insuranceModalTitle').innerText = 'Edit Insurance';
+            document.getElementById('insuranceName').value = insurance.name;
+            document.getElementById('insuranceModal').style.display = 'flex';
+        }
+    };
+    
+    window.deleteInsurance = async (id) => {
+        if (confirm('Delete this insurance company?')) {
+            await deleteDoc(doc(db, INSURANCE_COLLECTION, id));
+            insuranceCompanies = insuranceCompanies.filter(i => i.id !== id);
+            renderInsuranceList();
+            showMessage('insuranceMessage', 'Insurance deleted', 'info');
+        }
+    };
+    
+    function addNewInsurance() {
+        currentEditId = null;
+        currentEditType = 'insurance';
+        document.getElementById('insuranceModalTitle').innerText = 'Add New Insurance';
+        document.getElementById('insuranceName').value = '';
+        document.getElementById('insuranceModal').style.display = 'flex';
+    }
+    
+    async function saveInsurance() {
+        const name = document.getElementById('insuranceName').value.trim();
+        if (!name) {
+            showMessage('insuranceMessage', 'Please enter insurance company name', 'error');
+            return;
+        }
+        
+        if (currentEditId) {
+            const index = insuranceCompanies.findIndex(i => i.id === currentEditId);
+            if (index !== -1) {
+                insuranceCompanies[index] = { ...insuranceCompanies[index], name };
+                await setDoc(doc(db, INSURANCE_COLLECTION, currentEditId), insuranceCompanies[index]);
+            }
+        } else {
+            const newId = `INS${Date.now()}`;
+            const newInsurance = { id: newId, name };
+            insuranceCompanies.push(newInsurance);
+            await setDoc(doc(db, INSURANCE_COLLECTION, newId), newInsurance);
+        }
+        
+        renderInsuranceList();
+        closeModal('insuranceModal');
+        showMessage('insuranceMessage', currentEditId ? 'Insurance updated' : 'Insurance added', 'success');
+    }
+    
+    // Discount CRUD
+    window.editDiscount = (id) => {
+        const discount = discountTypes.find(d => d.id === id);
+        if (discount) {
+            currentEditId = id;
+            currentEditType = 'discount';
+            document.getElementById('discountModalTitle').innerText = 'Edit Discount';
+            document.getElementById('discountName').value = discount.name;
+            document.getElementById('discountPercent').value = discount.percent;
+            document.getElementById('discountDesc').value = discount.description || '';
+            document.getElementById('discountModal').style.display = 'flex';
+        }
+    };
+    
+    window.deleteDiscount = async (id) => {
+        if (confirm('Delete this discount type?')) {
+            await deleteDoc(doc(db, DISCOUNTS_COLLECTION, id));
+            discountTypes = discountTypes.filter(d => d.id !== id);
+            renderDiscountList();
+            showMessage('discountMessage', 'Discount deleted', 'info');
+        }
+    };
+    
+    function addNewDiscount() {
+        currentEditId = null;
+        currentEditType = 'discount';
+        document.getElementById('discountModalTitle').innerText = 'Add New Discount';
+        document.getElementById('discountName').value = '';
+        document.getElementById('discountPercent').value = '';
+        document.getElementById('discountDesc').value = '';
+        document.getElementById('discountModal').style.display = 'flex';
+    }
+    
+    async function saveDiscount() {
+        const name = document.getElementById('discountName').value.trim();
+        const percent = parseFloat(document.getElementById('discountPercent').value);
+        const description = document.getElementById('discountDesc').value.trim();
+        
+        if (!name || isNaN(percent) || percent < 0 || percent > 100) {
+            showMessage('discountMessage', 'Please enter valid discount name and percentage (0-100)', 'error');
+            return;
+        }
+        
+        if (currentEditId) {
+            const index = discountTypes.findIndex(d => d.id === currentEditId);
+            if (index !== -1) {
+                discountTypes[index] = { ...discountTypes[index], name, percent, description };
+                await setDoc(doc(db, DISCOUNTS_COLLECTION, currentEditId), discountTypes[index]);
+            }
+        } else {
+            const newId = `DISC${Date.now()}`;
+            const newDiscount = { id: newId, name, percent, description };
+            discountTypes.push(newDiscount);
+            await setDoc(doc(db, DISCOUNTS_COLLECTION, newId), newDiscount);
+        }
+        
+        renderDiscountList();
+        closeModal('discountModal');
+        showMessage('discountMessage', currentEditId ? 'Discount updated' : 'Discount added', 'success');
+    }
+    
+    async function saveCommissions() {
+        await saveToFirebase();
+        showMessage('doctorsMessage', 'Commissions saved to Firebase!', 'success');
+    }
+    
+    function closeModal(modalId) { 
+        document.getElementById(modalId).style.display = 'none'; 
+        currentEditId = null;
+        currentEditType = null;
+    }
+    
+    function showMessage(elementId, msg, type) { 
+        const el = document.getElementById(elementId); 
+        if(el){ 
+            el.innerText = msg; 
+            el.className = `message ${type}`; 
+            el.style.display = 'block'; 
+            setTimeout(() => el.style.display = 'none', 3000); 
+        } 
+    }
+    
+    function escapeHtml(str) { 
+        if(!str) return ''; 
+        return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); 
+    }
+    
+    function switchTab(tabName) {
+        document.getElementById('servicesTab').style.display = tabName === 'services' ? 'block' : 'none';
+        document.getElementById('doctorsTab').style.display = tabName === 'doctors' ? 'block' : 'none';
+        document.getElementById('insuranceTab').style.display = tabName === 'insurance' ? 'block' : 'none';
+        document.getElementById('discountTab').style.display = tabName === 'discounts' ? 'block' : 'none';
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.tab-btn[data-tab="${tabName}"]`).classList.add('active');
+        if (tabName === 'doctors') populateDoctorSelect();
+    }
+    
+    // Event Listeners
+    document.getElementById('saveToFirebaseBtn').onclick = saveToFirebase;
+    document.getElementById('addServiceBtn').onclick = addNewService;
+    document.getElementById('addDoctorBtn').onclick = addNewDoctor;
+    document.getElementById('addInsuranceBtn').onclick = addNewInsurance;
+    document.getElementById('addDiscountBtn').onclick = addNewDiscount;
+    document.getElementById('saveCommissionBtn').onclick = saveCommissions;
+    document.getElementById('doctorSelectForCommission').onchange = () => { 
+        if (document.getElementById('doctorSelectForCommission').value) {
+            document.getElementById('commissionSection').style.display = 'block';
+            renderCommissionList();
+        } else {
+            document.getElementById('commissionSection').style.display = 'none';
+        }
+    };
+    
+    document.getElementById('saveServiceBtn').onclick = saveService;
+    document.getElementById('cancelServiceBtn').onclick = () => closeModal('serviceModal');
+    document.getElementById('saveDoctorBtn').onclick = saveDoctor;
+    document.getElementById('cancelDoctorBtn').onclick = () => closeModal('doctorModal');
+    document.getElementById('saveInsuranceBtn').onclick = saveInsurance;
+    document.getElementById('cancelInsuranceBtn').onclick = () => closeModal('insuranceModal');
+    document.getElementById('saveDiscountBtn').onclick = saveDiscount;
+    document.getElementById('cancelDiscountBtn').onclick = () => closeModal('discountModal');
+    
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.onclick = () => switchTab(btn.dataset.tab));
+    
+    // Make functions global for onclick handlers
+    window.editService = editService;
+    window.editDoctor = editDoctor;
+    window.editInsurance = editInsurance;
+    window.editDiscount = editDiscount;
+    window.deleteService = deleteService;
+    window.deleteDoctor = deleteDoctor;
+    window.deleteInsurance = deleteInsurance;
+    window.deleteDiscount = deleteDiscount;
+    
+    // Initial load
+    loadAllFromFirebase();
+</script>
+</body>
+</html>
