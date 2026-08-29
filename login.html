@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Clinic Login</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-family:
+        Inter,
+        Segoe UI,
+        Arial,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dbeafe,
+            #f8fafc,
+            #dcfce7
+        );
+}
+
+.wrapper{
+    width:min(450px,92%);
+}
+
+.card{
+    background:white;
+
+    border-radius:22px;
+
+    padding:32px;
+
+    box-shadow:
+        0 20px 60px
+        rgba(15,23,42,.12);
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.icon{
+    width:68px;
+    height:68px;
+
+    margin:auto;
+
+    border-radius:20px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:31px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0284c7,
+            #2563eb
+        );
+}
+
+h1{
+    text-align:center;
+    margin:15px 0 5px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#64748b;
+    font-size:14px;
+    margin-bottom:25px;
+}
+
+.tabs{
+    display:flex;
+
+    background:#f1f5f9;
+
+    padding:5px;
+
+    border-radius:12px;
+
+    margin-bottom:25px;
+}
+
+.tab{
+    flex:1;
+
+    border:0;
+
+    padding:11px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+
+    background:transparent;
+
+    font-weight:600;
+
+    color:#64748b;
+}
+
+.tab.active{
+    background:white;
+
+    color:#0284c7;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,.06);
+}
+
+.form{
+    display:none;
+}
+
+.form.active{
+    display:block;
+}
+
+label{
+    display:block;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    margin-bottom:7px;
+}
+
+input{
+    width:100%;
+
+    padding:13px 14px;
+
+    border:
+        1px solid #cbd5e1;
+
+    border-radius:11px;
+
+    font-size:15px;
+
+    margin-bottom:15px;
+
+    outline:none;
+}
+
+input:focus{
+    border-color:#0284c7;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(2,132,199,.1);
+}
+
+.action{
+    width:100%;
+
+    border:0;
+
+    border-radius:11px;
+
+    padding:14px;
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0284c7,
+            #2563eb
+        );
+}
+
+.status{
+    display:none;
+
+    margin-top:18px;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    font-size:13px;
+}
+
+.success{
+    display:block;
+
+    background:#ecfdf5;
+
+    color:#166534;
+}
+
+.error{
+    display:block;
+
+    background:#fef2f2;
+
+    color:#991b1b;
+}
+
+.pending{
+    display:block;
+
+    background:#fffbeb;
+
+    color:#92400e;
+}
+
+.logout-device{
+    margin-top:18px;
+
+    text-align:center;
+
+    font-size:12px;
+
+    color:#64748b;
+
+    cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="card">
+
+    <div class="logo">
+
+        <div class="icon">
+            +
+        </div>
+
+    </div>
+
+
+    <h1>
+        Clinic
+    </h1>
+
+    <div class="subtitle">
+        Clinic Management System
+    </div>
+
+
+    <div class="tabs">
+
+        <button
+            class="tab active"
+            id="loginTab"
+            onclick="showLogin()"
+        >
+            Login
+        </button>
+
+        <button
+            class="tab"
+            id="registerTab"
+            onclick="showRegister()"
+        >
+            Create User
+        </button>
+
+    </div>
+
+
+    <!-- LOGIN -->
+
+    <div
+        id="loginForm"
+        class="form active"
+    >
+
+        <label>
+            Username
+        </label>
+
+        <input
+            id="loginUsername"
+            autocomplete="username"
+            placeholder="Username"
+        >
+
+
+        <label>
+            Password
+        </label>
+
+        <input
+            id="loginPassword"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Password"
+        >
+
+
+        <button
+            class="action"
+            onclick="login()"
+        >
+            Login
+        </button>
+
+    </div>
+
+
+    <!-- REGISTER -->
+
+    <div
+        id="registerForm"
+        class="form"
+    >
+
+        <label>
+            Full Name
+        </label>
+
+        <input
+            id="regFullName"
+            placeholder="Full name"
+        >
+
+
+        <label>
+            Username
+        </label>
+
+        <input
+            id="regUsername"
+            placeholder="Choose username"
+        >
+
+
+        <label>
+            Password
+        </label>
+
+        <input
+            id="regPassword"
+            type="password"
+            placeholder="Create password"
+        >
+
+
+        <label>
+            Confirm Password
+        </label>
+
+        <input
+            id="regConfirm"
+            type="password"
+            placeholder="Confirm password"
+        >
+
+
+        <button
+            class="action"
+            onclick="registerUser()"
+        >
+            Create User
+        </button>
+
+    </div>
+
+
+    <div
+        id="status"
+        class="status"
+    ></div>
+
+
+    <div
+        class="logout-device"
+        onclick="removeAuthorization()"
+    >
+        Remove device authorization
+    </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const AUTH_KEY =
+    'clinic_system_authorized';
+
+
+/*
+Require authorized device.
+*/
+if (
+    localStorage.getItem(
+        AUTH_KEY
+    ) !== 'true'
+) {
+
+    window.location.href =
+        'system.html';
+}
+
+
+function setStatus(
+    message,
+    type
+) {
+
+    const box =
+        document.getElementById(
+            'status'
+        );
+
+    box.textContent =
+        message;
+
+    box.className =
+        'status ' + type;
+}
+
+
+function clearStatus() {
+
+    const box =
+        document.getElementById(
+            'status'
+        );
+
+    box.className =
+        'status';
+
+    box.textContent =
+        '';
+}
+
+
+function showLogin() {
+
+    clearStatus();
+
+    loginForm.classList.add(
+        'active'
+    );
+
+    registerForm.classList.remove(
+        'active'
+    );
+
+    loginTab.classList.add(
+        'active'
+    );
+
+    registerTab.classList.remove(
+        'active'
+    );
+}
+
+
+function showRegister() {
+
+    clearStatus();
+
+    registerForm.classList.add(
+        'active'
+    );
+
+    loginForm.classList.remove(
+        'active'
+    );
+
+    registerTab.classList.add(
+        'active'
+    );
+
+    loginTab.classList.remove(
+        'active'
+    );
+}
+
+
+async function registerUser() {
+
+    const fullName =
+        regFullName.value.trim();
+
+    const username =
+        regUsername.value
+            .trim()
+            .toLowerCase();
+
+    const password =
+        regPassword.value;
+
+    const confirm =
+        regConfirm.value;
+
+
+    if (
+        !fullName ||
+        !username ||
+        !password
+    ) {
+
+        setStatus(
+            'Complete all fields.',
+            'error'
+        );
+
+        return;
+    }
+
+
+    if (
+        username.length < 3
+    ) {
+
+        setStatus(
+            'Username must be at least 3 characters.',
+            'error'
+        );
+
+        return;
+    }
+
+
+    if (
+        password.length < 6
+    ) {
+
+        setStatus(
+            'Password must be at least 6 characters.',
+            'error'
+        );
+
+        return;
+    }
+
+
+    if (
+        password !== confirm
+    ) {
+
+        setStatus(
+            'Passwords do not match.',
+            'error'
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                '/api/register-user',
+                {
+                    method:'POST',
+
+                    headers:{
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body:
+                        JSON.stringify({
+                            fullName,
+                            username,
+                            password
+                        })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        setStatus(
+            'User created. Waiting for administrator approval.',
+            'success'
+        );
+
+
+        regFullName.value = '';
+        regUsername.value = '';
+        regPassword.value = '';
+        regConfirm.value = '';
+
+
+    } catch(error) {
+
+        setStatus(
+            error.message ||
+            'Unable to create user.',
+            'error'
+        );
+    }
+}
+
+
+
+async function login() {
+
+    const username =
+        loginUsername.value
+            .trim()
+            .toLowerCase();
+
+    const password =
+        loginPassword.value;
+
+
+    if (
+        !username ||
+        !password
+    ) {
+
+        setStatus(
+            'Enter username and password.',
+            'error'
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                '/api/login',
+                {
+                    method:'POST',
+
+                    headers:{
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body:
+                        JSON.stringify({
+                            username,
+                            password
+                        })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            if (
+                data.status ===
+                'pending'
+            ) {
+
+                setStatus(
+                    'Your account is waiting for administrator approval.',
+                    'pending'
+                );
+
+                return;
+            }
+
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        /*
+        Temporary session information.
+        Later we will replace this
+        with secure server sessions.
+        */
+
+        sessionStorage.setItem(
+            'clinic_user',
+            JSON.stringify(
+                data.user
+            )
+        );
+
+
+        window.location.href =
+            'dashboard.html';
+
+
+    } catch(error) {
+
+        setStatus(
+            error.message ||
+            'Login failed.',
+            'error'
+        );
+    }
+}
+
+
+function removeAuthorization() {
+
+    localStorage.removeItem(
+        AUTH_KEY
+    );
+
+    window.location.href =
+        'system.html';
+}
+
+</script>
+
+</body>
+</html>
