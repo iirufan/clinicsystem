@@ -1,0 +1,5162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Create Memo | Clinic</title>
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --blue:#0b7ee8;
+    --blue-dark:#075db5;
+    --green:#12aa78;
+    --purple:#7654e8;
+    --orange:#f3a13d;
+    --red:#e95067;
+    --cyan:#13a8bb;
+
+    --text:#13213c;
+    --muted:#728198;
+    --border:#dfe8f1;
+
+    --bg:#f4f8fc;
+    --white:#fff;
+
+    --shadow:
+        0 9px 28px
+        rgba(30,65,105,.08);
+}
+
+body{
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #edf8ff,
+            #f8fbff,
+            #effcf8
+        );
+
+    color:var(--text);
+
+    min-height:100vh;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header{
+    min-height:72px;
+
+    background:white;
+
+    border-bottom:
+        1px solid var(--border);
+
+    padding:0 24px;
+
+    display:flex;
+    align-items:center;
+
+    position:sticky;
+    top:0;
+
+    z-index:100;
+
+    box-shadow:
+        0 4px 15px
+        rgba(30,60,100,.04);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    font-size:18px;
+    font-weight:800;
+}
+
+.brand-icon{
+    width:45px;
+    height:45px;
+
+    border-radius:14px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1685e8,
+            #10ad87
+        );
+
+    font-size:21px;
+}
+
+.header-actions{
+    margin-left:auto;
+
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.header-btn{
+    border:0;
+
+    border-radius:10px;
+
+    padding:10px 14px;
+
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+.dashboard-btn{
+    background:#e9f4ff;
+    color:var(--blue);
+}
+
+.logout-btn{
+    background:#fff0f2;
+    color:var(--red);
+}
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.container{
+    max-width:1450px;
+
+    margin:25px auto;
+
+    padding:0 18px 50px;
+}
+
+.page-head{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:flex-start;
+
+    gap:15px;
+
+    margin-bottom:20px;
+}
+
+.page-head h1{
+    font-size:27px;
+}
+
+.page-head p{
+    margin-top:5px;
+
+    font-size:12px;
+
+    color:var(--muted);
+}
+
+.receipt-preview{
+    padding:10px 15px;
+
+    background:white;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:12px;
+
+    font-size:11px;
+
+    box-shadow:var(--shadow);
+}
+
+.receipt-preview strong{
+    color:var(--blue);
+}
+
+/* =====================================================
+   SOURCE
+===================================================== */
+
+.source-mode{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:11px;
+
+    margin-bottom:18px;
+}
+
+.source-btn{
+    border:
+        1px solid var(--border);
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:14px;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    text-align:left;
+
+    box-shadow:var(--shadow);
+}
+
+.source-btn.active{
+    border-color:var(--blue);
+
+    background:#eff8ff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(11,126,232,.08);
+}
+
+.source-icon{
+    width:44px;
+    height:44px;
+
+    border-radius:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#e8f4ff;
+
+    color:var(--blue);
+}
+
+.source-title{
+    font-size:13px;
+    font-weight:800;
+}
+
+.source-sub{
+    margin-top:3px;
+
+    color:var(--muted);
+
+    font-size:10px;
+}
+
+/* =====================================================
+   LAYOUT
+===================================================== */
+
+.main-grid{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1.25fr;
+
+    gap:18px;
+}
+
+.card{
+    background:white;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:18px;
+
+    padding:20px;
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:17px;
+}
+
+.card-head{
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    margin-bottom:18px;
+}
+
+.card-icon{
+    width:42px;
+    height:42px;
+
+    flex:none;
+
+    border-radius:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#e8f4ff;
+
+    color:var(--blue);
+}
+
+.card-head h2{
+    font-size:16px;
+}
+
+.card-head p{
+    margin-top:3px;
+
+    color:var(--muted);
+
+    font-size:10px;
+}
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.field{
+    margin-bottom:14px;
+}
+
+label{
+    display:block;
+
+    margin-bottom:7px;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    color:#394961;
+}
+
+.required{
+    color:var(--red);
+}
+
+input,
+select,
+textarea{
+    width:100%;
+
+    border:
+        1px solid #d5e0ec;
+
+    border-radius:10px;
+
+    background:#fbfdff;
+
+    padding:11px 12px;
+
+    outline:none;
+
+    font-family:inherit;
+
+    font-size:12px;
+}
+
+textarea{
+    resize:vertical;
+
+    min-height:70px;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:var(--blue);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(11,126,232,.08);
+}
+
+.row2{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:10px;
+}
+
+.row3{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr 1fr;
+
+    gap:10px;
+}
+
+/* =====================================================
+   PATIENT
+===================================================== */
+
+.search-row{
+    display:flex;
+    gap:7px;
+}
+
+.search-row input{
+    flex:1;
+}
+
+.search-btn{
+    width:45px;
+
+    border:0;
+
+    border-radius:10px;
+
+    color:white;
+
+    background:var(--blue);
+
+    cursor:pointer;
+}
+
+.patient-box{
+    display:none;
+
+    padding:14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #edf8ff,
+            #effcf8
+        );
+
+    border:
+        1px solid #d2e7ec;
+
+    border-radius:13px;
+
+    margin-top:12px;
+}
+
+.patient-box.show{
+    display:block;
+}
+
+.patient-name{
+    font-size:14px;
+    font-weight:800;
+}
+
+.patient-meta{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:7px;
+
+    margin-top:9px;
+
+    font-size:10px;
+
+    color:#64748a;
+}
+
+.maldivian-badge{
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    margin-top:9px;
+
+    border-radius:20px;
+
+    padding:5px 9px;
+
+    background:#e6faf2;
+
+    color:#0b9566;
+
+    font-size:9px;
+
+    font-weight:800;
+}
+
+.register-new{
+    border:0;
+
+    border-radius:9px;
+
+    padding:8px 11px;
+
+    background:#e9faf2;
+
+    color:#0c9768;
+
+    font-size:10px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    margin-top:10px;
+}
+
+.message{
+    margin-top:8px;
+
+    font-size:10px;
+}
+
+.message.error{
+    color:var(--red);
+}
+
+.message.success{
+    color:var(--green);
+}
+
+/* =====================================================
+   REGISTER PATIENT
+===================================================== */
+
+.register-panel{
+    display:none;
+
+    margin-top:14px;
+
+    border:
+        1px solid #d9e8ee;
+
+    border-radius:13px;
+
+    padding:14px;
+
+    background:#f9fcff;
+}
+
+.register-panel.show{
+    display:block;
+}
+
+.age-box{
+    height:38px;
+
+    border:
+        1px solid #e1dafe;
+
+    background:#f4f1ff;
+
+    color:var(--purple);
+
+    border-radius:10px;
+
+    padding:0 11px;
+
+    display:flex;
+    align-items:center;
+
+    font-size:11px;
+
+    font-weight:800;
+}
+
+.register-save{
+    width:100%;
+
+    padding:11px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #12aa78,
+            #0d9469
+        );
+
+    color:white;
+
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+/* =====================================================
+   INSURANCE
+===================================================== */
+
+.govt-card{
+    display:none;
+
+    border:
+        1px solid #ccebdc;
+
+    background:#effbf5;
+
+    border-radius:12px;
+
+    padding:13px;
+
+    margin-top:10px;
+}
+
+.govt-card.show{
+    display:block;
+}
+
+.govt-title{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    color:#087950;
+}
+
+.govt-text{
+    margin-top:5px;
+
+    color:#5e766b;
+
+    font-size:9px;
+
+    line-height:1.5;
+}
+
+/* =====================================================
+   SERVICES
+===================================================== */
+
+.service-add{
+    display:grid;
+
+    grid-template-columns:
+        1fr 90px 110px;
+
+    gap:8px;
+
+    align-items:end;
+
+    margin-bottom:15px;
+}
+
+.add-service-btn{
+    height:39px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1685e8,
+            #0d6ccc
+        );
+
+    color:white;
+
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+.service-table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:780px;
+}
+
+th{
+    background:#f5f9fd;
+
+    color:#617188;
+
+    text-align:left;
+
+    font-size:9px;
+
+    padding:9px;
+}
+
+td{
+    border-bottom:
+        1px solid #edf1f5;
+
+    padding:9px;
+
+    font-size:10px;
+
+    vertical-align:middle;
+}
+
+.line-name{
+    font-weight:800;
+}
+
+.line-price{
+    color:var(--blue);
+}
+
+.small-select,
+.small-input{
+    padding:7px 8px;
+
+    border-radius:8px;
+
+    font-size:10px;
+}
+
+.remove-btn{
+    width:30px;
+    height:30px;
+
+    border:0;
+
+    border-radius:8px;
+
+    background:#fff0f2;
+
+    color:var(--red);
+
+    cursor:pointer;
+}
+
+/* =====================================================
+   CALCULATION
+===================================================== */
+
+.calculation{
+    background:
+        linear-gradient(
+            135deg,
+            #f4f9ff,
+            #f4fcf9
+        );
+
+    border:
+        1px solid #dce9ef;
+
+    border-radius:15px;
+
+    padding:16px;
+}
+
+.calc-row{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    padding:7px 0;
+
+    font-size:11px;
+
+    border-bottom:
+        1px dashed #d6e2e8;
+}
+
+.calc-row:last-child{
+    border-bottom:0;
+}
+
+.calc-label{
+    color:#627187;
+}
+
+.calc-value{
+    font-weight:800;
+}
+
+.calc-row.insurance{
+    color:#1269b4;
+}
+
+.calc-row.govt{
+    color:#0b9567;
+}
+
+.calc-row.discount{
+    color:#9b6617;
+}
+
+.calc-row.patient{
+    font-size:15px;
+
+    padding-top:12px;
+
+    color:#172542;
+}
+
+/* =====================================================
+   PAYMENT
+===================================================== */
+
+.payment-highlight{
+    padding:13px;
+
+    border-radius:12px;
+
+    background:#fff8e9;
+
+    border:
+        1px solid #f2dfb5;
+
+    margin-top:10px;
+}
+
+.payment-highlight strong{
+    color:#c9770e;
+}
+
+/* =====================================================
+   SAVE
+===================================================== */
+
+.save-memo{
+    width:100%;
+
+    margin-top:15px;
+
+    padding:14px;
+
+    border:0;
+
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1685e8,
+            #10a980
+        );
+
+    color:white;
+
+    font-size:13px;
+
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+.save-memo:disabled{
+    opacity:.55;
+}
+
+/* =====================================================
+   ADMIN RECEIPT
+===================================================== */
+
+.admin-box{
+    display:none;
+
+    margin-bottom:17px;
+
+    border:
+        1px dashed #d8dfee;
+
+    border-radius:13px;
+
+    padding:12px;
+
+    background:#fbfaff;
+}
+
+.admin-box.show{
+    display:block;
+}
+
+.admin-row{
+    display:flex;
+
+    gap:8px;
+}
+
+.admin-row input{
+    flex:1;
+}
+
+.admin-row button{
+    border:0;
+
+    border-radius:9px;
+
+    padding:0 13px;
+
+    background:var(--purple);
+
+    color:white;
+
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+/* =====================================================
+   RECEIPT
+===================================================== */
+
+.receipt-overlay{
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(13,30,52,.55);
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    z-index:5000;
+}
+
+.receipt-overlay.show{
+    display:flex;
+}
+
+.receipt{
+    background:white;
+
+    width:min(
+        720px,
+        100%
+    );
+
+    max-height:94vh;
+
+    overflow:auto;
+
+    border-radius:16px;
+
+    padding:28px;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.25);
+}
+
+.receipt-head{
+    text-align:center;
+
+    margin-bottom:20px;
+}
+
+.receipt-head h2{
+    font-size:22px;
+}
+
+.receipt-number{
+    margin-top:5px;
+
+    color:var(--blue);
+
+    font-weight:800;
+}
+
+.receipt-info{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:8px;
+
+    margin-bottom:17px;
+
+    font-size:11px;
+}
+
+.receipt-table{
+    width:100%;
+
+    min-width:0;
+
+    margin-bottom:18px;
+}
+
+.receipt-table th,
+.receipt-table td{
+    font-size:10px;
+}
+
+.receipt-actions{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:8px;
+
+    margin-top:20px;
+}
+
+.receipt-actions button{
+    border:0;
+
+    border-radius:9px;
+
+    padding:10px 14px;
+
+    cursor:pointer;
+
+    font-weight:800;
+}
+
+.print-btn{
+    background:var(--blue);
+
+    color:white;
+}
+
+.close-btn{
+    background:#edf1f5;
+
+    color:#576579;
+}
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+.toast{
+    position:fixed;
+
+    right:20px;
+    bottom:20px;
+
+    max-width:400px;
+
+    padding:14px 18px;
+
+    color:white;
+
+    border-radius:12px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    transform:
+        translateY(100px);
+
+    opacity:0;
+
+    transition:.25s;
+
+    z-index:9999;
+}
+
+.toast.show{
+    transform:
+        translateY(0);
+
+    opacity:1;
+}
+
+.toast.success{
+    background:#10a978;
+}
+
+.toast.error{
+    background:#df4b60;
+}
+
+@media(max-width:980px){
+
+    .main-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:650px){
+
+    .header{
+        padding:0 12px;
+    }
+
+    .brand span{
+        display:none;
+    }
+
+    .source-mode,
+    .row2,
+    .row3{
+        grid-template-columns:1fr;
+    }
+
+    .service-add{
+        grid-template-columns:1fr;
+    }
+
+    .page-head{
+        flex-direction:column;
+    }
+
+    .receipt-info{
+        grid-template-columns:1fr;
+    }
+}
+
+@media print{
+
+    body *{
+        visibility:hidden;
+    }
+
+    #receiptOverlay,
+    #receiptOverlay *{
+        visibility:visible;
+    }
+
+    #receiptOverlay{
+        position:absolute;
+
+        inset:0;
+
+        background:white;
+
+        padding:0;
+    }
+
+    .receipt{
+        width:100%;
+
+        max-height:none;
+
+        box-shadow:none;
+
+        border-radius:0;
+    }
+
+    .receipt-actions{
+        display:none;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+        </div>
+
+        <span>
+            Patient Memo
+        </span>
+
+    </div>
+
+
+    <div class="header-actions">
+
+        <button
+            class="header-btn dashboard-btn"
+            onclick="location.href='dashboard.html'"
+        >
+            <i class="fa-solid fa-house"></i>
+            Dashboard
+        </button>
+
+
+        <button
+            class="header-btn logout-btn"
+            onclick="logout()"
+        >
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <div class="page-head">
+
+        <div>
+
+            <h1>
+                Create Patient Memo
+            </h1>
+
+            <p>
+                Patient, insurance, services and payment.
+            </p>
+
+        </div>
+
+        <div class="receipt-preview">
+            Receipt number is assigned automatically when saved.
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ADMIN RECEIPT NUMBER
+    ================================================== -->
+
+    <div
+        class="admin-box"
+        id="receiptAdminBox"
+    >
+
+        <strong style="font-size:11px;">
+            <i class="fa-solid fa-hashtag"></i>
+            Receipt Number Setup
+        </strong>
+
+        <div
+            style="
+                margin:5px 0 9px;
+                color:#76839a;
+                font-size:9px;
+            "
+        >
+            Administrator can set the next continuous receipt number.
+        </div>
+
+        <div class="admin-row">
+
+            <input
+                id="nextReceiptNumber"
+                type="number"
+                min="1"
+                placeholder="Next receipt number"
+            >
+
+            <button onclick="setReceiptNumber()">
+                Set Next Number
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         SOURCE MODE
+    ================================================== -->
+
+    <div class="source-mode">
+
+        <button
+            class="source-btn active"
+            id="appointmentModeButton"
+            onclick="setSourceMode('appointment')"
+        >
+
+            <div class="source-icon">
+                <i class="fa-solid fa-calendar-check"></i>
+            </div>
+
+            <div>
+
+                <div class="source-title">
+                    From Appointment
+                </div>
+
+                <div class="source-sub">
+                    Load patient, doctor and service from appointment
+                </div>
+
+            </div>
+
+        </button>
+
+
+        <button
+            class="source-btn"
+            id="patientModeButton"
+            onclick="setSourceMode('patient')"
+        >
+
+            <div class="source-icon">
+                <i class="fa-solid fa-user"></i>
+            </div>
+
+            <div>
+
+                <div class="source-title">
+                    No Appointment
+                </div>
+
+                <div class="source-sub">
+                    Search patient or register a new patient
+                </div>
+
+            </div>
+
+        </button>
+
+    </div>
+
+
+    <div class="main-grid">
+
+
+        <!-- =================================================
+             LEFT SIDE
+        ================================================== -->
+
+        <div>
+
+
+            <!-- APPOINTMENT -->
+
+            <section
+                class="card"
+                id="appointmentCard"
+            >
+
+                <div class="card-head">
+
+                    <div class="card-icon">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Select Appointment
+                        </h2>
+
+                        <p>
+                            Active appointments
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Appointment
+                        <span class="required">*</span>
+                    </label>
+
+                    <select
+                        id="appointmentSelect"
+                        onchange="selectAppointment()"
+                    >
+                        <option value="">
+                            Loading appointments...
+                        </option>
+                    </select>
+
+                </div>
+
+            </section>
+
+
+            <!-- PATIENT -->
+
+            <section class="card">
+
+                <div class="card-head">
+
+                    <div
+                        class="card-icon"
+                        style="
+                            background:#e8faf2;
+                            color:#10a778;
+                        "
+                    >
+                        <i class="fa-solid fa-hospital-user"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Patient
+                        </h2>
+
+                        <p>
+                            Registered patient information
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="patientSearchArea"
+                    style="display:none;"
+                >
+
+                    <div class="field">
+
+                        <label>
+                            Search Patient
+                        </label>
+
+                        <div class="search-row">
+
+                            <input
+                                id="patientSearch"
+                                placeholder="ID, Passport, name or contact"
+                            >
+
+                            <button
+                                class="search-btn"
+                                onclick="searchPatients()"
+                            >
+                                <i class="fa-solid fa-search"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Patient
+                        </label>
+
+                        <select
+                            id="patientResults"
+                            onchange="choosePatient()"
+                        >
+                            <option value="">
+                                Search patient first
+                            </option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="patient-box"
+                    id="patientBox"
+                >
+
+                    <div
+                        class="patient-name"
+                        id="displayPatientName"
+                    >
+                        -
+                    </div>
+
+                    <div class="patient-meta">
+
+                        <div>
+                            Patient No:
+                            <strong id="displayPatientNo">-</strong>
+                        </div>
+
+                        <div>
+                            ID / Passport:
+                            <strong id="displayPatientId">-</strong>
+                        </div>
+
+                        <div>
+                            Contact:
+                            <strong id="displayPatientPhone">-</strong>
+                        </div>
+
+                        <div>
+                            Nationality:
+                            <strong id="displayNationality">-</strong>
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="maldivian-badge"
+                        id="maldivianBadge"
+                        style="display:none;"
+                    >
+                        <i class="fa-solid fa-shield-heart"></i>
+                        Aasandha Eligible
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="message"
+                    id="patientMessage"
+                ></div>
+
+
+                <button
+                    class="register-new"
+                    id="registerNewButton"
+                    onclick="showRegisterForm()"
+                    style="display:none;"
+                >
+                    <i class="fa-solid fa-user-plus"></i>
+                    Register New Patient
+                </button>
+
+
+                <!-- REGISTER NEW -->
+
+                <div
+                    class="register-panel"
+                    id="registerPanel"
+                >
+
+                    <div
+                        style="
+                            font-size:12px;
+                            font-weight:800;
+                            margin-bottom:12px;
+                        "
+                    >
+                        New Patient Registration
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            ID Card / Passport
+                            <span class="required">*</span>
+                        </label>
+
+                        <input id="regIdPassport">
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Patient Name
+                            <span class="required">*</span>
+                        </label>
+
+                        <input id="regName">
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Contact No.
+                            <span class="required">*</span>
+                        </label>
+
+                        <input id="regPhone">
+
+                    </div>
+
+
+                    <div class="row2">
+
+                        <div class="field">
+
+                            <label>
+                                Date of Birth
+                            </label>
+
+                            <input
+                                id="regDob"
+                                type="date"
+                                onchange="updateRegisterAge()"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Age
+                            </label>
+
+                            <div
+                                class="age-box"
+                                id="regAge"
+                            >
+                                -
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Nationality
+                        </label>
+
+                        <input
+                            id="regNationality"
+                            list="nationalityList"
+                        >
+
+                        <datalist id="nationalityList">
+
+                            <option value="Maldivian">
+                            <option value="Indian">
+                            <option value="Sri Lankan">
+                            <option value="Bangladeshi">
+                            <option value="Nepalese">
+                            <option value="Pakistani">
+
+                        </datalist>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Address
+                        </label>
+
+                        <textarea id="regAddress"></textarea>
+
+                    </div>
+
+
+                    <button
+                        class="register-save"
+                        onclick="registerPatient()"
+                    >
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Register & Select Patient
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- DOCTOR -->
+
+            <section class="card">
+
+                <div class="card-head">
+
+                    <div
+                        class="card-icon"
+                        style="
+                            background:#f0edff;
+                            color:#7654e8;
+                        "
+                    >
+                        <i class="fa-solid fa-user-doctor"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Doctor
+                        </h2>
+
+                        <p>
+                            Select consulting doctor
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Doctor
+                        <span class="required">*</span>
+                    </label>
+
+                    <select id="doctorSelect">
+                        <option value="">
+                            Loading...
+                        </option>
+                    </select>
+
+                </div>
+
+            </section>
+
+
+            <!-- INSURANCE -->
+
+            <section class="card">
+
+                <div class="card-head">
+
+                    <div
+                        class="card-icon"
+                        style="
+                            background:#fff3e2;
+                            color:#ed941e;
+                        "
+                    >
+                        <i class="fa-solid fa-shield-heart"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Insurance
+                        </h2>
+
+                        <p>
+                            Primary and government insurance
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Primary Insurance
+                    </label>
+
+                    <select
+                        id="primaryInsurance"
+                        onchange="insuranceChanged()"
+                    >
+                        <option value="">
+                            No other insurance
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <div
+                    class="row2"
+                    id="primaryRuleArea"
+                    style="display:none;"
+                >
+
+                    <div class="field">
+
+                        <label>
+                            Coverage Method
+                        </label>
+
+                        <select
+                            id="insuranceMethod"
+                            onchange="recalculate()"
+                        >
+                            <option value="percent">
+                                Percentage
+                            </option>
+
+                            <option value="fixed">
+                                Fixed Amount
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Amount / %
+                        </label>
+
+                        <input
+                            id="insuranceValue"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            value="0"
+                            oninput="recalculate()"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="govt-card"
+                    id="governmentInsuranceCard"
+                >
+
+                    <div class="govt-title">
+
+                        <span>
+                            <i class="fa-solid fa-shield-heart"></i>
+                            Aasandha
+                        </span>
+
+                        <span>
+                            Automatic
+                        </span>
+
+                    </div>
+
+                    <div class="govt-text">
+
+                        For Maldivian patients, Aasandha is calculated
+                        automatically. If another insurance is selected,
+                        that insurance is applied first and Aasandha
+                        becomes secondary insurance.
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- BILL DISCOUNT -->
+
+            <section class="card">
+
+                <div class="card-head">
+
+                    <div
+                        class="card-icon"
+                        style="
+                            background:#fff0f2;
+                            color:#e95067;
+                        "
+                    >
+                        <i class="fa-solid fa-tags"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Whole Bill Discount
+                        </h2>
+
+                        <p>
+                            Optional clinic discount
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row2">
+
+                    <div class="field">
+
+                        <label>
+                            Discount Type
+                        </label>
+
+                        <select
+                            id="billDiscountMethod"
+                            onchange="recalculate()"
+                        >
+                            <option value="none">
+                                No Discount
+                            </option>
+
+                            <option value="percent">
+                                Percentage
+                            </option>
+
+                            <option value="fixed">
+                                Fixed Amount
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Discount Value
+                        </label>
+
+                        <input
+                            id="billDiscountValue"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            value="0"
+                            oninput="recalculate()"
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT SIDE
+        ================================================== -->
+
+        <div>
+
+
+            <!-- SERVICES -->
+
+            <section class="card">
+
+                <div class="card-head">
+
+                    <div
+                        class="card-icon"
+                        style="
+                            background:#e9f5ff;
+                            color:#1685e8;
+                        "
+                    >
+                        <i class="fa-solid fa-stethoscope"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Services
+                        </h2>
+
+                        <p>
+                            Add one or more services
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="service-add">
+
+                    <div class="field">
+
+                        <label>
+                            Service
+                        </label>
+
+                        <select id="serviceSelect">
+                            <option value="">
+                                Select service
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Qty
+                        </label>
+
+                        <input
+                            id="serviceQty"
+                            type="number"
+                            min="1"
+                            value="1"
+                        >
+
+                    </div>
+
+
+                    <button
+                        class="add-service-btn"
+                        onclick="addService()"
+                    >
+                        <i class="fa-solid fa-plus"></i>
+                        Add
+                    </button>
+
+                </div>
+
+
+                <div class="service-table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Service</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th>Discount</th>
+                                <th>Value</th>
+                                <th>Aasandha</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="serviceLines">
+
+                            <tr>
+                                <td
+                                    colspan="8"
+                                    style="
+                                        text-align:center;
+                                        color:#8996a8;
+                                        padding:25px;
+                                    "
+                                >
+                                    No services added.
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- CALCULATION -->
+
+            <section class="card">
+
+                <div class="card-head">
+
+                    <div
+                        class="card-icon"
+                        style="
+                            background:#e8faf2;
+                            color:#10a778;
+                        "
+                    >
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Bill Calculation
+                        </h2>
+
+                        <p>
+                            Insurance and patient share
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="calculation">
+
+                    <div class="calc-row">
+
+                        <span class="calc-label">
+                            Services Subtotal
+                        </span>
+
+                        <span
+                            class="calc-value"
+                            id="subtotalDisplay"
+                        >
+                            MVR 0.00
+                        </span>
+
+                    </div>
+
+
+                    <div class="calc-row discount">
+
+                        <span>
+                            Service Discounts
+                        </span>
+
+                        <span
+                            class="calc-value"
+                            id="lineDiscountDisplay"
+                        >
+                            - MVR 0.00
+                        </span>
+
+                    </div>
+
+
+                    <div class="calc-row discount">
+
+                        <span>
+                            Whole Bill Discount
+                        </span>
+
+                        <span
+                            class="calc-value"
+                            id="billDiscountDisplay"
+                        >
+                            - MVR 0.00
+                        </span>
+
+                    </div>
+
+
+                    <div class="calc-row">
+
+                        <span>
+                            Amount After Discounts
+                        </span>
+
+                        <span
+                            class="calc-value"
+                            id="afterDiscountDisplay"
+                        >
+                            MVR 0.00
+                        </span>
+
+                    </div>
+
+
+                    <div class="calc-row insurance">
+
+                        <span>
+                            Primary Insurance
+                        </span>
+
+                        <span
+                            class="calc-value"
+                            id="primaryCoverDisplay"
+                        >
+                            - MVR 0.00
+                        </span>
+
+                    </div>
+
+
+                    <div class="calc-row govt">
+
+                        <span>
+                            Aasandha Coverage
+                        </span>
+
+                        <span
+                            class="calc-value"
+                            id="governmentCoverDisplay"
+                        >
+                            - MVR 0.00
+                        </span>
+
+                    </div>
+
+
+                    <div class="calc-row patient">
+
+                        <span>
+                            Patient Payable
+                        </span>
+
+                        <span
+                            class="calc-value"
+                            id="patientPayableDisplay"
+                        >
+                            MVR 0.00
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- PAYMENT -->
+
+            <section class="card">
+
+                <div class="card-head">
+
+                    <div
+                        class="card-icon"
+                        style="
+                            background:#f0edff;
+                            color:#7654e8;
+                        "
+                    >
+                        <i class="fa-solid fa-credit-card"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Patient Payment
+                        </h2>
+
+                        <p>
+                            Payment method and balance
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Payment Method
+                    </label>
+
+                    <select
+                        id="paymentMethod"
+                        onchange="paymentMethodChanged()"
+                    >
+                        <option value="">
+                            Select payment method
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <div
+                    id="partialPaymentArea"
+                    style="display:none;"
+                >
+
+                    <div class="field">
+
+                        <label>
+                            Amount Paid
+                        </label>
+
+                        <input
+                            id="amountPaid"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            value="0"
+                            oninput="updatePaymentBalance()"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Reference / Transaction No.
+                    </label>
+
+                    <input
+                        id="paymentReference"
+                        placeholder="Optional"
+                    >
+
+                </div>
+
+
+                <div class="payment-highlight">
+
+                    Patient payable:
+                    <strong id="paymentPatientTotal">
+                        MVR 0.00
+                    </strong>
+
+                    <br><br>
+
+                    Paid:
+                    <strong id="paidDisplay">
+                        MVR 0.00
+                    </strong>
+
+                    &nbsp;&nbsp;
+
+                    Balance:
+                    <strong id="balanceDisplay">
+                        MVR 0.00
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+            <!-- NOTES -->
+
+            <section class="card">
+
+                <div class="field">
+
+                    <label>
+                        Memo Remarks
+                    </label>
+
+                    <textarea
+                        id="memoRemarks"
+                        placeholder="Optional remarks..."
+                    ></textarea>
+
+                </div>
+
+
+                <button
+                    class="save-memo"
+                    id="saveMemoButton"
+                    onclick="saveMemo()"
+                >
+                    <i class="fa-solid fa-file-circle-check"></i>
+                    Create Memo & Receipt
+                </button>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- =====================================================
+     RECEIPT
+===================================================== -->
+
+<div
+    class="receipt-overlay"
+    id="receiptOverlay"
+>
+
+    <div class="receipt">
+
+        <div class="receipt-head">
+
+            <h2>
+                Patient Memo / Receipt
+            </h2>
+
+            <div
+                class="receipt-number"
+                id="receiptNumber"
+            ></div>
+
+        </div>
+
+
+        <div
+            class="receipt-info"
+            id="receiptInfo"
+        ></div>
+
+
+        <table class="receipt-table">
+
+            <thead>
+
+                <tr>
+                    <th>Service</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                    <th>Discount</th>
+                    <th>Total</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="receiptItems">
+            </tbody>
+
+        </table>
+
+
+        <div
+            class="calculation"
+            id="receiptCalculation"
+        ></div>
+
+
+        <div class="receipt-actions">
+
+            <button
+                class="close-btn"
+                onclick="closeReceipt()"
+            >
+                Close
+            </button>
+
+
+            <button
+                class="print-btn"
+                onclick="window.print()"
+            >
+                <i class="fa-solid fa-print"></i>
+                Print
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+const currentUser =
+    JSON.parse(
+        sessionStorage.getItem(
+            'clinic_user'
+        ) || 'null'
+    );
+
+if (!currentUser){
+
+    location.href =
+        'login.html';
+}
+
+
+if (
+    currentUser.role ===
+    'admin'
+){
+
+    receiptAdminBox.classList.add(
+        'show'
+    );
+}
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let sourceMode =
+    'appointment';
+
+let doctors = [];
+
+let services = [];
+
+let insuranceCompanies = [];
+
+let paymentMethods = [];
+
+let appointments = [];
+
+let patientSearchRows = [];
+
+let selectedPatient = null;
+
+let selectedAppointment = null;
+
+let invoiceLines = [];
+
+let totals = {
+
+    subtotal:0,
+
+    lineDiscount:0,
+
+    billDiscount:0,
+
+    afterDiscount:0,
+
+    primaryCover:0,
+
+    govtEligible:0,
+
+    governmentCover:0,
+
+    patientPayable:0,
+
+    paid:0,
+
+    balance:0
+};
+
+
+/* =====================================================
+   SOURCE
+===================================================== */
+
+function setSourceMode(mode){
+
+    sourceMode =
+        mode;
+
+
+    appointmentModeButton
+        .classList
+        .toggle(
+            'active',
+            mode === 'appointment'
+        );
+
+
+    patientModeButton
+        .classList
+        .toggle(
+            'active',
+            mode === 'patient'
+        );
+
+
+    appointmentCard.style.display =
+        mode === 'appointment'
+        ?
+        'block'
+        :
+        'none';
+
+
+    patientSearchArea.style.display =
+        mode === 'patient'
+        ?
+        'block'
+        :
+        'none';
+
+
+    registerNewButton.style.display =
+        mode === 'patient'
+        ?
+        'inline-block'
+        :
+        'none';
+
+
+    selectedAppointment =
+        null;
+
+
+    selectedPatient =
+        null;
+
+
+    clearPatientDisplay();
+
+
+    if (
+        mode === 'patient'
+    ){
+
+        appointmentSelect.value =
+            '';
+    }
+
+
+    recalculate();
+}
+
+
+/* =====================================================
+   LOAD
+===================================================== */
+
+async function loadPage(){
+
+    try{
+
+        const response =
+            await fetch(
+                '/api/memocreate?mode=setup'
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok){
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        doctors =
+            data.doctors ||
+            [];
+
+
+        services =
+            data.services ||
+            [];
+
+
+        insuranceCompanies =
+            data.insuranceCompanies ||
+            [];
+
+
+        paymentMethods =
+            data.paymentMethods ||
+            [];
+
+
+        appointments =
+            data.appointments ||
+            [];
+
+
+        renderDoctors();
+
+        renderServices();
+
+        renderInsurance();
+
+        renderPaymentMethods();
+
+        renderAppointments();
+
+
+    }catch(error){
+
+        showToast(
+            error.message ||
+            'Unable to load memo page.',
+            'error'
+        );
+    }
+}
+
+
+function renderDoctors(){
+
+    doctorSelect.innerHTML = `
+
+        <option value="">
+            Select Doctor
+        </option>
+
+        ${
+            doctors.map(
+                doctor => `
+
+                    <option value="${doctor.id}">
+
+                        ${escapeHtml(
+                            doctor.full_name
+                        )}
+
+                        ${
+                            doctor.speciality
+                            ?
+                            ' - ' +
+                            escapeHtml(
+                                doctor.speciality
+                            )
+                            :
+                            ''
+                        }
+
+                    </option>
+
+                `
+            ).join('')
+        }
+    `;
+}
+
+
+function renderServices(){
+
+    serviceSelect.innerHTML = `
+
+        <option value="">
+            Select service
+        </option>
+
+        ${
+            services.map(
+                service => `
+
+                    <option value="${service.id}">
+
+                        ${escapeHtml(
+                            service.service_name
+                        )}
+
+                        - MVR
+                        ${money(
+                            service.price
+                        )}
+
+                    </option>
+
+                `
+            ).join('')
+        }
+    `;
+}
+
+
+function renderInsurance(){
+
+    const privateInsurance =
+        insuranceCompanies.filter(
+            company =>
+                !company.is_government
+        );
+
+
+    primaryInsurance.innerHTML = `
+
+        <option value="">
+            No other insurance
+        </option>
+
+        ${
+            privateInsurance.map(
+                company => `
+
+                    <option value="${company.id}">
+
+                        ${escapeHtml(
+                            company.company_name
+                        )}
+
+                    </option>
+
+                `
+            ).join('')
+        }
+    `;
+}
+
+
+function renderPaymentMethods(){
+
+    paymentMethod.innerHTML = `
+
+        <option value="">
+            Select payment method
+        </option>
+
+        ${
+            paymentMethods.map(
+                method => `
+
+                    <option
+                        value="${method.id}"
+                        data-name="${escapeHtml(
+                            method.method_name
+                        )}"
+                    >
+                        ${escapeHtml(
+                            method.method_name
+                        )}
+                    </option>
+
+                `
+            ).join('')
+        }
+    `;
+}
+
+
+function renderAppointments(){
+
+    appointmentSelect.innerHTML = `
+
+        <option value="">
+            Select appointment
+        </option>
+
+        ${
+            appointments.map(
+                app => `
+
+                    <option value="${app.id}">
+
+                        ${formatDate(
+                            app.appointment_date
+                        )}
+
+                        ${formatTime(
+                            app.appointment_time
+                        )}
+
+                        -
+
+                        ${escapeHtml(
+                            app.patient_name ||
+                            'Patient'
+                        )}
+
+                        ${
+                            app.doctor_name
+                            ?
+                            ' - ' +
+                            escapeHtml(
+                                app.doctor_name
+                            )
+                            :
+                            ''
+                        }
+
+                    </option>
+
+                `
+            ).join('')
+        }
+    `;
+}
+
+
+/* =====================================================
+   APPOINTMENT
+===================================================== */
+
+function selectAppointment(){
+
+    const id =
+        Number(
+            appointmentSelect.value
+        );
+
+
+    selectedAppointment =
+        appointments.find(
+            row =>
+                Number(row.id) ===
+                id
+        ) ||
+        null;
+
+
+    if (!selectedAppointment){
+
+        selectedPatient =
+            null;
+
+        clearPatientDisplay();
+
+        return;
+    }
+
+
+    doctorSelect.value =
+        selectedAppointment.doctor_id ||
+        '';
+
+
+    /*
+     Registered patient
+    */
+
+    if (
+        selectedAppointment.patient_id
+    ){
+
+        selectedPatient = {
+
+            id:
+                selectedAppointment.patient_id,
+
+            patient_no:
+                selectedAppointment.patient_no,
+
+            id_passport_no:
+                selectedAppointment.id_passport_no,
+
+            full_name:
+                selectedAppointment.patient_name,
+
+            phone:
+                selectedAppointment.contact_no,
+
+            nationality:
+                selectedAppointment.nationality,
+
+            date_of_birth:
+                selectedAppointment.date_of_birth
+        };
+
+
+        displayPatient();
+
+
+    }else{
+
+        selectedPatient =
+            null;
+
+
+        clearPatientDisplay();
+
+
+        patientMessage.className =
+            'message error';
+
+
+        patientMessage.textContent =
+            'This appointment patient is not registered. Please register the patient before creating the memo.';
+
+
+        registerNewButton.style.display =
+            'inline-block';
+
+
+        regName.value =
+            selectedAppointment.patient_name ||
+            '';
+
+
+        regPhone.value =
+            selectedAppointment.contact_no ||
+            '';
+    }
+
+
+    /*
+     Add appointment service if known
+    */
+
+    if (
+        selectedAppointment.service_id
+        &&
+        invoiceLines.length === 0
+    ){
+
+        const service =
+            services.find(
+                row =>
+                    Number(row.id) ===
+                    Number(
+                        selectedAppointment.service_id
+                    )
+            );
+
+
+        if (service){
+
+            addServiceObject(
+                service,
+                1
+            );
+        }
+    }
+}
+
+
+/* =====================================================
+   PATIENT SEARCH
+===================================================== */
+
+patientSearch.addEventListener(
+    'keydown',
+    event => {
+
+        if (
+            event.key ===
+            'Enter'
+        ){
+
+            searchPatients();
+        }
+    }
+);
+
+
+async function searchPatients(){
+
+    const query =
+        patientSearch
+            .value
+            .trim();
+
+
+    if (!query){
+
+        return showToast(
+            'Enter patient name, ID, Passport or contact.',
+            'error'
+        );
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                '/api/memocreate?mode=patient-search&q='
+                +
+                encodeURIComponent(
+                    query
+                )
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok){
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        patientSearchRows =
+            data.patients ||
+            [];
+
+
+        patientResults.innerHTML = `
+
+            <option value="">
+                ${
+                    patientSearchRows.length
+                    ?
+                    'Select patient'
+                    :
+                    'No patient found'
+                }
+            </option>
+
+            ${
+                patientSearchRows.map(
+                    patient => `
+
+                        <option value="${patient.id}">
+
+                            ${escapeHtml(
+                                patient.full_name
+                            )}
+
+                            ${
+                                patient.id_passport_no
+                                ?
+                                ' - ' +
+                                escapeHtml(
+                                    patient.id_passport_no
+                                )
+                                :
+                                ''
+                            }
+
+                            ${
+                                patient.phone
+                                ?
+                                ' - ' +
+                                escapeHtml(
+                                    patient.phone
+                                )
+                                :
+                                ''
+                            }
+
+                        </option>
+
+                    `
+                ).join('')
+            }
+        `;
+
+
+        if (!patientSearchRows.length){
+
+            registerNewButton.style.display =
+                'inline-block';
+        }
+
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            'error'
+        );
+    }
+}
+
+
+function choosePatient(){
+
+    const id =
+        Number(
+            patientResults.value
+        );
+
+
+    selectedPatient =
+        patientSearchRows.find(
+            patient =>
+                Number(patient.id) ===
+                id
+        ) ||
+        null;
+
+
+    displayPatient();
+}
+
+
+/* =====================================================
+   PATIENT DISPLAY
+===================================================== */
+
+function displayPatient(){
+
+    if (!selectedPatient){
+
+        clearPatientDisplay();
+
+        return;
+    }
+
+
+    patientBox.classList.add(
+        'show'
+    );
+
+
+    displayPatientName.textContent =
+        selectedPatient.full_name ||
+        '-';
+
+
+    displayPatientNo.textContent =
+        selectedPatient.patient_no ||
+        '-';
+
+
+    displayPatientId.textContent =
+        selectedPatient.id_passport_no ||
+        selectedPatient.national_id ||
+        selectedPatient.passport_id ||
+        '-';
+
+
+    displayPatientPhone.textContent =
+        selectedPatient.phone ||
+        '-';
+
+
+    displayNationality.textContent =
+        selectedPatient.nationality ||
+        '-';
+
+
+    patientMessage.className =
+        'message success';
+
+
+    patientMessage.textContent =
+        'Patient selected.';
+
+
+    const maldivian =
+        isMaldivianPatient();
+
+
+    maldivianBadge.style.display =
+        maldivian
+        ?
+        'inline-flex'
+        :
+        'none';
+
+
+    governmentInsuranceCard
+        .classList
+        .toggle(
+            'show',
+            maldivian
+        );
+
+
+    recalculate();
+}
+
+
+function clearPatientDisplay(){
+
+    patientBox.classList.remove(
+        'show'
+    );
+
+
+    patientMessage.textContent =
+        '';
+
+
+    maldivianBadge.style.display =
+        'none';
+
+
+    governmentInsuranceCard
+        .classList
+        .remove(
+            'show'
+        );
+
+
+    recalculate();
+}
+
+
+function isMaldivianPatient(){
+
+    return (
+        String(
+            selectedPatient
+                ?.nationality ||
+            ''
+        )
+        .trim()
+        .toLowerCase()
+        ===
+        'maldivian'
+    );
+}
+
+
+/* =====================================================
+   REGISTER
+===================================================== */
+
+function showRegisterForm(){
+
+    registerPanel.classList.add(
+        'show'
+    );
+}
+
+
+function updateRegisterAge(){
+
+    regAge.textContent =
+        calculateAge(
+            regDob.value
+        );
+}
+
+
+async function registerPatient(){
+
+    const idPassport =
+        regIdPassport
+            .value
+            .trim();
+
+
+    const fullName =
+        regName
+            .value
+            .trim();
+
+
+    const phone =
+        regPhone
+            .value
+            .trim();
+
+
+    if (
+        !idPassport ||
+        !fullName ||
+        !phone
+    ){
+
+        return showToast(
+            'ID/Passport, patient name and contact are required.',
+            'error'
+        );
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                '/api/memocreate',
+                {
+
+                    method:'POST',
+
+                    headers:{
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            action:
+                                'register-patient',
+
+                            userId:
+                                currentUser.id,
+
+                            appointmentId:
+                                selectedAppointment
+                                ?.id ||
+                                null,
+
+                            idPassport,
+
+                            fullName,
+
+                            phone,
+
+                            dateOfBirth:
+                                regDob.value ||
+                                null,
+
+                            nationality:
+                                regNationality
+                                    .value
+                                    .trim(),
+
+                            address:
+                                regAddress
+                                    .value
+                                    .trim()
+                        })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok){
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        selectedPatient =
+            data.patient;
+
+
+        registerPanel
+            .classList
+            .remove(
+                'show'
+            );
+
+
+        displayPatient();
+
+
+        showToast(
+            'Patient registered successfully.',
+            'success'
+        );
+
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            'error'
+        );
+    }
+}
+
+
+/* =====================================================
+   INSURANCE
+===================================================== */
+
+function insuranceChanged(){
+
+    const id =
+        Number(
+            primaryInsurance.value
+        );
+
+
+    const company =
+        insuranceCompanies.find(
+            row =>
+                Number(row.id) ===
+                id
+        );
+
+
+    if (!company){
+
+        primaryRuleArea.style.display =
+            'none';
+
+
+        insuranceValue.value =
+            0;
+
+
+        recalculate();
+
+        return;
+    }
+
+
+    primaryRuleArea.style.display =
+        'grid';
+
+
+    insuranceMethod.value =
+        company.charge_method ||
+        'percent';
+
+
+    insuranceValue.value =
+        Number(
+            company.charge_value ||
+            0
+        );
+
+
+    recalculate();
+}
+
+
+/* =====================================================
+   SERVICES
+===================================================== */
+
+function addService(){
+
+    const id =
+        Number(
+            serviceSelect.value
+        );
+
+
+    const qty =
+        Math.max(
+            1,
+            Number(
+                serviceQty.value ||
+                1
+            )
+        );
+
+
+    const service =
+        services.find(
+            row =>
+                Number(row.id) ===
+                id
+        );
+
+
+    if (!service){
+
+        return showToast(
+            'Select a service.',
+            'error'
+        );
+    }
+
+
+    addServiceObject(
+        service,
+        qty
+    );
+
+
+    serviceSelect.value =
+        '';
+
+
+    serviceQty.value =
+        1;
+}
+
+
+function addServiceObject(
+    service,
+    qty
+){
+
+    const existing =
+        invoiceLines.find(
+            line =>
+                Number(line.serviceId) ===
+                Number(service.id)
+        );
+
+
+    if (existing){
+
+        existing.qty +=
+            Number(qty);
+
+    }else{
+
+        invoiceLines.push({
+
+            serviceId:
+                Number(
+                    service.id
+                ),
+
+            serviceName:
+                service.service_name,
+
+            qty:
+                Number(qty),
+
+            price:
+                Number(
+                    service.price ||
+                    0
+                ),
+
+            aasandhaPrice:
+                Number(
+                    service.aasandha_price ||
+                    0
+                ),
+
+            discountMethod:
+                'none',
+
+            discountValue:
+                0
+        });
+    }
+
+
+    renderServiceLines();
+}
+
+
+function renderServiceLines(){
+
+    if (!invoiceLines.length){
+
+        serviceLines.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    style="
+                        text-align:center;
+                        color:#8996a8;
+                        padding:25px;
+                    "
+                >
+                    No services added.
+                </td>
+
+            </tr>
+        `;
+
+
+        recalculate();
+
+        return;
+    }
+
+
+    serviceLines.innerHTML =
+        invoiceLines.map(
+            (
+                line,
+                index
+            ) => {
+
+                const calc =
+                    calculateLine(
+                        line
+                    );
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+
+                            <div class="line-name">
+
+                                ${escapeHtml(
+                                    line.serviceName
+                                )}
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <input
+                                class="small-input"
+                                type="number"
+                                min="1"
+                                value="${line.qty}"
+                                onchange="
+                                    updateLine(
+                                        ${index},
+                                        'qty',
+                                        this.value
+                                    )
+                                "
+                            >
+
+                        </td>
+
+
+                        <td class="line-price">
+
+                            MVR
+                            ${money(
+                                line.price
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            <select
+                                class="small-select"
+                                onchange="
+                                    updateLine(
+                                        ${index},
+                                        'discountMethod',
+                                        this.value
+                                    )
+                                "
+                            >
+
+                                <option
+                                    value="none"
+                                    ${
+                                        line.discountMethod ===
+                                        'none'
+                                        ?
+                                        'selected'
+                                        :
+                                        ''
+                                    }
+                                >
+                                    None
+                                </option>
+
+                                <option
+                                    value="percent"
+                                    ${
+                                        line.discountMethod ===
+                                        'percent'
+                                        ?
+                                        'selected'
+                                        :
+                                        ''
+                                    }
+                                >
+                                    %
+                                </option>
+
+                                <option
+                                    value="fixed"
+                                    ${
+                                        line.discountMethod ===
+                                        'fixed'
+                                        ?
+                                        'selected'
+                                        :
+                                        ''
+                                    }
+                                >
+                                    Fixed
+                                </option>
+
+                            </select>
+
+                        </td>
+
+
+                        <td>
+
+                            <input
+                                class="small-input"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                value="${line.discountValue}"
+                                onchange="
+                                    updateLine(
+                                        ${index},
+                                        'discountValue',
+                                        this.value
+                                    )
+                                "
+                            >
+
+                        </td>
+
+
+                        <td>
+
+                            MVR
+                            ${money(
+                                line.aasandhaPrice *
+                                line.qty
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                MVR
+                                ${money(
+                                    calc.total
+                                )}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                class="remove-btn"
+                                onclick="
+                                    removeLine(
+                                        ${index}
+                                    )
+                                "
+                            >
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+
+                        </td>
+
+                    </tr>
+                `;
+            }
+        ).join('');
+
+
+    recalculate();
+}
+
+
+function updateLine(
+    index,
+    field,
+    value
+){
+
+    if (
+        field === 'qty'
+    ){
+
+        invoiceLines[index][field] =
+            Math.max(
+                1,
+                Number(value || 1)
+            );
+
+    }else if (
+        field ===
+        'discountValue'
+    ){
+
+        invoiceLines[index][field] =
+            Math.max(
+                0,
+                Number(value || 0)
+            );
+
+    }else{
+
+        invoiceLines[index][field] =
+            value;
+    }
+
+
+    renderServiceLines();
+}
+
+
+function removeLine(index){
+
+    invoiceLines.splice(
+        index,
+        1
+    );
+
+
+    renderServiceLines();
+}
+
+
+function calculateLine(line){
+
+    const subtotal =
+        Number(line.price) *
+        Number(line.qty);
+
+
+    let discount =
+        0;
+
+
+    if (
+        line.discountMethod ===
+        'percent'
+    ){
+
+        const percent =
+            Math.min(
+                100,
+                Math.max(
+                    0,
+                    Number(
+                        line.discountValue ||
+                        0
+                    )
+                )
+            );
+
+
+        discount =
+            subtotal *
+            percent /
+            100;
+
+    }else if (
+        line.discountMethod ===
+        'fixed'
+    ){
+
+        discount =
+            Math.min(
+                subtotal,
+                Math.max(
+                    0,
+                    Number(
+                        line.discountValue ||
+                        0
+                    )
+                )
+            );
+    }
+
+
+    return {
+
+        subtotal,
+
+        discount,
+
+        total:
+            Math.max(
+                0,
+                subtotal -
+                discount
+            )
+    };
+}
+
+
+/* =====================================================
+   CALCULATIONS
+===================================================== */
+
+function recalculate(){
+
+    let subtotal =
+        0;
+
+
+    let lineDiscount =
+        0;
+
+
+    let lineNet =
+        0;
+
+
+    let govtEligible =
+        0;
+
+
+    invoiceLines.forEach(
+        line => {
+
+            const calculated =
+                calculateLine(
+                    line
+                );
+
+
+            subtotal +=
+                calculated.subtotal;
+
+
+            lineDiscount +=
+                calculated.discount;
+
+
+            lineNet +=
+                calculated.total;
+
+
+            const aasandhaLimit =
+                Number(
+                    line.aasandhaPrice ||
+                    0
+                )
+                *
+                Number(
+                    line.qty
+                );
+
+
+            govtEligible +=
+                Math.min(
+                    calculated.total,
+                    aasandhaLimit
+                );
+        }
+    );
+
+
+    let billDiscount =
+        0;
+
+
+    const billMethod =
+        billDiscountMethod.value;
+
+
+    const billValue =
+        Math.max(
+            0,
+            Number(
+                billDiscountValue.value ||
+                0
+            )
+        );
+
+
+    if (
+        billMethod ===
+        'percent'
+    ){
+
+        billDiscount =
+            lineNet *
+            Math.min(
+                100,
+                billValue
+            )
+            /
+            100;
+
+    }else if (
+        billMethod ===
+        'fixed'
+    ){
+
+        billDiscount =
+            Math.min(
+                lineNet,
+                billValue
+            );
+    }
+
+
+    const afterDiscount =
+        Math.max(
+            0,
+            lineNet -
+            billDiscount
+        );
+
+
+    /* PRIMARY INSURANCE */
+
+    let primaryCover =
+        0;
+
+
+    if (
+        primaryInsurance.value
+    ){
+
+        const method =
+            insuranceMethod.value;
+
+
+        const value =
+            Math.max(
+                0,
+                Number(
+                    insuranceValue.value ||
+                    0
+                )
+            );
+
+
+        if (
+            method ===
+            'percent'
+        ){
+
+            primaryCover =
+                afterDiscount *
+                Math.min(
+                    100,
+                    value
+                )
+                /
+                100;
+
+        }else{
+
+            primaryCover =
+                Math.min(
+                    afterDiscount,
+                    value
+                );
+        }
+    }
+
+
+    primaryCover =
+        Math.min(
+            afterDiscount,
+            primaryCover
+        );
+
+
+    let balanceAfterPrimary =
+        Math.max(
+            0,
+            afterDiscount -
+            primaryCover
+        );
+
+
+    /* GOVERNMENT INSURANCE */
+
+    let governmentCover =
+        0;
+
+
+    if (
+        isMaldivianPatient()
+    ){
+
+        governmentCover =
+            Math.min(
+                balanceAfterPrimary,
+                govtEligible
+            );
+    }
+
+
+    const patientPayable =
+        Math.max(
+            0,
+            balanceAfterPrimary -
+            governmentCover
+        );
+
+
+    totals = {
+
+        subtotal,
+
+        lineDiscount,
+
+        billDiscount,
+
+        afterDiscount,
+
+        primaryCover,
+
+        govtEligible,
+
+        governmentCover,
+
+        patientPayable,
+
+        paid:
+            totals.paid ||
+            0,
+
+        balance:
+            totals.balance ||
+            0
+    };
+
+
+    subtotalDisplay.textContent =
+        'MVR ' +
+        money(
+            subtotal
+        );
+
+
+    lineDiscountDisplay.textContent =
+        '- MVR ' +
+        money(
+            lineDiscount
+        );
+
+
+    billDiscountDisplay.textContent =
+        '- MVR ' +
+        money(
+            billDiscount
+        );
+
+
+    afterDiscountDisplay.textContent =
+        'MVR ' +
+        money(
+            afterDiscount
+        );
+
+
+    primaryCoverDisplay.textContent =
+        '- MVR ' +
+        money(
+            primaryCover
+        );
+
+
+    governmentCoverDisplay.textContent =
+        '- MVR ' +
+        money(
+            governmentCover
+        );
+
+
+    patientPayableDisplay.textContent =
+        'MVR ' +
+        money(
+            patientPayable
+        );
+
+
+    paymentPatientTotal.textContent =
+        'MVR ' +
+        money(
+            patientPayable
+        );
+
+
+    paymentMethodChanged();
+}
+
+
+/* =====================================================
+   PAYMENT
+===================================================== */
+
+function paymentMethodChanged(){
+
+    const option =
+        paymentMethod.options[
+            paymentMethod.selectedIndex
+        ];
+
+
+    const name =
+        String(
+            option
+                ?.dataset
+                ?.name ||
+            option
+                ?.textContent ||
+            ''
+        )
+        .trim()
+        .toLowerCase();
+
+
+    const allowPartial =
+        name.includes(
+            'cash'
+        )
+        ||
+        name.includes(
+            'transfer'
+        );
+
+
+    partialPaymentArea.style.display =
+        allowPartial
+        ?
+        'block'
+        :
+        'none';
+
+
+    if (
+        totals.patientPayable <=
+        0
+    ){
+
+        amountPaid.value =
+            0;
+
+
+        totals.paid =
+            0;
+
+
+        totals.balance =
+            0;
+
+    }else if (
+        allowPartial
+    ){
+
+        updatePaymentBalance();
+
+        return;
+
+    }else{
+
+        amountPaid.value =
+            totals.patientPayable.toFixed(
+                2
+            );
+
+
+        totals.paid =
+            totals.patientPayable;
+
+
+        totals.balance =
+            0;
+    }
+
+
+    paidDisplay.textContent =
+        'MVR ' +
+        money(
+            totals.paid
+        );
+
+
+    balanceDisplay.textContent =
+        'MVR ' +
+        money(
+            totals.balance
+        );
+}
+
+
+function updatePaymentBalance(){
+
+    let paid =
+        Math.max(
+            0,
+            Number(
+                amountPaid.value ||
+                0
+            )
+        );
+
+
+    paid =
+        Math.min(
+            paid,
+            totals.patientPayable
+        );
+
+
+    const balance =
+        Math.max(
+            0,
+            totals.patientPayable -
+            paid
+        );
+
+
+    totals.paid =
+        paid;
+
+
+    totals.balance =
+        balance;
+
+
+    paidDisplay.textContent =
+        'MVR ' +
+        money(
+            paid
+        );
+
+
+    balanceDisplay.textContent =
+        'MVR ' +
+        money(
+            balance
+        );
+}
+
+
+/* =====================================================
+   SAVE MEMO
+===================================================== */
+
+async function saveMemo(){
+
+    if (!selectedPatient){
+
+        return showToast(
+            'Select or register the patient first.',
+            'error'
+        );
+    }
+
+
+    if (!doctorSelect.value){
+
+        return showToast(
+            'Select a doctor.',
+            'error'
+        );
+    }
+
+
+    if (!invoiceLines.length){
+
+        return showToast(
+            'Add at least one service.',
+            'error'
+        );
+    }
+
+
+    if (
+        totals.patientPayable >
+        0
+        &&
+        !paymentMethod.value
+    ){
+
+        return showToast(
+            'Select patient payment method.',
+            'error'
+        );
+    }
+
+
+    saveMemoButton.disabled =
+        true;
+
+
+    saveMemoButton.innerHTML = `
+
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        Creating Memo...
+
+    `;
+
+
+    try{
+
+        const response =
+            await fetch(
+                '/api/memocreate',
+                {
+
+                    method:'POST',
+
+                    headers:{
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            action:
+                                'save-memo',
+
+                            userId:
+                                currentUser.id,
+
+                            patientId:
+                                selectedPatient.id,
+
+                            appointmentId:
+                                selectedAppointment
+                                    ?.id ||
+                                null,
+
+                            doctorId:
+                                Number(
+                                    doctorSelect.value
+                                ),
+
+                            primaryInsuranceId:
+                                primaryInsurance.value
+                                ?
+                                Number(
+                                    primaryInsurance.value
+                                )
+                                :
+                                null,
+
+                            insuranceMethod:
+                                primaryInsurance.value
+                                ?
+                                insuranceMethod.value
+                                :
+                                null,
+
+                            insuranceValue:
+                                Number(
+                                    insuranceValue.value ||
+                                    0
+                                ),
+
+                            billDiscountMethod:
+                                billDiscountMethod.value,
+
+                            billDiscountValue:
+                                Number(
+                                    billDiscountValue.value ||
+                                    0
+                                ),
+
+                            paymentMethodId:
+                                paymentMethod.value
+                                ?
+                                Number(
+                                    paymentMethod.value
+                                )
+                                :
+                                null,
+
+                            amountPaid:
+                                totals.paid,
+
+                            paymentReference:
+                                paymentReference
+                                    .value
+                                    .trim(),
+
+                            remarks:
+                                memoRemarks
+                                    .value
+                                    .trim(),
+
+                            services:
+                                invoiceLines.map(
+                                    line => ({
+
+                                        serviceId:
+                                            line.serviceId,
+
+                                        qty:
+                                            line.qty,
+
+                                        discountMethod:
+                                            line.discountMethod,
+
+                                        discountValue:
+                                            line.discountValue
+                                    })
+                                )
+                        })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok){
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        showToast(
+            'Memo created successfully.',
+            'success'
+        );
+
+
+        showReceipt(
+            data.memo
+        );
+
+
+    }catch(error){
+
+        showToast(
+            error.message ||
+            'Unable to create memo.',
+            'error'
+        );
+
+
+    }finally{
+
+        saveMemoButton.disabled =
+            false;
+
+
+        saveMemoButton.innerHTML = `
+
+            <i class="fa-solid fa-file-circle-check"></i>
+            Create Memo & Receipt
+
+        `;
+    }
+}
+
+
+/* =====================================================
+   RECEIPT NUMBER ADMIN
+===================================================== */
+
+async function setReceiptNumber(){
+
+    const next =
+        Number(
+            nextReceiptNumber.value
+        );
+
+
+    if (
+        !Number.isInteger(next) ||
+        next < 1
+    ){
+
+        return showToast(
+            'Enter a valid next receipt number.',
+            'error'
+        );
+    }
+
+
+    if (
+        !confirm(
+            'Set the next receipt number to '
+            +
+            next
+            +
+            '?'
+        )
+    ){
+
+        return;
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                '/api/memocreate',
+                {
+
+                    method:'POST',
+
+                    headers:{
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            action:
+                                'set-receipt-next',
+
+                            userId:
+                                currentUser.id,
+
+                            nextNumber:
+                                next
+                        })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok){
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        nextReceiptNumber.value =
+            '';
+
+
+        showToast(
+            'Next receipt number updated.',
+            'success'
+        );
+
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            'error'
+        );
+    }
+}
+
+
+/* =====================================================
+   RECEIPT DISPLAY
+===================================================== */
+
+function showReceipt(memo){
+
+    receiptNumber.textContent =
+        'Receipt No: ' +
+        memo.receiptNo;
+
+
+    receiptInfo.innerHTML = `
+
+        <div>
+            <strong>Patient:</strong>
+            ${escapeHtml(
+                memo.patientName
+            )}
+        </div>
+
+        <div>
+            <strong>Patient No:</strong>
+            ${escapeHtml(
+                memo.patientNo ||
+                '-'
+            )}
+        </div>
+
+        <div>
+            <strong>Doctor:</strong>
+            ${escapeHtml(
+                memo.doctorName
+            )}
+        </div>
+
+        <div>
+            <strong>Date:</strong>
+            ${escapeHtml(
+                memo.memoDate
+            )}
+        </div>
+
+        <div>
+            <strong>Primary Insurance:</strong>
+            ${escapeHtml(
+                memo.primaryInsuranceName ||
+                'None'
+            )}
+        </div>
+
+        <div>
+            <strong>Government Insurance:</strong>
+            ${
+                memo.governmentInsuranceCover >
+                0
+                ?
+                'Aasandha'
+                :
+                'None'
+            }
+        </div>
+    `;
+
+
+    receiptItems.innerHTML =
+        memo.items.map(
+            item => `
+
+                <tr>
+
+                    <td>
+                        ${escapeHtml(
+                            item.serviceName
+                        )}
+                    </td>
+
+                    <td>
+                        ${item.qty}
+                    </td>
+
+                    <td>
+                        MVR
+                        ${money(
+                            item.price
+                        )}
+                    </td>
+
+                    <td>
+                        MVR
+                        ${money(
+                            item.discountAmount
+                        )}
+                    </td>
+
+                    <td>
+                        MVR
+                        ${money(
+                            item.lineTotal
+                        )}
+                    </td>
+
+                </tr>
+
+            `
+        ).join('');
+
+
+    receiptCalculation.innerHTML = `
+
+        <div class="calc-row">
+
+            <span>
+                Subtotal
+            </span>
+
+            <strong>
+                MVR
+                ${money(
+                    memo.subtotal
+                )}
+            </strong>
+
+        </div>
+
+
+        <div class="calc-row discount">
+
+            <span>
+                Discounts
+            </span>
+
+            <strong>
+                - MVR
+                ${money(
+                    memo.totalDiscount
+                )}
+            </strong>
+
+        </div>
+
+
+        <div class="calc-row insurance">
+
+            <span>
+                Primary Insurance
+            </span>
+
+            <strong>
+                - MVR
+                ${money(
+                    memo.primaryInsuranceCover
+                )}
+            </strong>
+
+        </div>
+
+
+        <div class="calc-row govt">
+
+            <span>
+                Aasandha
+            </span>
+
+            <strong>
+                - MVR
+                ${money(
+                    memo.governmentInsuranceCover
+                )}
+            </strong>
+
+        </div>
+
+
+        <div class="calc-row patient">
+
+            <span>
+                Patient Payable
+            </span>
+
+            <strong>
+                MVR
+                ${money(
+                    memo.patientPayable
+                )}
+            </strong>
+
+        </div>
+
+
+        <div class="calc-row">
+
+            <span>
+                Paid
+            </span>
+
+            <strong>
+                MVR
+                ${money(
+                    memo.paidAmount
+                )}
+            </strong>
+
+        </div>
+
+
+        <div class="calc-row">
+
+            <span>
+                Balance
+            </span>
+
+            <strong>
+                MVR
+                ${money(
+                    memo.balanceAmount
+                )}
+            </strong>
+
+        </div>
+    `;
+
+
+    receiptOverlay.classList.add(
+        'show'
+    );
+}
+
+
+function closeReceipt(){
+
+    receiptOverlay.classList.remove(
+        'show'
+    );
+
+
+    location.reload();
+}
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function calculateAge(value){
+
+    if (!value){
+
+        return '-';
+    }
+
+
+    const dob =
+        new Date(
+            String(value)
+                .substring(
+                    0,
+                    10
+                )
+            +
+            'T00:00:00'
+        );
+
+
+    const today =
+        new Date();
+
+
+    let age =
+        today.getFullYear()
+        -
+        dob.getFullYear();
+
+
+    const month =
+        today.getMonth()
+        -
+        dob.getMonth();
+
+
+    if (
+        month < 0
+        ||
+        (
+            month === 0
+            &&
+            today.getDate() <
+            dob.getDate()
+        )
+    ){
+
+        age--;
+    }
+
+
+    return age >= 0
+        ?
+        age + ' yrs'
+        :
+        '-';
+}
+
+
+function money(value){
+
+    return Number(
+        value ||
+        0
+    ).toLocaleString(
+        'en-US',
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+}
+
+
+function formatDate(value){
+
+    if (!value){
+
+        return '-';
+    }
+
+
+    return new Date(
+        String(value)
+            .substring(
+                0,
+                10
+            )
+        +
+        'T00:00:00'
+    ).toLocaleDateString(
+        'en-GB'
+    );
+}
+
+
+function formatTime(value){
+
+    return String(
+        value ||
+        ''
+    ).substring(
+        0,
+        5
+    );
+}
+
+
+function escapeHtml(value){
+
+    return String(
+        value ??
+        ''
+    )
+    .replaceAll(
+        '&',
+        '&amp;'
+    )
+    .replaceAll(
+        '<',
+        '&lt;'
+    )
+    .replaceAll(
+        '>',
+        '&gt;'
+    )
+    .replaceAll(
+        '"',
+        '&quot;'
+    )
+    .replaceAll(
+        "'",
+        '&#039;'
+    );
+}
+
+
+let toastTimer;
+
+
+function showToast(
+    text,
+    type='success'
+){
+
+    toast.textContent =
+        text;
+
+
+    toast.className =
+        'toast '
+        +
+        type
+        +
+        ' show';
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    'show'
+                );
+
+            },
+            3500
+        );
+}
+
+
+function logout(){
+
+    if (
+        !confirm(
+            'Do you want to logout?'
+        )
+    ){
+
+        return;
+    }
+
+
+    sessionStorage.removeItem(
+        'clinic_user'
+    );
+
+
+    location.href =
+        'login.html';
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadPage();
+
+recalculate();
+
+</script>
+
+</body>
+</html>
