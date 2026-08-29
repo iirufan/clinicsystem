@@ -1,31 +1,22 @@
 import sql from '../lib/db.js';
 
 
-/* =========================================================
-   HELPERS
-========================================================= */
+function num(value) {
 
-function number(value){
-
-    const result =
+    const n =
         Number(value);
 
-    return Number.isFinite(
-        result
-    )
-        ?
-        result
-        :
-        0;
+    return Number.isFinite(n)
+        ? n
+        : 0;
 }
 
 
-function roundMoney(value){
+function money(value) {
 
     return Math.round(
         (
-            number(value)
-            +
+            num(value) +
             Number.EPSILON
         )
         *
@@ -38,10 +29,9 @@ function roundMoney(value){
 
 async function verifyUser(
     userId
-){
+) {
 
-    if (!userId){
-
+    if (!userId) {
         return null;
     }
 
@@ -70,12 +60,10 @@ async function verifyUser(
 
 
     if (
-        !user
-        ||
-        !user.approved
-        ||
+        !user ||
+        !user.approved ||
         !user.active
-    ){
+    ) {
 
         return null;
     }
@@ -85,26 +73,22 @@ async function verifyUser(
 }
 
 
-/* =========================================================
-   HANDLER
-========================================================= */
-
 export default async function handler(
     req,
     res
-){
+) {
 
-    try{
+    try {
 
 
-        /* =================================================
+        /* =====================================================
            GET
-        ================================================= */
+        ===================================================== */
 
         if (
             req.method ===
             'GET'
-        ){
+        ) {
 
             const mode =
                 String(
@@ -113,35 +97,54 @@ export default async function handler(
                 );
 
 
-            /* =============================================
-               SETUP
-            ============================================= */
+            /* =================================================
+               PAGE SETUP
+            ================================================= */
 
             if (
                 mode ===
                 'setup'
-            ){
+            ) {
+
+
+                /*
+                 IMPORTANT CHANGE:
+
+                 Doctors now come from USERS,
+                 not from doctors table.
+                */
 
                 const doctors =
                     await sql`
                         SELECT
-                            id,
-                            full_name,
-                            speciality
 
-                        FROM doctors
+                            u.id,
+                            u.full_name,
+                            u.username,
+                            u.doctor_id
 
-                        WHERE active =
-                            TRUE
+                        FROM users u
+
+                        WHERE
+
+                            LOWER(u.role) =
+                                'doctor'
+
+                            AND u.approved =
+                                TRUE
+
+                            AND u.active =
+                                TRUE
 
                         ORDER BY
-                            full_name
+                            u.full_name
                     `;
 
 
                 const services =
                     await sql`
                         SELECT
+
                             id,
                             service_name,
                             price,
@@ -160,13 +163,29 @@ export default async function handler(
                 const insuranceCompanies =
                     await sql`
                         SELECT
+
                             id,
                             company_code,
                             company_name,
                             short_name,
-                            is_government,
-                            charge_method,
-                            charge_value
+
+                            COALESCE(
+                                is_government,
+                                FALSE
+                            )
+                            AS is_government,
+
+                            COALESCE(
+                                charge_method,
+                                'percent'
+                            )
+                            AS charge_method,
+
+                            COALESCE(
+                                charge_value,
+                                0
+                            )
+                            AS charge_value
 
                         FROM insurance_companies
 
@@ -195,28 +214,30 @@ export default async function handler(
                     `;
 
 
+                /*
+                 Appointments still support the older
+                 doctor_id link.
+
+                 Patient information comes from patients
+                 when registered, otherwise appointment
+                 temporary fields.
+                */
+
                 const appointments =
                     await sql`
                         SELECT
 
                             a.id,
-                            a.patient_id,
-                            a.patient_name,
-                            a.contact_no,
 
+                            a.patient_id,
                             a.doctor_id,
                             a.service_id,
 
                             a.appointment_date,
                             a.appointment_time,
-                            a.status,
 
-                            p.patient_no,
-                            p.id_passport_no,
-                            p.passport_id,
-                            p.national_id,
-                            p.nationality,
-                            p.date_of_birth,
+                            a.status,
+                            a.temporary_patient,
 
                             COALESCE(
                                 p.full_name,
@@ -230,24 +251,20 @@ export default async function handler(
                             )
                             AS contact_no,
 
-                            d.full_name
-                            AS doctor_name,
+                            p.patient_no,
 
-                            s.service_name
+                            p.id_passport_no,
+                            p.passport_id,
+                            p.national_id,
+
+                            p.nationality,
+                            p.date_of_birth
 
                         FROM appointments a
 
                         LEFT JOIN patients p
                         ON p.id =
                             a.patient_id
-
-                        LEFT JOIN doctors d
-                        ON d.id =
-                            a.doctor_id
-
-                        LEFT JOIN services s
-                        ON s.id =
-                            a.service_id
 
                         WHERE
                             a.status IN (
@@ -260,7 +277,9 @@ export default async function handler(
                             CURRENT_DATE - INTERVAL '2 days'
 
                         ORDER BY
+
                             a.appointment_date,
+
                             a.appointment_time
                     `;
 
@@ -284,23 +303,24 @@ export default async function handler(
             }
 
 
-            /* =============================================
+            /* =================================================
                PATIENT SEARCH
-            ============================================= */
+            ================================================= */
 
             if (
                 mode ===
                 'patient-search'
-            ){
+            ) {
 
                 const query =
                     String(
                         req.query.q ||
                         ''
-                    ).trim();
+                    )
+                    .trim();
 
 
-                if (!query){
+                if (!query) {
 
                     return res
                         .status(400)
@@ -309,10 +329,23 @@ export default async function handler(
                             success:false,
 
                             message:
-                                'Search value required.'
+                                'Enter patient search information.'
                         });
                 }
 
+
+                /*
+                 Partial matching.
+
+                 This searches:
+
+                 - patient number
+                 - ID / Passport
+                 - old passport field
+                 - national ID
+                 - full name
+                 - phone
+                */
 
                 const search =
                     '%' +
@@ -322,16 +355,19 @@ export default async function handler(
 
                 const patients =
                     await sql`
+
                         SELECT
 
                             id,
                             patient_no,
+
                             id_passport_no,
                             passport_id,
                             national_id,
 
                             full_name,
                             phone,
+
                             date_of_birth,
                             nationality,
                             address
@@ -339,44 +375,63 @@ export default async function handler(
                         FROM patients
 
                         WHERE
+
                             active =
-                            TRUE
+                                TRUE
 
                             AND (
 
-                                full_name
-                                    ILIKE ${search}
+                                COALESCE(
+                                    patient_no,
+                                    ''
+                                )
+                                ILIKE ${search}
 
                                 OR
 
-                                phone
-                                    ILIKE ${search}
+                                COALESCE(
+                                    id_passport_no,
+                                    ''
+                                )
+                                ILIKE ${search}
 
                                 OR
 
-                                patient_no
-                                    ILIKE ${search}
+                                COALESCE(
+                                    passport_id,
+                                    ''
+                                )
+                                ILIKE ${search}
 
                                 OR
 
-                                id_passport_no
-                                    ILIKE ${search}
+                                COALESCE(
+                                    national_id,
+                                    ''
+                                )
+                                ILIKE ${search}
 
                                 OR
 
-                                passport_id
-                                    ILIKE ${search}
+                                COALESCE(
+                                    full_name,
+                                    ''
+                                )
+                                ILIKE ${search}
 
                                 OR
 
-                                national_id
-                                    ILIKE ${search}
+                                COALESCE(
+                                    phone,
+                                    ''
+                                )
+                                ILIKE ${search}
                             )
 
                         ORDER BY
                             full_name
 
-                        LIMIT 30
+                        LIMIT 50
                     `;
 
 
@@ -398,19 +453,19 @@ export default async function handler(
                     success:false,
 
                     message:
-                        'Invalid request.'
+                        'Invalid GET request.'
                 });
         }
 
 
-        /* =================================================
+        /* =====================================================
            POST
-        ================================================= */
+        ===================================================== */
 
         if (
             req.method !==
             'POST'
-        ){
+        ) {
 
             return res
                 .status(405)
@@ -435,7 +490,7 @@ export default async function handler(
             );
 
 
-        if (!user){
+        if (!user) {
 
             return res
                 .status(403)
@@ -449,19 +504,19 @@ export default async function handler(
         }
 
 
-        /* =================================================
-           ADMIN SET RECEIPT NUMBER
-        ================================================= */
+        /* =====================================================
+           SET RECEIPT NUMBER
+        ===================================================== */
 
         if (
             body.action ===
             'set-receipt-next'
-        ){
+        ) {
 
             if (
                 user.role !==
                 'admin'
-            ){
+            ) {
 
                 return res
                     .status(403)
@@ -488,7 +543,7 @@ export default async function handler(
                 ||
                 nextNumber <
                 1
-            ){
+            ) {
 
                 return res
                     .status(400)
@@ -497,13 +552,13 @@ export default async function handler(
                         success:false,
 
                         message:
-                            'Invalid receipt number.'
+                            'Invalid next receipt number.'
                     });
             }
 
 
             /*
-             Check this number does not already exist.
+             Prevent duplicate existing number.
             */
 
             const existing =
@@ -512,7 +567,7 @@ export default async function handler(
 
                     FROM memos
 
-                    WHERE receipt_serial >=
+                    WHERE receipt_serial =
                         ${nextNumber}
 
                     LIMIT 1
@@ -521,7 +576,7 @@ export default async function handler(
 
             if (
                 existing.length
-            ){
+            ) {
 
                 return res
                     .status(409)
@@ -530,7 +585,7 @@ export default async function handler(
                         success:false,
 
                         message:
-                            'Cannot restart receipt numbering because that number range is already in use.'
+                            'That receipt number already exists.'
                     });
             }
 
@@ -557,9 +612,16 @@ export default async function handler(
                 VALUES (
 
                     ${user.id},
+
                     'SET_RECEIPT_NUMBER',
+
                     'memos',
-                    ${'Next receipt number set to ' + nextNumber}
+
+                    ${
+                        'Next receipt number set to '
+                        +
+                        nextNumber
+                    }
                 )
             `;
 
@@ -573,14 +635,14 @@ export default async function handler(
         }
 
 
-        /* =================================================
+        /* =====================================================
            REGISTER PATIENT
-        ================================================= */
+        ===================================================== */
 
         if (
             body.action ===
             'register-patient'
-        ){
+        ) {
 
             const idPassport =
                 String(
@@ -617,7 +679,7 @@ export default async function handler(
                 ).trim();
 
 
-            const dob =
+            const dateOfBirth =
                 body.dateOfBirth ||
                 null;
 
@@ -626,7 +688,7 @@ export default async function handler(
                 !idPassport ||
                 !fullName ||
                 !phone
-            ){
+            ) {
 
                 return res
                     .status(400)
@@ -635,7 +697,7 @@ export default async function handler(
                         success:false,
 
                         message:
-                            'ID/Passport, name and contact are required.'
+                            'ID / Passport, patient name and contact number are required.'
                     });
             }
 
@@ -647,6 +709,7 @@ export default async function handler(
                     FROM patients
 
                     WHERE
+
                         LOWER(
                             COALESCE(
                                 id_passport_no,
@@ -690,7 +753,7 @@ export default async function handler(
 
             if (
                 duplicate.length
-            ){
+            ) {
 
                 return res
                     .status(409)
@@ -699,27 +762,38 @@ export default async function handler(
                         success:false,
 
                         message:
-                            'Patient with this ID / Passport already exists.'
+                            'A patient with this ID / Passport already exists.'
                     });
             }
 
+
+            /*
+             Create temporary patient number first,
+             then replace it with generated ID number.
+            */
 
             const inserted =
                 await sql`
                     INSERT INTO patients (
 
                         patient_no,
+
                         id_passport_no,
+
                         full_name,
+
                         phone,
 
                         date_of_birth,
+
                         nationality,
+
                         address,
 
                         active,
 
                         created_at,
+
                         updated_at
 
                     )
@@ -727,17 +801,29 @@ export default async function handler(
                     VALUES (
 
                         'TEMP',
+
                         ${idPassport},
+
                         ${fullName},
+
                         ${phone},
 
-                        ${dob},
-                        ${nationality || null},
-                        ${address || null},
+                        ${dateOfBirth},
+
+                        ${
+                            nationality ||
+                            null
+                        },
+
+                        ${
+                            address ||
+                            null
+                        },
 
                         TRUE,
 
                         NOW(),
+
                         NOW()
                     )
 
@@ -746,7 +832,8 @@ export default async function handler(
 
 
             const patientId =
-                inserted[0].id;
+                inserted[0]
+                    .id;
 
 
             const patientNo =
@@ -764,8 +851,12 @@ export default async function handler(
                 UPDATE patients
 
                 SET
+
                     patient_no =
-                        ${patientNo}
+                        ${patientNo},
+
+                    updated_at =
+                        NOW()
 
                 WHERE id =
                     ${patientId}
@@ -773,17 +864,19 @@ export default async function handler(
 
 
             /*
-             Link selected temporary appointment.
+             If patient came from temporary appointment,
+             connect appointment to registration.
             */
 
             if (
                 body.appointmentId
-            ){
+            ) {
 
                 await sql`
                     UPDATE appointments
 
                     SET
+
                         patient_id =
                             ${patientId},
 
@@ -800,24 +893,32 @@ export default async function handler(
                             NOW()
 
                     WHERE id =
-                        ${Number(
-                            body.appointmentId
-                        )}
+                        ${
+                            Number(
+                                body.appointmentId
+                            )
+                        }
                 `;
             }
 
 
-            const rows =
+            const patientRows =
                 await sql`
                     SELECT
 
                         id,
                         patient_no,
+
                         id_passport_no,
+
                         full_name,
+
                         phone,
+
                         date_of_birth,
+
                         nationality,
+
                         address
 
                     FROM patients
@@ -829,6 +930,32 @@ export default async function handler(
                 `;
 
 
+            await sql`
+                INSERT INTO audit_logs (
+
+                    user_id,
+                    action,
+                    table_name,
+                    record_id,
+                    description
+
+                )
+
+                VALUES (
+
+                    ${user.id},
+
+                    'CREATE_PATIENT',
+
+                    'patients',
+
+                    ${patientId},
+
+                    'Patient registered from memo page'
+                )
+            `;
+
+
             return res
                 .status(201)
                 .json({
@@ -836,19 +963,19 @@ export default async function handler(
                     success:true,
 
                     patient:
-                        rows[0]
+                        patientRows[0]
                 });
         }
 
 
-        /* =================================================
+        /* =====================================================
            SAVE MEMO
-        ================================================= */
+        ===================================================== */
 
         if (
             body.action !==
             'save-memo'
-        ){
+        ) {
 
             return res
                 .status(400)
@@ -862,22 +989,17 @@ export default async function handler(
         }
 
 
+        /* =====================================================
+           PATIENT
+        ===================================================== */
+
         const patientId =
             Number(
                 body.patientId
             );
 
 
-        const doctorId =
-            Number(
-                body.doctorId
-            );
-
-
-        if (
-            !patientId ||
-            !doctorId
-        ){
+        if (!patientId) {
 
             return res
                 .status(400)
@@ -886,18 +1008,15 @@ export default async function handler(
                     success:false,
 
                     message:
-                        'Patient and doctor are required.'
+                        'Patient is required.'
                 });
         }
 
 
-        /* =================================================
-           PATIENT
-        ================================================= */
-
         const patientRows =
             await sql`
                 SELECT
+
                     id,
                     patient_no,
                     full_name,
@@ -907,6 +1026,7 @@ export default async function handler(
                 FROM patients
 
                 WHERE
+
                     id =
                         ${patientId}
 
@@ -919,7 +1039,7 @@ export default async function handler(
 
         if (
             !patientRows.length
-        ){
+        ) {
 
             return res
                 .status(404)
@@ -937,7 +1057,7 @@ export default async function handler(
             patientRows[0];
 
 
-        const isMaldivian =
+        const maldivian =
             String(
                 patient.nationality ||
                 ''
@@ -948,21 +1068,50 @@ export default async function handler(
             'maldivian';
 
 
-        /* =================================================
-           DOCTOR
-        ================================================= */
+        /* =====================================================
+           DOCTOR FROM USERS
+        ===================================================== */
+
+        const doctorUserId =
+            Number(
+                body.doctorUserId
+            );
+
+
+        if (!doctorUserId) {
+
+            return res
+                .status(400)
+                .json({
+
+                    success:false,
+
+                    message:
+                        'Select a doctor.'
+                });
+        }
+
 
         const doctorRows =
             await sql`
                 SELECT
-                    id,
-                    full_name
 
-                FROM doctors
+                    id,
+                    full_name,
+                    doctor_id
+
+                FROM users
 
                 WHERE
+
                     id =
-                        ${doctorId}
+                        ${doctorUserId}
+
+                    AND LOWER(role) =
+                        'doctor'
+
+                    AND approved =
+                        TRUE
 
                     AND active =
                         TRUE
@@ -973,7 +1122,7 @@ export default async function handler(
 
         if (
             !doctorRows.length
-        ){
+        ) {
 
             return res
                 .status(400)
@@ -982,18 +1131,35 @@ export default async function handler(
                     success:false,
 
                     message:
-                        'Doctor not found.'
+                        'Selected doctor is not available.'
                 });
         }
 
 
-        const doctor =
+        const doctorUser =
             doctorRows[0];
 
 
-        /* =================================================
+        /*
+         doctor_id remains compatible with the old
+         doctors table if this user has doctor_id assigned.
+
+         doctor_user_id always records the doctor user.
+        */
+
+        const doctorTableId =
+            doctorUser.doctor_id
+            ?
+            Number(
+                doctorUser.doctor_id
+            )
+            :
+            null;
+
+
+        /* =====================================================
            SERVICES
-        ================================================= */
+        ===================================================== */
 
         const requestedServices =
             Array.isArray(
@@ -1007,7 +1173,7 @@ export default async function handler(
 
         if (
             !requestedServices.length
-        ){
+        ) {
 
             return res
                 .status(400)
@@ -1016,7 +1182,7 @@ export default async function handler(
                     success:false,
 
                     message:
-                        'At least one service is required.'
+                        'Add at least one service.'
                 });
         }
 
@@ -1036,6 +1202,7 @@ export default async function handler(
             await sql.query(
                 `
                 SELECT
+
                     id,
                     service_name,
                     price,
@@ -1044,6 +1211,7 @@ export default async function handler(
                 FROM services
 
                 WHERE
+
                     active = TRUE
 
                     AND id =
@@ -1074,15 +1242,15 @@ export default async function handler(
             0;
 
 
-        let lineDiscountTotal =
+        let serviceDiscount =
             0;
 
 
-        let lineNet =
+        let serviceNet =
             0;
 
 
-        let govtEligible =
+        let aasandhaEligible =
             0;
 
 
@@ -1093,7 +1261,7 @@ export default async function handler(
         for (
             const requested
             of requestedServices
-        ){
+        ) {
 
             const service =
                 serviceMap.get(
@@ -1103,7 +1271,7 @@ export default async function handler(
                 );
 
 
-            if (!service){
+            if (!service) {
 
                 return res
                     .status(400)
@@ -1112,7 +1280,7 @@ export default async function handler(
                         success:false,
 
                         message:
-                            'One of the selected services is invalid.'
+                            'Invalid service selected.'
                     });
             }
 
@@ -1121,7 +1289,7 @@ export default async function handler(
                 Math.max(
                     1,
                     Math.floor(
-                        number(
+                        num(
                             requested.qty
                         )
                     )
@@ -1129,25 +1297,25 @@ export default async function handler(
 
 
             const price =
-                roundMoney(
+                money(
                     service.price
                 );
 
 
-            const aasandhaPrice =
-                roundMoney(
+            const govtRate =
+                money(
                     service.aasandha_price
                 );
 
 
             const lineSubtotal =
-                roundMoney(
+                money(
                     price *
                     qty
                 );
 
 
-            const method =
+            const discountMethod =
                 [
                     'none',
                     'percent',
@@ -1165,7 +1333,7 @@ export default async function handler(
             const discountValue =
                 Math.max(
                     0,
-                    number(
+                    num(
                         requested.discountValue
                     )
                 );
@@ -1176,9 +1344,9 @@ export default async function handler(
 
 
             if (
-                method ===
+                discountMethod ===
                 'percent'
-            ){
+            ) {
 
                 discountAmount =
                     lineSubtotal
@@ -1191,9 +1359,9 @@ export default async function handler(
                     100;
 
             }else if (
-                method ===
+                discountMethod ===
                 'fixed'
-            ){
+            ) {
 
                 discountAmount =
                     Math.min(
@@ -1204,13 +1372,13 @@ export default async function handler(
 
 
             discountAmount =
-                roundMoney(
+                money(
                     discountAmount
                 );
 
 
             const lineTotal =
-                roundMoney(
+                money(
                     Math.max(
                         0,
                         lineSubtotal -
@@ -1219,11 +1387,11 @@ export default async function handler(
                 );
 
 
-            const itemGovtEligible =
-                roundMoney(
+            const lineGovtEligible =
+                money(
                     Math.min(
                         lineTotal,
-                        aasandhaPrice *
+                        govtRate *
                         qty
                     )
                 );
@@ -1233,16 +1401,16 @@ export default async function handler(
                 lineSubtotal;
 
 
-            lineDiscountTotal +=
+            serviceDiscount +=
                 discountAmount;
 
 
-            lineNet +=
+            serviceNet +=
                 lineTotal;
 
 
-            govtEligible +=
-                itemGovtEligible;
+            aasandhaEligible +=
+                lineGovtEligible;
 
 
             calculatedItems.push({
@@ -1259,12 +1427,11 @@ export default async function handler(
 
                 price,
 
-                aasandhaPrice,
+                govtRate,
 
                 lineSubtotal,
 
-                discountMethod:
-                    method,
+                discountMethod,
 
                 discountValue,
 
@@ -1276,32 +1443,32 @@ export default async function handler(
 
 
         subtotal =
-            roundMoney(
+            money(
                 subtotal
             );
 
 
-        lineDiscountTotal =
-            roundMoney(
-                lineDiscountTotal
+        serviceDiscount =
+            money(
+                serviceDiscount
             );
 
 
-        lineNet =
-            roundMoney(
-                lineNet
+        serviceNet =
+            money(
+                serviceNet
             );
 
 
-        govtEligible =
-            roundMoney(
-                govtEligible
+        aasandhaEligible =
+            money(
+                aasandhaEligible
             );
 
 
-        /* =================================================
-           WHOLE BILL DISCOUNT
-        ================================================= */
+        /* =====================================================
+           BILL DISCOUNT
+        ===================================================== */
 
         const billDiscountMethod =
             [
@@ -1321,7 +1488,7 @@ export default async function handler(
         const billDiscountValue =
             Math.max(
                 0,
-                number(
+                num(
                     body.billDiscountValue
                 )
             );
@@ -1334,10 +1501,10 @@ export default async function handler(
         if (
             billDiscountMethod ===
             'percent'
-        ){
+        ) {
 
             billDiscountAmount =
-                lineNet
+                serviceNet
                 *
                 Math.min(
                     100,
@@ -1349,35 +1516,35 @@ export default async function handler(
         }else if (
             billDiscountMethod ===
             'fixed'
-        ){
+        ) {
 
             billDiscountAmount =
                 Math.min(
-                    lineNet,
+                    serviceNet,
                     billDiscountValue
                 );
         }
 
 
         billDiscountAmount =
-            roundMoney(
+            money(
                 billDiscountAmount
             );
 
 
         const afterDiscount =
-            roundMoney(
+            money(
                 Math.max(
                     0,
-                    lineNet -
+                    serviceNet -
                     billDiscountAmount
                 )
             );
 
 
-        /* =================================================
+        /* =====================================================
            PRIMARY INSURANCE
-        ================================================= */
+        ===================================================== */
 
         let primaryInsuranceId =
             body.primaryInsuranceId
@@ -1407,18 +1574,25 @@ export default async function handler(
 
         if (
             primaryInsuranceId
-        ){
+        ) {
 
             const insuranceRows =
                 await sql`
                     SELECT
+
                         id,
                         company_name,
-                        is_government
+
+                        COALESCE(
+                            is_government,
+                            FALSE
+                        )
+                        AS is_government
 
                     FROM insurance_companies
 
                     WHERE
+
                         id =
                             ${primaryInsuranceId}
 
@@ -1430,11 +1604,10 @@ export default async function handler(
 
 
             if (
-                !insuranceRows.length
-                ||
+                !insuranceRows.length ||
                 insuranceRows[0]
                     .is_government
-            ){
+            ) {
 
                 return res
                     .status(400)
@@ -1465,7 +1638,7 @@ export default async function handler(
             primaryInsuranceValue =
                 Math.max(
                     0,
-                    number(
+                    num(
                         body.insuranceValue
                     )
                 );
@@ -1474,7 +1647,7 @@ export default async function handler(
             if (
                 primaryInsuranceMethod ===
                 'percent'
-            ){
+            ) {
 
                 primaryInsuranceCover =
                     afterDiscount
@@ -1486,7 +1659,7 @@ export default async function handler(
                     /
                     100;
 
-            }else{
+            }else {
 
                 primaryInsuranceCover =
                     Math.min(
@@ -1497,7 +1670,7 @@ export default async function handler(
 
 
             primaryInsuranceCover =
-                roundMoney(
+                money(
                     Math.min(
                         afterDiscount,
                         primaryInsuranceCover
@@ -1506,9 +1679,9 @@ export default async function handler(
         }
 
 
-        /* =================================================
+        /* =====================================================
            GOVERNMENT INSURANCE
-        ================================================= */
+        ===================================================== */
 
         let governmentInsuranceId =
             null;
@@ -1519,18 +1692,23 @@ export default async function handler(
 
 
         if (
-            isMaldivian
-        ){
+            maldivian
+        ) {
 
-            const governmentRows =
+            const govtRows =
                 await sql`
                     SELECT id
 
                     FROM insurance_companies
 
                     WHERE
-                        is_government =
-                            TRUE
+
+                        COALESCE(
+                            is_government,
+                            FALSE
+                        )
+                        =
+                        TRUE
 
                         AND active =
                             TRUE
@@ -1542,16 +1720,16 @@ export default async function handler(
 
 
             if (
-                governmentRows.length
-            ){
+                govtRows.length
+            ) {
 
                 governmentInsuranceId =
-                    governmentRows[0]
+                    govtRows[0]
                         .id;
 
 
-                const remaining =
-                    roundMoney(
+                const remainingAfterPrimary =
+                    money(
                         Math.max(
                             0,
                             afterDiscount -
@@ -1561,10 +1739,10 @@ export default async function handler(
 
 
                 governmentInsuranceCover =
-                    roundMoney(
+                    money(
                         Math.min(
-                            remaining,
-                            govtEligible
+                            remainingAfterPrimary,
+                            aasandhaEligible
                         )
                     );
             }
@@ -1572,7 +1750,7 @@ export default async function handler(
 
 
         const patientPayable =
-            roundMoney(
+            money(
                 Math.max(
                     0,
                     afterDiscount
@@ -1584,9 +1762,9 @@ export default async function handler(
             );
 
 
-        /* =================================================
+        /* =====================================================
            PAYMENT
-        ================================================= */
+        ===================================================== */
 
         let paymentMethodId =
             body.paymentMethodId
@@ -1613,11 +1791,11 @@ export default async function handler(
         if (
             patientPayable >
             0
-        ){
+        ) {
 
             if (
                 !paymentMethodId
-            ){
+            ) {
 
                 return res
                     .status(400)
@@ -1631,15 +1809,17 @@ export default async function handler(
             }
 
 
-            const paymentMethodRows =
+            const paymentRows =
                 await sql`
                     SELECT
+
                         id,
                         method_name
 
                     FROM payment_methods
 
                     WHERE
+
                         id =
                             ${paymentMethodId}
 
@@ -1651,8 +1831,8 @@ export default async function handler(
 
 
             if (
-                !paymentMethodRows.length
-            ){
+                !paymentRows.length
+            ) {
 
                 return res
                     .status(400)
@@ -1667,11 +1847,11 @@ export default async function handler(
 
 
             paymentMethodName =
-                paymentMethodRows[0]
+                paymentRows[0]
                     .method_name;
 
 
-            const methodLower =
+            const methodName =
                 String(
                     paymentMethodName
                 )
@@ -1679,33 +1859,33 @@ export default async function handler(
 
 
             const partialAllowed =
-                methodLower.includes(
+                methodName.includes(
                     'cash'
                 )
                 ||
-                methodLower.includes(
+                methodName.includes(
                     'transfer'
                 );
 
 
             if (
                 partialAllowed
-            ){
+            ) {
 
                 paidAmount =
-                    roundMoney(
+                    money(
                         Math.min(
                             patientPayable,
                             Math.max(
                                 0,
-                                number(
+                                num(
                                     body.amountPaid
                                 )
                             )
                         )
                     );
 
-            }else{
+            }else {
 
                 paidAmount =
                     patientPayable;
@@ -1713,42 +1893,32 @@ export default async function handler(
 
 
             balanceAmount =
-                roundMoney(
+                money(
                     patientPayable -
                     paidAmount
                 );
-
-        }else{
-
-            paymentMethodId =
-                null;
-
-            paidAmount =
-                0;
-
-            balanceAmount =
-                0;
         }
 
 
-        /* =================================================
+        /* =====================================================
            RECEIPT NUMBER
-        ================================================= */
+        ===================================================== */
 
         const receiptRows =
             await sql`
                 SELECT
+
                     nextval(
                         'memo_receipt_seq'
                     )
-                    AS receipt_serial
+                    AS number
             `;
 
 
         const receiptSerial =
             Number(
                 receiptRows[0]
-                    .receipt_serial
+                    .number
             );
 
 
@@ -1761,12 +1931,13 @@ export default async function handler(
             );
 
 
-        /* =================================================
+        /* =====================================================
            INSERT MEMO
-        ================================================= */
+        ===================================================== */
 
         const memoRows =
             await sql`
+
                 INSERT INTO memos (
 
                     memo_no,
@@ -1778,6 +1949,8 @@ export default async function handler(
                     patient_name,
 
                     doctor_id,
+                    doctor_user_id,
+
                     appointment_id,
 
                     primary_insurance_id,
@@ -1807,17 +1980,21 @@ export default async function handler(
                     patient_payable,
 
                     paid_amount,
+
                     balance_amount,
 
                     payment_method_id,
+
                     payment_reference,
 
                     status,
+
                     remarks,
 
                     created_by,
 
                     created_at,
+
                     updated_at
 
                 )
@@ -1832,7 +2009,9 @@ export default async function handler(
                     ${patient.id},
                     ${patient.full_name},
 
-                    ${doctor.id},
+                    ${doctorTableId},
+                    ${doctorUser.id},
+
                     ${
                         body.appointmentId
                         ?
@@ -1844,11 +2023,15 @@ export default async function handler(
                     },
 
                     ${primaryInsuranceId},
+
                     ${primaryInsuranceMethod},
+
                     ${primaryInsuranceValue},
+
                     ${primaryInsuranceCover},
 
                     ${governmentInsuranceId},
+
                     ${governmentInsuranceCover},
 
                     CURRENT_DATE,
@@ -1856,18 +2039,20 @@ export default async function handler(
                     ${subtotal},
 
                     ${
-                        roundMoney(
-                            lineDiscountTotal +
+                        money(
+                            serviceDiscount +
                             billDiscountAmount
                         )
                     },
 
                     ${billDiscountMethod},
+
                     ${billDiscountValue},
+
                     ${billDiscountAmount},
 
                     ${
-                        roundMoney(
+                        money(
                             primaryInsuranceCover +
                             governmentInsuranceCover
                         )
@@ -1880,6 +2065,7 @@ export default async function handler(
                     ${patientPayable},
 
                     ${paidAmount},
+
                     ${balanceAmount},
 
                     ${paymentMethodId},
@@ -1894,7 +2080,8 @@ export default async function handler(
                     },
 
                     ${
-                        balanceAmount > 0
+                        balanceAmount >
+                        0
                         ?
                         'PARTIAL'
                         :
@@ -1913,6 +2100,7 @@ export default async function handler(
                     ${user.id},
 
                     NOW(),
+
                     NOW()
                 )
 
@@ -1925,21 +2113,23 @@ export default async function handler(
                 .id;
 
 
-        /* =================================================
-           MEMO ITEMS
-        ================================================= */
+        /* =====================================================
+           ITEMS
+        ===================================================== */
 
         for (
             const item
             of calculatedItems
-        ){
+        ) {
 
             await sql`
+
                 INSERT INTO memo_items (
 
                     memo_id,
 
                     service_id,
+
                     service_name,
 
                     description,
@@ -1947,6 +2137,7 @@ export default async function handler(
                     quantity,
 
                     unit_price,
+
                     base_price,
 
                     aasandha_unit_price,
@@ -1954,10 +2145,13 @@ export default async function handler(
                     line_subtotal,
 
                     discount_method,
+
                     discount_value,
+
                     discount_amount,
 
                     amount,
+
                     line_total,
 
                     created_at
@@ -1969,6 +2163,7 @@ export default async function handler(
                     ${memoId},
 
                     ${item.serviceId},
+
                     ${item.serviceName},
 
                     ${item.serviceName},
@@ -1976,17 +2171,21 @@ export default async function handler(
                     ${item.qty},
 
                     ${item.price},
+
                     ${item.price},
 
-                    ${item.aasandhaPrice},
+                    ${item.govtRate},
 
                     ${item.lineSubtotal},
 
                     ${item.discountMethod},
+
                     ${item.discountValue},
+
                     ${item.discountAmount},
 
                     ${item.lineTotal},
+
                     ${item.lineTotal},
 
                     NOW()
@@ -1995,19 +2194,21 @@ export default async function handler(
         }
 
 
-        /* =================================================
+        /* =====================================================
            PAYMENT RECORD
-        ================================================= */
+        ===================================================== */
 
         if (
             paidAmount >
             0
-        ){
+        ) {
 
             await sql`
+
                 INSERT INTO payments (
 
                     memo_id,
+
                     patient_id,
 
                     payment_date,
@@ -2027,6 +2228,7 @@ export default async function handler(
                 VALUES (
 
                     ${memoId},
+
                     ${patient.id},
 
                     CURRENT_DATE,
@@ -2052,20 +2254,19 @@ export default async function handler(
         }
 
 
-        /* =================================================
-           APPOINTMENT COMPLETE
-        ================================================= */
+        /* =====================================================
+           APPOINTMENT
+        ===================================================== */
 
         if (
             body.appointmentId
-        ){
+        ) {
 
             await sql`
+
                 UPDATE appointments
 
                 SET
-                    status =
-                        'COMPLETED',
 
                     patient_id =
                         ${patient.id},
@@ -2073,28 +2274,38 @@ export default async function handler(
                     temporary_patient =
                         FALSE,
 
+                    status =
+                        'COMPLETED',
+
                     updated_at =
                         NOW()
 
                 WHERE id =
-                    ${Number(
-                        body.appointmentId
-                    )}
+                    ${
+                        Number(
+                            body.appointmentId
+                        )
+                    }
             `;
         }
 
 
-        /* =================================================
+        /* =====================================================
            AUDIT
-        ================================================= */
+        ===================================================== */
 
         await sql`
+
             INSERT INTO audit_logs (
 
                 user_id,
+
                 action,
+
                 table_name,
+
                 record_id,
+
                 description
 
             )
@@ -2110,7 +2321,7 @@ export default async function handler(
                 ${memoId},
 
                 ${
-                    'Memo created. Receipt No '
+                    'Memo created. Receipt '
                     +
                     receiptNo
                 }
@@ -2138,7 +2349,7 @@ export default async function handler(
                         patient.patient_no,
 
                     doctorName:
-                        doctor.full_name,
+                        doctorUser.full_name,
 
                     memoDate:
                         new Date()
@@ -2153,8 +2364,8 @@ export default async function handler(
                     subtotal,
 
                     totalDiscount:
-                        roundMoney(
-                            lineDiscountTotal +
+                        money(
+                            serviceDiscount +
                             billDiscountAmount
                         ),
 
@@ -2167,8 +2378,6 @@ export default async function handler(
                     paidAmount,
 
                     balanceAmount,
-
-                    paymentMethodName,
 
                     items:
                         calculatedItems.map(
@@ -2194,10 +2403,10 @@ export default async function handler(
             });
 
 
-    }catch(error){
+    } catch(error) {
 
         console.error(
-            'MEMO CREATE ERROR:',
+            'MEMOCREATE API ERROR:',
             error
         );
 
@@ -2210,7 +2419,7 @@ export default async function handler(
 
                 message:
                     error.message ||
-                    'Unable to create memo.'
+                    'Unable to process memo.'
             });
     }
 }
