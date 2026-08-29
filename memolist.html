@@ -335,20 +335,492 @@ async function saveEdit(){
   toast('Memo updated successfully.');closeEdit();await loadMemos();showReceipt(data.memo);
  }catch(e){toast(e.message,'error')}finally{btn.disabled=false}
 }
-function showReceipt(m){
- const c=m.company||setup.company||{},p=m.patient||{};
- $('rCompany').textContent=c.company_name||c.name||'Clinic';
- $('rCompanyInfo').innerHTML=[c.company_address||c.address,c.company_phone||c.phone,c.company_email||c.email,c.company_registration_no||c.registrationNo?('Reg: '+(c.company_registration_no||c.registrationNo)):null].filter(Boolean).map(esc).join('<br>');
- $('rPatientName').textContent=p.full_name||p.name||m.patient_name||'-';
- const patientLines=[['Patient No.',p.patient_no||p.patientNo],['ID / Passport',idText(p)],['DOB',date(p.date_of_birth||p.dateOfBirth)],['Age',age(p.date_of_birth||p.dateOfBirth)],['Nationality',p.nationality],['Contact',p.phone||p.contact],['Address',p.address],['Email',p.email]].filter(x=>x[1]&&x[1]!=='-');
- $('rPatientInfo').innerHTML=patientLines.map(x=>`<div class="receipt-line"><span>${esc(x[0])}</span><strong>${esc(x[1])}</strong></div>`).join('');
- const memoLines=[['Receipt No.',m.receipt_no||m.receiptNo],['Memo No.',m.memo_no],['Date',date(m.memo_date||m.memoDate)],['Doctor',m.doctor_name||m.doctorName],['Insurance',m.primary_insurance_name||m.primaryInsuranceName],['Payment',m.payment_method_name||m.paymentMethodName]].filter(x=>x[1]);
- $('rMemoInfo').innerHTML=memoLines.map(x=>`<div class="receipt-line"><span>${esc(x[0])}</span><strong>${esc(x[1])}</strong></div>`).join('');
- $('rItems').innerHTML=(m.items||[]).map(x=>`<tr><td>${esc(x.service_name||x.serviceName)}</td><td>${Number(x.quantity||x.qty||1)}</td><td>MVR ${money(x.unit_price??x.price)}</td><td>${Number(x.discount_amount??x.discountAmount||0)>0?'MVR '+money(x.discount_amount??x.discountAmount):'-'}</td><td>MVR ${money(x.line_total??x.lineTotal??x.amount)}</td></tr>`).join('');
- const sd=Number(m.service_discount??m.serviceDiscount||0),bd=Number(m.bill_discount_amount??m.billDiscountAmount||0),pi=Number(m.primary_insurance_cover??m.primaryInsuranceCover||0),gi=Number(m.government_insurance_cover??m.governmentInsuranceCover||0),pay=Number(m.patient_payable??m.patientPayable||0),paid=Number(m.paid_amount??m.paidAmount||0),bal=Number(m.balance_amount??m.balanceAmount||0);
- $('rSummary').innerHTML=`<div class="sum-row"><span>Subtotal</span><b>MVR ${money(m.subtotal)}</b></div>${sd>0?`<div class="sum-row"><span>Service Discount</span><b>- MVR ${money(sd)}</b></div>`:''}${bd>0?`<div class="sum-row"><span>Bill Discount</span><b>- MVR ${money(bd)}</b></div>`:''}${pi>0?`<div class="sum-row"><span>${esc(m.primary_insurance_name||m.primaryInsuranceName||'Insurance')}</span><b>- MVR ${money(pi)}</b></div>`:''}${gi>0?`<div class="sum-row"><span>Aasandha</span><b>- MVR ${money(gi)}</b></div>`:''}<div class="sum-row sum-total"><span>Patient Payable</span><b>MVR ${money(pay)}</b></div>${paid>0?`<div class="sum-row"><span>Paid</span><b>MVR ${money(paid)}</b></div>`:''}${bal>0?`<div class="sum-row"><span>Balance</span><b>MVR ${money(bal)}</b></div>`:''}`;
- $('receiptOverlay').classList.add('show');
+function showReceipt(m) {
+
+    const c =
+        m.company ||
+        setup.company ||
+        {};
+
+    const p =
+        m.patient ||
+        {};
+
+
+    /* =============================================
+       COMPANY
+    ============================================= */
+
+    $('rCompany').textContent =
+        c.company_name ||
+        c.name ||
+        'Clinic';
+
+
+    const companyInfo = [];
+
+    if (
+        c.company_address ||
+        c.address
+    ) {
+        companyInfo.push(
+            c.company_address ||
+            c.address
+        );
+    }
+
+    if (
+        c.company_phone ||
+        c.phone
+    ) {
+        companyInfo.push(
+            c.company_phone ||
+            c.phone
+        );
+    }
+
+    if (
+        c.company_email ||
+        c.email
+    ) {
+        companyInfo.push(
+            c.company_email ||
+            c.email
+        );
+    }
+
+    const registrationNo =
+        c.company_registration_no ||
+        c.registrationNo;
+
+    if (registrationNo) {
+
+        companyInfo.push(
+            'Reg: ' +
+            registrationNo
+        );
+    }
+
+
+    $('rCompanyInfo').innerHTML =
+        companyInfo
+            .map(esc)
+            .join('<br>');
+
+
+    /* =============================================
+       PATIENT
+    ============================================= */
+
+    $('rPatientName').textContent =
+        p.full_name ||
+        p.name ||
+        m.patient_name ||
+        '-';
+
+
+    const patientDOB =
+        p.date_of_birth ||
+        p.dateOfBirth ||
+        null;
+
+
+    const patientLines = [
+
+        [
+            'Patient No.',
+            p.patient_no ||
+            p.patientNo
+        ],
+
+        [
+            'ID / Passport',
+            idText(p)
+        ],
+
+        [
+            'DOB',
+            patientDOB
+                ? date(patientDOB)
+                : null
+        ],
+
+        [
+            'Age',
+            patientDOB
+                ? age(patientDOB)
+                : null
+        ],
+
+        [
+            'Nationality',
+            p.nationality
+        ],
+
+        [
+            'Contact',
+            p.phone ||
+            p.contact
+        ],
+
+        [
+            'Address',
+            p.address
+        ],
+
+        [
+            'Email',
+            p.email
+        ]
+
+    ].filter(
+        item =>
+            item[1] &&
+            item[1] !== '-'
+    );
+
+
+    $('rPatientInfo').innerHTML =
+        patientLines
+            .map(
+                item => `
+                    <div class="receipt-line">
+                        <span>${esc(item[0])}</span>
+                        <strong>${esc(item[1])}</strong>
+                    </div>
+                `
+            )
+            .join('');
+
+
+    /* =============================================
+       MEMO INFORMATION
+    ============================================= */
+
+    const memoDate =
+        m.memo_date ||
+        m.memoDate;
+
+
+    const memoLines = [
+
+        [
+            'Receipt No.',
+            m.receipt_no ||
+            m.receiptNo
+        ],
+
+        [
+            'Memo No.',
+            m.memo_no
+        ],
+
+        [
+            'Date',
+            memoDate
+                ? date(memoDate)
+                : '-'
+        ],
+
+        [
+            'Doctor',
+            m.doctor_name ||
+            m.doctorName
+        ],
+
+        [
+            'Insurance',
+            m.primary_insurance_name ||
+            m.primaryInsuranceName
+        ],
+
+        [
+            'Payment',
+            m.payment_method_name ||
+            m.paymentMethodName
+        ]
+
+    ].filter(
+        item =>
+            item[1]
+    );
+
+
+    $('rMemoInfo').innerHTML =
+        memoLines
+            .map(
+                item => `
+                    <div class="receipt-line">
+                        <span>${esc(item[0])}</span>
+                        <strong>${esc(item[1])}</strong>
+                    </div>
+                `
+            )
+            .join('');
+
+
+    /* =============================================
+       MEMO ITEMS
+    ============================================= */
+
+    const items =
+        Array.isArray(m.items)
+            ? m.items
+            : [];
+
+
+    $('rItems').innerHTML =
+        items
+            .map(
+                item => {
+
+                    const serviceName =
+                        item.service_name ||
+                        item.serviceName ||
+                        item.description ||
+                        '-';
+
+
+                    const quantity =
+                        Number(
+                            item.quantity ??
+                            item.qty ??
+                            1
+                        );
+
+
+                    const rate =
+                        Number(
+                            item.unit_price ??
+                            item.price ??
+                            item.base_price ??
+                            0
+                        );
+
+
+                    const discountAmount =
+                        Number(
+                            item.discount_amount ??
+                            item.discountAmount ??
+                            0
+                        );
+
+
+                    const lineTotal =
+                        Number(
+                            item.line_total ??
+                            item.lineTotal ??
+                            item.amount ??
+                            0
+                        );
+
+
+                    return `
+                        <tr>
+                            <td>${esc(serviceName)}</td>
+                            <td>${quantity}</td>
+                            <td>MVR ${money(rate)}</td>
+                            <td>${
+                                discountAmount > 0
+                                    ? 'MVR ' +
+                                      money(discountAmount)
+                                    : '-'
+                            }</td>
+                            <td>MVR ${money(lineTotal)}</td>
+                        </tr>
+                    `;
+                }
+            )
+            .join('');
+
+
+    /* =============================================
+       SUMMARY VALUES
+    ============================================= */
+
+    const subtotal =
+        Number(
+            m.subtotal ??
+            0
+        );
+
+
+    const serviceDiscount =
+        Number(
+            m.service_discount ??
+            m.serviceDiscount ??
+            0
+        );
+
+
+    const billDiscount =
+        Number(
+            m.bill_discount_amount ??
+            m.billDiscountAmount ??
+            0
+        );
+
+
+    const primaryInsurance =
+        Number(
+            m.primary_insurance_cover ??
+            m.primaryInsuranceCover ??
+            0
+        );
+
+
+    const governmentInsurance =
+        Number(
+            m.government_insurance_cover ??
+            m.governmentInsuranceCover ??
+            0
+        );
+
+
+    const patientPayable =
+        Number(
+            m.patient_payable ??
+            m.patientPayable ??
+            m.patient_amount ??
+            0
+        );
+
+
+    const paidAmount =
+        Number(
+            m.paid_amount ??
+            m.paidAmount ??
+            0
+        );
+
+
+    const balanceAmount =
+        Number(
+            m.balance_amount ??
+            m.balanceAmount ??
+            0
+        );
+
+
+    const insuranceName =
+        m.primary_insurance_name ||
+        m.primaryInsuranceName ||
+        'Insurance';
+
+
+    /* =============================================
+       SUMMARY HTML
+    ============================================= */
+
+    let summaryHTML = `
+        <div class="sum-row">
+            <span>Subtotal</span>
+            <b>MVR ${money(subtotal)}</b>
+        </div>
+    `;
+
+
+    if (
+        serviceDiscount >
+        0
+    ) {
+
+        summaryHTML += `
+            <div class="sum-row">
+                <span>Service Discount</span>
+                <b>- MVR ${money(serviceDiscount)}</b>
+            </div>
+        `;
+    }
+
+
+    if (
+        billDiscount >
+        0
+    ) {
+
+        summaryHTML += `
+            <div class="sum-row">
+                <span>Bill Discount</span>
+                <b>- MVR ${money(billDiscount)}</b>
+            </div>
+        `;
+    }
+
+
+    if (
+        primaryInsurance >
+        0
+    ) {
+
+        summaryHTML += `
+            <div class="sum-row">
+                <span>${esc(insuranceName)}</span>
+                <b>- MVR ${money(primaryInsurance)}</b>
+            </div>
+        `;
+    }
+
+
+    if (
+        governmentInsurance >
+        0
+    ) {
+
+        summaryHTML += `
+            <div class="sum-row">
+                <span>Aasandha</span>
+                <b>- MVR ${money(governmentInsurance)}</b>
+            </div>
+        `;
+    }
+
+
+    summaryHTML += `
+        <div class="sum-row sum-total">
+            <span>Patient Payable</span>
+            <b>MVR ${money(patientPayable)}</b>
+        </div>
+    `;
+
+
+    if (
+        paidAmount >
+        0
+    ) {
+
+        summaryHTML += `
+            <div class="sum-row">
+                <span>Paid</span>
+                <b>MVR ${money(paidAmount)}</b>
+            </div>
+        `;
+    }
+
+
+    if (
+        balanceAmount >
+        0
+    ) {
+
+        summaryHTML += `
+            <div class="sum-row">
+                <span>Balance</span>
+                <b>MVR ${money(balanceAmount)}</b>
+            </div>
+        `;
+    }
+
+
+    $('rSummary').innerHTML =
+        summaryHTML;
+
+
+    $('receiptOverlay')
+        .classList
+        .add('show');
 }
+
 function closeReceipt(){$('receiptOverlay').classList.remove('show')}
 function logout(){if(confirm('Do you want to logout?')){sessionStorage.removeItem('clinic_user');location.href='login.html'}}
 
