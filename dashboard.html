@@ -268,19 +268,28 @@ body{
     margin-top:2px;
 }
 
-.logout-btn{
+.sidebar-logout{
     margin-left:auto;
 
-    width:34px;
-    height:34px;
+    width:36px;
+    height:36px;
 
     border:0;
-    border-radius:9px;
+    border-radius:10px;
 
-    background:rgba(255,255,255,.11);
+    background:
+        rgba(255,255,255,.14);
+
     color:white;
 
     cursor:pointer;
+
+    transition:.2s;
+}
+
+.sidebar-logout:hover{
+    background:
+        rgba(255,255,255,.24);
 }
 
 /* =========================================================
@@ -297,7 +306,7 @@ body{
 ========================================================= */
 
 .topbar{
-    height:78px;
+    min-height:78px;
 
     background:white;
 
@@ -465,7 +474,6 @@ body{
 
 .time-area{
     text-align:right;
-
     padding-left:15px;
 }
 
@@ -479,6 +487,44 @@ body{
     font-size:10px;
     color:var(--muted);
     margin-top:2px;
+}
+
+.top-logout{
+    height:42px;
+
+    border:0;
+
+    border-radius:12px;
+
+    padding:0 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff6176,
+            #e9465e
+        );
+
+    color:white;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    box-shadow:
+        0 6px 16px
+        rgba(233,70,94,.18);
+
+    transition:.2s;
+}
+
+.top-logout:hover{
+    transform:
+        translateY(-1px);
 }
 
 /* =========================================================
@@ -647,7 +693,7 @@ body{
 }
 
 /* =========================================================
-   GRID CARDS
+   GRID
 ========================================================= */
 
 .grid-main{
@@ -825,7 +871,7 @@ body{
 }
 
 /* =========================================================
-   APPOINTMENTS LIST
+   APPOINTMENTS
 ========================================================= */
 
 .appointment{
@@ -896,7 +942,7 @@ body{
 }
 
 /* =========================================================
-   QUICK ACTION
+   QUICK ACTIONS
 ========================================================= */
 
 .quick-grid{
@@ -966,6 +1012,10 @@ body{
 
 .quick.users i{
     color:#12a9bb;
+}
+
+.quick.master i{
+    color:#7c4dff;
 }
 
 /* =========================================================
@@ -1127,24 +1177,6 @@ body{
     justify-content:center;
 }
 
-.notice:nth-child(1)
-.notice-icon{
-    background:#e0efff;
-    color:#2486ef;
-}
-
-.notice:nth-child(2)
-.notice-icon{
-    background:#e5faed;
-    color:#26ac65;
-}
-
-.notice:nth-child(3)
-.notice-icon{
-    background:#fff0e2;
-    color:#f08b28;
-}
-
 .notice-text{
     flex:1;
 }
@@ -1192,7 +1224,6 @@ body{
     }
 }
 
-
 @media(max-width:850px){
 
     .sidebar{
@@ -1237,6 +1268,18 @@ body{
     }
 }
 
+@media(max-width:620px){
+
+    .top-logout span{
+        display:none;
+    }
+
+    .top-logout{
+        width:42px;
+        padding:0;
+        justify-content:center;
+    }
+}
 
 @media(max-width:550px){
 
@@ -1371,6 +1414,16 @@ body{
         </a>
 
         <a
+            href="admin-master.html"
+            class="nav-item"
+            id="masterDataMenu"
+            style="display:none;"
+        >
+            <i class="fa-solid fa-sliders"></i>
+            Master Data
+        </a>
+
+        <a
             href="admin-users.html"
             class="nav-item"
             id="adminUsersMenu"
@@ -1429,7 +1482,7 @@ body{
 
 
             <button
-                class="logout-btn"
+                class="sidebar-logout"
                 onclick="logout()"
                 title="Logout"
             >
@@ -1448,8 +1501,6 @@ body{
 ===================================================== -->
 
 <div class="main">
-
-    <!-- TOP BAR -->
 
     <header class="topbar">
 
@@ -1531,12 +1582,20 @@ body{
 
             </div>
 
+
+            <button
+                class="top-logout"
+                onclick="logout()"
+                title="Logout"
+            >
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+            </button>
+
         </div>
 
     </header>
 
-
-    <!-- CONTENT -->
 
     <main class="content">
 
@@ -1565,8 +1624,6 @@ body{
 
         </div>
 
-
-        <!-- STATS -->
 
         <section class="stats">
 
@@ -1668,11 +1725,7 @@ body{
         </section>
 
 
-        <!-- TOP GRID -->
-
         <section class="grid-main">
-
-            <!-- GRAPH -->
 
             <div class="card">
 
@@ -1788,8 +1841,6 @@ body{
             </div>
 
 
-            <!-- APPOINTMENTS -->
-
             <div class="card">
 
                 <div class="card-head">
@@ -1825,8 +1876,6 @@ body{
 
             </div>
 
-
-            <!-- QUICK ACTION -->
 
             <div class="card quick-actions-card">
 
@@ -1897,6 +1946,19 @@ body{
 
 
                     <button
+                        class="quick master"
+                        id="quickMaster"
+                        style="display:none;"
+                        onclick="
+                            location.href='admin-master.html'
+                        "
+                    >
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>Master Data</span>
+                    </button>
+
+
+                    <button
                         class="quick users"
                         id="quickUsers"
                         style="display:none;"
@@ -1915,11 +1977,7 @@ body{
         </section>
 
 
-        <!-- BOTTOM GRID -->
-
         <section class="grid-bottom">
-
-            <!-- RECENT PATIENTS -->
 
             <div class="card">
 
@@ -1958,8 +2016,6 @@ body{
 
             </div>
 
-
-            <!-- REVENUE -->
 
             <div class="card">
 
@@ -2060,8 +2116,6 @@ body{
             </div>
 
 
-            <!-- NOTICES -->
-
             <div class="card notices-card">
 
                 <div class="card-head">
@@ -2075,7 +2129,13 @@ body{
 
                 <div class="notice">
 
-                    <div class="notice-icon">
+                    <div
+                        class="notice-icon"
+                        style="
+                            background:#e0efff;
+                            color:#2486ef;
+                        "
+                    >
                         <i class="fa-solid fa-database"></i>
                     </div>
 
@@ -2096,7 +2156,13 @@ body{
 
                 <div class="notice">
 
-                    <div class="notice-icon">
+                    <div
+                        class="notice-icon"
+                        style="
+                            background:#e5faed;
+                            color:#26ac65;
+                        "
+                    >
                         <i class="fa-solid fa-shield-halved"></i>
                     </div>
 
@@ -2117,7 +2183,13 @@ body{
 
                 <div class="notice">
 
-                    <div class="notice-icon">
+                    <div
+                        class="notice-icon"
+                        style="
+                            background:#fff0e2;
+                            color:#f08b28;
+                        "
+                    >
                         <i class="fa-solid fa-heart-pulse"></i>
                     </div>
 
@@ -2188,37 +2260,69 @@ if (user) {
             .toUpperCase();
 
 
-    welcomeName.textContent =
-        firstName;
+    document
+        .getElementById(
+            'welcomeName'
+        )
+        .textContent =
+            firstName;
 
 
-    sideName.textContent =
-        displayName;
+    document
+        .getElementById(
+            'sideName'
+        )
+        .textContent =
+            displayName;
 
 
-    topName.textContent =
-        displayName;
+    document
+        .getElementById(
+            'topName'
+        )
+        .textContent =
+            displayName;
 
 
-    sideRole.textContent =
-        formatRole(
-            user.role
-        );
+    document
+        .getElementById(
+            'sideRole'
+        )
+        .textContent =
+            formatRole(
+                user.role
+            );
 
 
-    topRole.textContent =
-        formatRole(
-            user.role
-        );
+    document
+        .getElementById(
+            'topRole'
+        )
+        .textContent =
+            formatRole(
+                user.role
+            );
 
 
-    sideAvatar.textContent =
-        firstLetter;
+    document
+        .getElementById(
+            'sideAvatar'
+        )
+        .textContent =
+            firstLetter;
 
 
-    topAvatar.textContent =
-        firstLetter;
+    document
+        .getElementById(
+            'topAvatar'
+        )
+        .textContent =
+            firstLetter;
 
+
+    /* =============================================
+       ADMIN
+    ============================================= */
 
     if (
         user.role === 'admin'
@@ -2236,6 +2340,34 @@ if (user) {
         document
             .getElementById(
                 'quickUsers'
+            )
+            .style
+            .display =
+                'block';
+    }
+
+
+    /* =============================================
+       ADMIN + SUPERVISOR
+    ============================================= */
+
+    if (
+        user.role === 'admin' ||
+        user.role === 'supervisor'
+    ) {
+
+        document
+            .getElementById(
+                'masterDataMenu'
+            )
+            .style
+            .display =
+                'flex';
+
+
+        document
+            .getElementById(
+                'quickMaster'
             )
             .style
             .display =
@@ -2324,7 +2456,7 @@ setInterval(
 
 
 /* =========================================================
-   MOBILE
+   MOBILE SIDEBAR
 ========================================================= */
 
 function toggleSidebar() {
@@ -2340,15 +2472,64 @@ function toggleSidebar() {
 }
 
 
+document.addEventListener(
+    'click',
+    function(event) {
+
+        const sidebar =
+            document.getElementById(
+                'sidebar'
+            );
+
+
+        const menuButton =
+            document.querySelector(
+                '.mobile-menu'
+            );
+
+
+        if (
+            window.innerWidth <= 850 &&
+            sidebar.classList.contains(
+                'open'
+            ) &&
+            !sidebar.contains(
+                event.target
+            ) &&
+            !menuButton.contains(
+                event.target
+            )
+        ) {
+
+            sidebar.classList.remove(
+                'open'
+            );
+        }
+    }
+);
+
+
 /* =========================================================
    LOGOUT
 ========================================================= */
 
 function logout() {
 
+    const confirmed =
+        confirm(
+            'Do you want to logout?'
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
     sessionStorage.removeItem(
         'clinic_user'
     );
+
 
     window.location.href =
         'login.html';
