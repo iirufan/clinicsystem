@@ -1,0 +1,2010 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Patient Registry | Clinic</title>
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --blue:#1685e8;
+    --green:#12aa78;
+    --purple:#7655e8;
+    --orange:#f3a13b;
+    --red:#e95067;
+
+    --text:#14223d;
+    --muted:#728198;
+    --border:#dfe8f1;
+    --white:#fff;
+
+    --shadow:
+        0 10px 30px
+        rgba(30,65,105,.08);
+}
+
+body{
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #edf8ff,
+            #f8fbff,
+            #edfcf7
+        );
+
+    color:var(--text);
+
+    min-height:100vh;
+}
+
+.header{
+    min-height:72px;
+
+    background:white;
+
+    border-bottom:
+        1px solid var(--border);
+
+    padding:0 25px;
+
+    display:flex;
+
+    align-items:center;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+}
+
+.brand{
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-weight:800;
+
+    font-size:18px;
+}
+
+.brand-icon{
+    width:44px;
+    height:44px;
+
+    border-radius:13px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1685e8,
+            #12aa78
+        );
+}
+
+.actions{
+    margin-left:auto;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+}
+
+.header-btn{
+    border:0;
+
+    padding:10px 14px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:700;
+}
+
+.dashboard{
+    background:#e9f4ff;
+
+    color:var(--blue);
+}
+
+.appointment-btn{
+    background:#e8faf3;
+
+    color:var(--green);
+}
+
+.logout{
+    background:#fff0f2;
+
+    color:var(--red);
+}
+
+.container{
+    max-width:1300px;
+
+    margin:28px auto;
+
+    padding:0 18px 40px;
+}
+
+.page-head{
+    margin-bottom:22px;
+}
+
+.page-head h1{
+    font-size:28px;
+}
+
+.page-head p{
+    margin-top:6px;
+
+    color:var(--muted);
+
+    font-size:13px;
+}
+
+.tabs{
+    display:flex;
+
+    gap:8px;
+
+    background:white;
+
+    padding:7px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:14px;
+
+    margin-bottom:20px;
+
+    box-shadow:var(--shadow);
+}
+
+.tab{
+    flex:1;
+
+    border:0;
+
+    border-radius:10px;
+
+    padding:12px;
+
+    cursor:pointer;
+
+    background:transparent;
+
+    color:#64738b;
+
+    font-weight:700;
+}
+
+.tab.active{
+    background:
+        linear-gradient(
+            135deg,
+            #1685e8,
+            #1074cd
+        );
+
+    color:white;
+}
+
+.panel{
+    display:none;
+}
+
+.panel.active{
+    display:block;
+}
+
+.layout{
+    display:grid;
+
+    grid-template-columns:
+        390px 1fr;
+
+    gap:20px;
+}
+
+.card{
+    background:white;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:18px;
+
+    padding:21px;
+
+    box-shadow:var(--shadow);
+}
+
+.card-head{
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    margin-bottom:20px;
+}
+
+.card-icon{
+    width:42px;
+    height:42px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:#e9f5ff;
+
+    color:var(--blue);
+}
+
+.card-head h2{
+    font-size:16px;
+}
+
+.card-head p{
+    font-size:10px;
+
+    color:var(--muted);
+
+    margin-top:3px;
+}
+
+.field{
+    margin-bottom:14px;
+}
+
+label{
+    display:block;
+
+    margin-bottom:7px;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    color:#3a4961;
+}
+
+.required{
+    color:var(--red);
+}
+
+input,
+textarea{
+    width:100%;
+
+    border:
+        1px solid #d5e0ec;
+
+    border-radius:10px;
+
+    background:#fbfdff;
+
+    padding:11px 12px;
+
+    outline:none;
+
+    font-family:inherit;
+
+    font-size:13px;
+}
+
+textarea{
+    min-height:75px;
+
+    resize:vertical;
+}
+
+input:focus,
+textarea:focus{
+    border-color:var(--blue);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(22,133,232,.08);
+}
+
+.row2{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:11px;
+}
+
+.age{
+    height:41px;
+
+    border:
+        1px solid #e0d9ff;
+
+    background:#f3f0ff;
+
+    color:var(--purple);
+
+    border-radius:10px;
+
+    padding:0 12px;
+
+    display:flex;
+
+    align-items:center;
+
+    font-weight:800;
+
+    font-size:12px;
+}
+
+.buttons{
+    display:flex;
+
+    gap:8px;
+
+    margin-top:10px;
+}
+
+.save{
+    flex:1;
+
+    border:0;
+
+    border-radius:11px;
+
+    padding:12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1685e8,
+            #11a981
+        );
+
+    color:white;
+
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+.cancel{
+    display:none;
+
+    border:0;
+
+    border-radius:11px;
+
+    padding:12px 16px;
+
+    background:#edf1f6;
+
+    color:#5c687b;
+
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+.search-bar{
+    display:flex;
+
+    gap:9px;
+
+    margin-bottom:16px;
+}
+
+.search-bar input{
+    flex:1;
+}
+
+.search-button{
+    border:0;
+
+    border-radius:10px;
+
+    background:var(--blue);
+
+    color:white;
+
+    width:45px;
+
+    cursor:pointer;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+th{
+    padding:11px;
+
+    background:#f5f9fd;
+
+    text-align:left;
+
+    color:#62728a;
+
+    font-size:10px;
+}
+
+td{
+    padding:12px 11px;
+
+    border-bottom:
+        1px solid #edf1f5;
+
+    font-size:11px;
+}
+
+.patient-name{
+    font-weight:800;
+}
+
+.patient-no{
+    color:var(--blue);
+
+    font-weight:700;
+}
+
+.action{
+    width:31px;
+    height:31px;
+
+    border:0;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    margin-right:3px;
+}
+
+.edit{
+    background:#e8f4ff;
+
+    color:var(--blue);
+}
+
+.app-row{
+    padding:13px;
+
+    background:#fafcff;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:12px;
+
+    margin-bottom:9px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.app-icon{
+    width:42px;
+    height:42px;
+
+    border-radius:11px;
+
+    background:#fff2df;
+
+    color:#e58a1c;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+}
+
+.app-info{
+    flex:1;
+}
+
+.app-name{
+    font-size:12px;
+
+    font-weight:800;
+}
+
+.app-meta{
+    margin-top:4px;
+
+    font-size:10px;
+
+    color:var(--muted);
+}
+
+.register{
+    border:0;
+
+    border-radius:9px;
+
+    padding:8px 10px;
+
+    background:#e8faf2;
+
+    color:#0d9768;
+
+    cursor:pointer;
+
+    font-size:10px;
+
+    font-weight:800;
+}
+
+.empty{
+    text-align:center;
+
+    padding:35px;
+
+    color:#8392a7;
+
+    font-size:11px;
+}
+
+.toast{
+    position:fixed;
+
+    right:20px;
+
+    bottom:20px;
+
+    padding:14px 18px;
+
+    border-radius:12px;
+
+    color:white;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    opacity:0;
+
+    transform:
+        translateY(100px);
+
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:
+        translateY(0);
+}
+
+.toast.success{
+    background:#10a978;
+}
+
+.toast.error{
+    background:#df4b60;
+}
+
+@media(max-width:900px){
+
+    .layout{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:620px){
+
+    .header{
+        padding:0 12px;
+    }
+
+    .brand span{
+        display:none;
+    }
+
+    .actions .appointment-btn{
+        display:none;
+    }
+
+    .row2{
+        grid-template-columns:1fr;
+    }
+
+    .tabs{
+        flex-direction:column;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            <i class="fa-solid fa-hospital-user"></i>
+        </div>
+
+        <span>
+            Patient Registry
+        </span>
+
+    </div>
+
+
+    <div class="actions">
+
+        <button
+            class="header-btn appointment-btn"
+            onclick="
+                location.href='appointments.html'
+            "
+        >
+            <i class="fa-solid fa-calendar-plus"></i>
+            Appointment
+        </button>
+
+
+        <button
+            class="header-btn dashboard"
+            onclick="
+                location.href='dashboard.html'
+            "
+        >
+            <i class="fa-solid fa-house"></i>
+            Dashboard
+        </button>
+
+
+        <button
+            class="header-btn logout"
+            onclick="logout()"
+        >
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <div class="page-head">
+
+        <h1>
+            Patient Registry
+        </h1>
+
+        <p>
+            Register, search and update clinic patients.
+        </p>
+
+    </div>
+
+
+    <div class="tabs">
+
+        <button
+            class="tab active"
+            id="registryTab"
+            onclick="
+                showTab('registry', this)
+            "
+        >
+            <i class="fa-solid fa-users"></i>
+            Patient Registry
+        </button>
+
+
+        <button
+            class="tab"
+            id="arrivalTab"
+            onclick="
+                showTab('arrivals', this)
+            "
+        >
+            <i class="fa-solid fa-user-clock"></i>
+            Unregistered Appointments
+        </button>
+
+    </div>
+
+
+    <!-- REGISTRY -->
+
+    <section
+        class="panel active"
+        id="registryPanel"
+    >
+
+        <div class="layout">
+
+
+            <!-- FORM -->
+
+            <div class="card">
+
+                <div class="card-head">
+
+                    <div class="card-icon">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+
+                    <div>
+
+                        <h2 id="formTitle">
+                            Register Patient
+                        </h2>
+
+                        <p>
+                            Patient personal information
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <input
+                    id="patientId"
+                    type="hidden"
+                >
+
+
+                <input
+                    id="sourceAppointmentId"
+                    type="hidden"
+                >
+
+
+                <div class="field">
+
+                    <label>
+                        ID Card / Passport No.
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        id="idPassport"
+                        placeholder="ID Card or Passport number"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Patient Name
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        id="patientName"
+                        placeholder="Full name"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Contact No.
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        id="contactNo"
+                        placeholder="Contact number"
+                    >
+
+                </div>
+
+
+                <div class="row2">
+
+                    <div class="field">
+
+                        <label>
+                            Date of Birth
+                        </label>
+
+                        <input
+                            id="dateOfBirth"
+                            type="date"
+                            onchange="calculatePatientAge()"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Age
+                        </label>
+
+                        <div
+                            class="age"
+                            id="ageDisplay"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Nationality
+                    </label>
+
+                    <input
+                        id="nationality"
+                        list="nationalities"
+                        placeholder="Nationality"
+                    >
+
+                    <datalist id="nationalities">
+
+                        <option value="Maldivian">
+                        <option value="Indian">
+                        <option value="Sri Lankan">
+                        <option value="Bangladeshi">
+                        <option value="Nepalese">
+                        <option value="Pakistani">
+                        <option value="British">
+                        <option value="American">
+
+                    </datalist>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Address
+                    </label>
+
+                    <textarea
+                        id="address"
+                        placeholder="Patient address"
+                    ></textarea>
+
+                </div>
+
+
+                <div class="buttons">
+
+                    <button
+                        class="save"
+                        id="savePatientButton"
+                        onclick="savePatient()"
+                    >
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Save Patient
+                    </button>
+
+
+                    <button
+                        class="cancel"
+                        id="cancelEdit"
+                        onclick="resetPatientForm()"
+                    >
+                        Cancel
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- PATIENT LIST -->
+
+            <div class="card">
+
+                <div class="card-head">
+
+                    <div
+                        class="card-icon"
+                        style="
+                            background:#e9faf3;
+                            color:#12aa78;
+                        "
+                    >
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Registered Patients
+                        </h2>
+
+                        <p id="patientCount">
+                            0 patients
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="search-bar">
+
+                    <input
+                        id="patientSearch"
+                        placeholder="Search ID, name, contact or patient no..."
+                        oninput="loadPatients()"
+                    >
+
+                    <button
+                        class="search-button"
+                        onclick="loadPatients()"
+                    >
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="table-wrap"
+                    id="patientsTable"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ARRIVALS -->
+
+    <section
+        class="panel"
+        id="arrivalsPanel"
+    >
+
+        <div class="card">
+
+            <div class="card-head">
+
+                <div
+                    class="card-icon"
+                    style="
+                        background:#fff2df;
+                        color:#e48a1e;
+                    "
+                >
+                    <i class="fa-solid fa-user-clock"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        Unregistered Appointment Patients
+                    </h2>
+
+                    <p>
+                        Register patients when they arrive
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div id="temporaryAppointments">
+
+                <div class="empty">
+                    Loading...
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+
+const currentUser =
+    JSON.parse(
+        sessionStorage.getItem(
+            'clinic_user'
+        ) || 'null'
+    );
+
+
+if (!currentUser){
+
+    location.href =
+        'login.html';
+}
+
+
+let patients = [];
+
+
+/* TABS */
+
+function showTab(
+    name,
+    button
+){
+
+    document
+        .querySelectorAll(
+            '.tab'
+        )
+        .forEach(
+            item =>
+                item.classList.remove(
+                    'active'
+                )
+        );
+
+
+    document
+        .querySelectorAll(
+            '.panel'
+        )
+        .forEach(
+            item =>
+                item.classList.remove(
+                    'active'
+                )
+        );
+
+
+    button.classList.add(
+        'active'
+    );
+
+
+    document
+        .getElementById(
+            name + 'Panel'
+        )
+        .classList.add(
+            'active'
+        );
+
+
+    if (
+        name ===
+        'arrivals'
+    ){
+
+        loadTemporaryAppointments();
+    }
+}
+
+
+/* AGE */
+
+function calculatePatientAge(){
+
+    ageDisplay.textContent =
+        calculateAge(
+            dateOfBirth.value
+        );
+}
+
+
+function calculateAge(value){
+
+    if (!value){
+        return '-';
+    }
+
+
+    const dob =
+        new Date(
+            String(value)
+                .substring(
+                    0,
+                    10
+                )
+            +
+            'T00:00:00'
+        );
+
+
+    const today =
+        new Date();
+
+
+    let age =
+        today.getFullYear()
+        -
+        dob.getFullYear();
+
+
+    const month =
+        today.getMonth()
+        -
+        dob.getMonth();
+
+
+    if (
+        month < 0 ||
+        (
+            month === 0 &&
+            today.getDate() <
+            dob.getDate()
+        )
+    ){
+
+        age--;
+    }
+
+
+    return age >= 0
+        ?
+        age + ' yrs'
+        :
+        '-';
+}
+
+
+/* SAVE */
+
+async function savePatient(){
+
+    const idPassportValue =
+        idPassport
+            .value
+            .trim();
+
+
+    const patientNameValue =
+        patientName
+            .value
+            .trim();
+
+
+    const contactValue =
+        contactNo
+            .value
+            .trim();
+
+
+    if (
+        !idPassportValue ||
+        !patientNameValue ||
+        !contactValue
+    ){
+
+        return showToast(
+            'ID/Passport, patient name and contact number are required.',
+            'error'
+        );
+    }
+
+
+    savePatientButton.disabled =
+        true;
+
+
+    try{
+
+        const response =
+            await fetch(
+                '/api/patients',
+                {
+
+                    method:
+                        patientId.value
+                        ?
+                        'PUT'
+                        :
+                        'POST',
+
+                    headers:{
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            userId:
+                                currentUser.id,
+
+                            id:
+                                patientId.value
+                                ?
+                                Number(
+                                    patientId.value
+                                )
+                                :
+                                null,
+
+                            sourceAppointmentId:
+                                sourceAppointmentId.value
+                                ?
+                                Number(
+                                    sourceAppointmentId.value
+                                )
+                                :
+                                null,
+
+                            idPassport:
+                                idPassportValue,
+
+                            fullName:
+                                patientNameValue,
+
+                            phone:
+                                contactValue,
+
+                            dateOfBirth:
+                                dateOfBirth.value ||
+                                null,
+
+                            nationality:
+                                nationality
+                                    .value
+                                    .trim(),
+
+                            address:
+                                address
+                                    .value
+                                    .trim()
+                        })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok){
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        showToast(
+            patientId.value
+            ?
+            'Patient updated.'
+            :
+            'Patient registered successfully.',
+            'success'
+        );
+
+
+        resetPatientForm();
+
+
+        await loadPatients();
+
+        await loadTemporaryAppointments();
+
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            'error'
+        );
+
+
+    }finally{
+
+        savePatientButton.disabled =
+            false;
+    }
+}
+
+
+/* PATIENTS */
+
+async function loadPatients(){
+
+    try{
+
+        const query =
+            patientSearch
+                .value
+                .trim();
+
+
+        const response =
+            await fetch(
+                '/api/patients?q='
+                +
+                encodeURIComponent(
+                    query
+                )
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok){
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        patients =
+            data.patients ||
+            [];
+
+
+        renderPatients();
+
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            'error'
+        );
+    }
+}
+
+
+function renderPatients(){
+
+    patientCount.textContent =
+        patients.length +
+        (
+            patients.length === 1
+            ?
+            ' patient'
+            :
+            ' patients'
+        );
+
+
+    if (!patients.length){
+
+        patientsTable.innerHTML = `
+
+            <div class="empty">
+                No patients found.
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    patientsTable.innerHTML = `
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Patient</th>
+                    <th>ID / Passport</th>
+                    <th>Contact</th>
+                    <th>Age</th>
+                    <th>Nationality</th>
+                    <th></th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${
+                    patients.map(
+                        patient => `
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="patient-name">
+
+                                        ${escapeHtml(
+                                            patient.full_name
+                                        )}
+
+                                    </div>
+
+                                    <div class="patient-no">
+
+                                        ${escapeHtml(
+                                            patient.patient_no ||
+                                            ''
+                                        )}
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    ${escapeHtml(
+                                        patient.id_passport_no ||
+                                        patient.national_id ||
+                                        patient.passport_id ||
+                                        '-'
+                                    )}
+
+                                </td>
+
+
+                                <td>
+
+                                    ${escapeHtml(
+                                        patient.phone ||
+                                        '-'
+                                    )}
+
+                                </td>
+
+
+                                <td>
+
+                                    ${calculateAge(
+                                        patient.date_of_birth
+                                    )}
+
+                                </td>
+
+
+                                <td>
+
+                                    ${escapeHtml(
+                                        patient.nationality ||
+                                        '-'
+                                    )}
+
+                                </td>
+
+
+                                <td>
+
+                                    <button
+                                        class="action edit"
+                                        onclick="
+                                            editPatient(
+                                                ${patient.id}
+                                            )
+                                        "
+                                    >
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                        `
+                    ).join('')
+                }
+
+            </tbody>
+
+        </table>
+    `;
+}
+
+
+/* EDIT */
+
+function editPatient(id){
+
+    const patient =
+        patients.find(
+            item =>
+                String(item.id) ===
+                String(id)
+        );
+
+
+    if (!patient){
+        return;
+    }
+
+
+    patientId.value =
+        patient.id;
+
+
+    idPassport.value =
+        patient.id_passport_no ||
+        patient.national_id ||
+        patient.passport_id ||
+        '';
+
+
+    patientName.value =
+        patient.full_name ||
+        '';
+
+
+    contactNo.value =
+        patient.phone ||
+        '';
+
+
+    dateOfBirth.value =
+        patient.date_of_birth
+        ?
+        String(
+            patient.date_of_birth
+        ).substring(
+            0,
+            10
+        )
+        :
+        '';
+
+
+    nationality.value =
+        patient.nationality ||
+        '';
+
+
+    address.value =
+        patient.address ||
+        '';
+
+
+    calculatePatientAge();
+
+
+    formTitle.textContent =
+        'Edit Patient';
+
+
+    cancelEdit.style.display =
+        'block';
+
+
+    window.scrollTo({
+        top:100,
+        behavior:'smooth'
+    });
+}
+
+
+/* TEMP APPOINTMENTS */
+
+async function loadTemporaryAppointments(){
+
+    try{
+
+        const response =
+            await fetch(
+                '/api/patients?mode=temporary-appointments'
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok){
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        renderTemporaryAppointments(
+            data.appointments ||
+            []
+        );
+
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            'error'
+        );
+    }
+}
+
+
+function renderTemporaryAppointments(rows){
+
+    if (!rows.length){
+
+        temporaryAppointments.innerHTML = `
+
+            <div class="empty">
+
+                No unregistered appointment patients.
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    temporaryAppointments.innerHTML =
+        rows.map(
+            row => `
+
+                <div class="app-row">
+
+                    <div class="app-icon">
+                        <i class="fa-solid fa-user-clock"></i>
+                    </div>
+
+
+                    <div class="app-info">
+
+                        <div class="app-name">
+
+                            ${escapeHtml(
+                                row.patient_name
+                            )}
+
+                        </div>
+
+
+                        <div class="app-meta">
+
+                            ${escapeHtml(
+                                row.contact_no ||
+                                '-'
+                            )}
+
+                            • ${formatDate(
+                                row.appointment_date
+                            )}
+
+                            • ${formatTime(
+                                row.appointment_time
+                            )}
+
+                            ${
+                                row.doctor_name
+                                ?
+                                ' • ' +
+                                escapeHtml(
+                                    row.doctor_name
+                                )
+                                :
+                                ''
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="register"
+                        onclick='registerFromAppointment(
+                            ${JSON.stringify(
+                                row
+                            )}
+                        )'
+                    >
+
+                        <i class="fa-solid fa-user-plus"></i>
+
+                        Register
+
+                    </button>
+
+                </div>
+
+            `
+        ).join('');
+}
+
+
+function registerFromAppointment(
+    appointment
+){
+
+    showTab(
+        'registry',
+        registryTab
+    );
+
+
+    resetPatientForm();
+
+
+    sourceAppointmentId.value =
+        appointment.id;
+
+
+    patientName.value =
+        appointment.patient_name ||
+        '';
+
+
+    contactNo.value =
+        appointment.contact_no ||
+        '';
+
+
+    formTitle.textContent =
+        'Register Appointment Patient';
+
+
+    window.scrollTo({
+        top:100,
+        behavior:'smooth'
+    });
+
+
+    idPassport.focus();
+}
+
+
+/* RESET */
+
+function resetPatientForm(){
+
+    patientId.value =
+        '';
+
+
+    sourceAppointmentId.value =
+        '';
+
+
+    idPassport.value =
+        '';
+
+
+    patientName.value =
+        '';
+
+
+    contactNo.value =
+        '';
+
+
+    dateOfBirth.value =
+        '';
+
+
+    nationality.value =
+        '';
+
+
+    address.value =
+        '';
+
+
+    ageDisplay.textContent =
+        '-';
+
+
+    formTitle.textContent =
+        'Register Patient';
+
+
+    cancelEdit.style.display =
+        'none';
+}
+
+
+/* HELPERS */
+
+function formatDate(value){
+
+    if (!value){
+        return '-';
+    }
+
+
+    return new Date(
+        String(value)
+            .substring(
+                0,
+                10
+            )
+        +
+        'T00:00:00'
+    ).toLocaleDateString(
+        undefined,
+        {
+            day:'numeric',
+            month:'short',
+            year:'numeric'
+        }
+    );
+}
+
+
+function formatTime(value){
+
+    return String(
+        value ||
+        ''
+    ).substring(
+        0,
+        5
+    );
+}
+
+
+function escapeHtml(value){
+
+    return String(
+        value ?? ''
+    )
+    .replaceAll(
+        '&',
+        '&amp;'
+    )
+    .replaceAll(
+        '<',
+        '&lt;'
+    )
+    .replaceAll(
+        '>',
+        '&gt;'
+    )
+    .replaceAll(
+        '"',
+        '&quot;'
+    )
+    .replaceAll(
+        "'",
+        '&#039;'
+    );
+}
+
+
+let toastTimer;
+
+
+function showToast(
+    text,
+    type='success'
+){
+
+    toast.textContent =
+        text;
+
+
+    toast.className =
+        'toast ' +
+        type +
+        ' show';
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    'show'
+                );
+
+            },
+            3000
+        );
+}
+
+
+function logout(){
+
+    if (
+        !confirm(
+            'Do you want to logout?'
+        )
+    ){
+        return;
+    }
+
+
+    sessionStorage.removeItem(
+        'clinic_user'
+    );
+
+
+    location.href =
+        'login.html';
+}
+
+
+loadPatients();
+
+</script>
+
+</body>
+</html>
