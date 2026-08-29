@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memo Register | Clinic</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#0b7ee8;--blue2:#0864bd;--green:#12aa78;--red:#e95067;
+  --orange:#f3a13d;--purple:#7654e8;--text:#13213c;--muted:#718099;
+  --border:#dfe8f2;--bg:#f4f8fc;--white:#fff;--shadow:0 9px 28px rgba(30,65,105,.08)
+}
+body{font-family:Inter,"Segoe UI",Arial,sans-serif;background:linear-gradient(135deg,#eef8ff,#fafcff,#eefcf8);color:var(--text);min-height:100vh}
+.header{min-height:72px;display:flex;align-items:center;padding:0 24px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:500;box-shadow:0 4px 15px rgba(30,60,100,.04)}
+.brand{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:800}
+.brand-icon{width:45px;height:45px;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;background:linear-gradient(135deg,#1685e8,#12aa78)}
+.header-actions{margin-left:auto;display:flex;gap:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer;font-family:inherit}
+.btn-blue{background:#e9f4ff;color:var(--blue)}
+.btn-green{background:#e9faf3;color:#0c9569}
+.btn-red{background:#fff0f2;color:var(--red)}
+.btn-solid{background:linear-gradient(135deg,#1685e8,#10a980);color:#fff}
+.container{max-width:1450px;margin:25px auto;padding:0 18px 50px}
+.page-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;margin-bottom:18px}
+.page-head h1{font-size:28px}.page-head p{font-size:12px;color:var(--muted);margin-top:6px}
+.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:18px;box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;gap:10px;margin-bottom:15px}.card-head i{color:var(--blue)}.card-head h2{font-size:15px}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px;align-items:end}
+label{display:block;font-size:10px;font-weight:800;color:#394962;margin-bottom:6px}
+input,select,textarea{width:100%;border:1px solid #d5e0ec;border-radius:10px;background:#fbfdff;padding:10px 11px;outline:none;font:inherit;font-size:11px}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(11,126,232,.08)}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:1050px}
+th{background:#f5f9fd;padding:10px 8px;text-align:left;color:#64738b;font-size:9px;white-space:nowrap}
+td{padding:10px 8px;border-bottom:1px solid #edf1f5;font-size:10px;vertical-align:middle}
+tr:hover td{background:#fbfdff}
+.receipt-no{font-weight:900;color:var(--blue)}
+.patient-name{font-weight:800}.small{font-size:8px;color:var(--muted);margin-top:3px}
+.badge{display:inline-flex;padding:5px 8px;border-radius:20px;font-size:8px;font-weight:900}
+.badge-paid{background:#e9faf3;color:#0c9569}.badge-partial{background:#fff4e5;color:#b66c12}
+.actions{display:flex;gap:5px}.icon-btn{width:32px;height:32px;border:0;border-radius:8px;cursor:pointer}.view{background:#e9f4ff;color:var(--blue)}.edit{background:#f0edff;color:var(--purple)}.print{background:#e9faf3;color:#0c9569}
+.empty{text-align:center;padding:35px;color:var(--muted);font-size:11px}
+.modal{display:none;position:fixed;inset:0;background:rgba(13,30,52,.58);z-index:4000;padding:18px;overflow:auto}
+.modal.show{display:flex;align-items:flex-start;justify-content:center}
+.modal-card{width:min(1100px,100%);background:#fff;border-radius:18px;margin:auto;padding:22px;box-shadow:0 20px 70px rgba(0,0,0,.22)}
+.modal-head{display:flex;align-items:center;gap:10px;margin-bottom:18px}.modal-head h2{font-size:18px}.modal-head .close{margin-left:auto}
+.info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.info-box{border:1px solid var(--border);border-radius:13px;padding:13px;background:#fbfdff}
+.info-title{font-size:8px;text-transform:uppercase;font-weight:900;color:var(--muted);margin-bottom:7px}.info-value{font-size:12px;font-weight:800}
+.editor-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:15px}
+.service-add{display:grid;grid-template-columns:1fr 100px 120px;gap:8px;align-items:end;margin-bottom:12px}
+.edit-table{min-width:900px}
+.summary{margin-top:15px;margin-left:auto;width:min(440px,100%);border:1px solid var(--border);border-radius:13px;padding:13px;background:linear-gradient(135deg,#f4f9ff,#f3fcf8)}
+.sum-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #d7e2e8;font-size:10px}.sum-row:last-child{border:0}.sum-total{font-size:14px;font-weight:900}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.receipt-overlay{display:none;position:fixed;inset:0;padding:20px;align-items:center;justify-content:center;background:rgba(13,30,52,.55);z-index:5000}
+.receipt-overlay.show{display:flex}
+.receipt{width:min(760px,100%);max-height:95vh;overflow:auto;background:#fff;border-radius:16px;padding:28px}
+.receipt-company{text-align:center;padding-bottom:16px;border-bottom:2px solid #12213f}.receipt-company h1{font-size:23px;margin-bottom:5px}.receipt-company div{font-size:9px;line-height:1.5}
+.receipt-title{text-align:center;padding:13px 0}.receipt-title h2{font-size:13px}
+.receipt-two{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:20px}
+.receipt-section-title{padding-bottom:5px;margin-bottom:8px;border-bottom:1px solid #e1e6ec;color:#68778d;font-size:9px;font-weight:800;text-transform:uppercase}
+.receipt-patient-name{margin-bottom:9px;font-size:15px;font-weight:800}
+.receipt-line{display:grid;grid-template-columns:105px 1fr;gap:8px;padding:3px 0;font-size:9px}.receipt-line span{color:#6e7b8f}
+.receipt-table{width:100%;min-width:0;margin-bottom:15px}.receipt-table th,.receipt-table td{font-size:9px}
+.receipt-summary{margin-left:auto;width:330px;max-width:100%}.receipt-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.toast{position:fixed;right:20px;bottom:20px;max-width:400px;padding:14px 18px;border-radius:12px;color:#fff;font-size:10px;font-weight:700;opacity:0;transform:translateY(100px);transition:.25s;z-index:9999}.toast.show{opacity:1;transform:translateY(0)}.toast.success{background:#10a978}.toast.error{background:#df4b60}
+@media(max-width:900px){.filters,.info-grid,.editor-grid{grid-template-columns:1fr 1fr}.service-add{grid-template-columns:1fr}.receipt-two{grid-template-columns:1fr}}
+@media(max-width:650px){.filters,.info-grid,.editor-grid{grid-template-columns:1fr}.brand span{display:none}.page-head{flex-direction:column}.header{padding:0 12px}.header-actions .btn{padding:9px}.receipt{padding:18px}}
+@media print{
+ body *{visibility:hidden}
+ #receiptOverlay,#receiptOverlay *{visibility:visible}
+ #receiptOverlay{position:absolute;inset:0;display:block;background:#fff;padding:0}
+ .receipt{width:100%;max-height:none;overflow:visible;border-radius:0;padding:15px}
+ .receipt-actions{display:none}
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="brand"><div class="brand-icon"><i class="fa-solid fa-file-invoice"></i></div><span>Memo Register</span></div>
+  <div class="header-actions">
+    <button class="btn btn-green" onclick="location.href='memocreate.html'"><i class="fa-solid fa-plus"></i> New Memo</button>
+    <button class="btn btn-blue" onclick="location.href='dashboard.html'"><i class="fa-solid fa-house"></i> Dashboard</button>
+    <button class="btn btn-red" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></button>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-head">
+    <div><h1>Created Memos</h1><p>Find, review, edit and print existing patient memos. Receipt numbers remain unchanged.</p></div>
+  </div>
+
+  <section class="card">
+    <div class="card-head"><i class="fa-solid fa-magnifying-glass"></i><h2>Search & Filter</h2></div>
+    <div class="filters">
+      <div><label>Search</label><input id="searchText" placeholder="Receipt, memo, patient, ID/passport, phone, doctor..."></div>
+      <div><label>From Date</label><input type="date" id="fromDate"></div>
+      <div><label>To Date</label><input type="date" id="toDate"></div>
+      <div><label>Status</label><select id="statusFilter"><option value="">All Status</option><option>PAID</option><option>PARTIAL</option></select></div>
+      <button class="btn btn-solid" id="searchBtn"><i class="fa-solid fa-search"></i> Search</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><i class="fa-solid fa-list"></i><h2>Memo List</h2></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Date</th><th>Receipt</th><th>Patient</th><th>Doctor</th><th>Insurance</th><th>Total</th><th>Patient Payable</th><th>Paid</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="memoRows"><tr><td colspan="11" class="empty">Loading memos...</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<div class="modal" id="editModal">
+ <div class="modal-card">
+  <div class="modal-head"><i class="fa-solid fa-pen-to-square"></i><h2>Edit Memo <span id="editReceipt"></span></h2><button class="btn btn-red close" onclick="closeEdit()"><i class="fa-solid fa-xmark"></i></button></div>
+
+  <div class="info-grid" style="margin-bottom:15px">
+   <div class="info-box"><div class="info-title">Patient</div><div class="info-value" id="editPatient">-</div><div class="small" id="editPatientExtra"></div></div>
+   <div class="info-box"><div class="info-title">Receipt</div><div class="info-value" id="editReceiptInfo">-</div><div class="small">Receipt number cannot be changed.</div></div>
+   <div class="info-box"><div class="info-title">Memo Date</div><div class="info-value" id="editMemoDate">-</div></div>
+  </div>
+
+  <div class="editor-grid">
+   <div><label>Doctor</label><select id="doctorSelect"></select></div>
+   <div><label>Primary Insurance</label><select id="insuranceSelect"></select></div>
+   <div><label>Insurance Method</label><select id="insuranceMethod"><option value="percent">Percentage</option><option value="fixed">Fixed Amount</option></select></div>
+   <div><label>Insurance Value</label><input type="number" min="0" step="0.01" id="insuranceValue"></div>
+   <div><label>Whole Bill Discount</label><select id="billDiscountMethod"><option value="none">No Discount</option><option value="percent">Percentage</option><option value="fixed">Fixed Amount</option></select></div>
+   <div><label>Discount Value</label><input type="number" min="0" step="0.01" id="billDiscountValue"></div>
+  </div>
+
+  <div class="card" style="box-shadow:none">
+   <div class="card-head"><i class="fa-solid fa-stethoscope"></i><h2>Services</h2></div>
+   <div class="service-add">
+    <div><label>Add Service</label><select id="serviceSelect"></select></div>
+    <div><label>Qty</label><input id="serviceQty" type="number" min="1" value="1"></div>
+    <button class="btn btn-solid" id="addServiceBtn"><i class="fa-solid fa-plus"></i> Add</button>
+   </div>
+   <div class="table-wrap">
+    <table class="edit-table">
+     <thead><tr><th>Service</th><th>Qty</th><th>Rate</th><th>Discount</th><th>Value</th><th>Aasandha Rate</th><th>Total</th><th></th></tr></thead>
+     <tbody id="editItems"></tbody>
+    </table>
+   </div>
+  </div>
+
+  <div class="editor-grid">
+   <div><label>Payment Method</label><select id="paymentMethod"></select></div>
+   <div><label>Amount Paid</label><input type="number" min="0" step="0.01" id="amountPaid"></div>
+   <div><label>Payment Reference</label><input id="paymentReference" placeholder="Optional reference"></div>
+  </div>
+  <div><label>Remarks</label><textarea id="remarks" rows="3"></textarea></div>
+
+  <div class="summary" id="editSummary"></div>
+  <div class="modal-actions">
+   <button class="btn btn-red" onclick="closeEdit()">Cancel</button>
+   <button class="btn btn-solid" id="saveEditBtn"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+  </div>
+ </div>
+</div>
+
+<div class="receipt-overlay" id="receiptOverlay">
+ <div class="receipt">
+  <div class="receipt-company"><h1 id="rCompany">Clinic</h1><div id="rCompanyInfo"></div></div>
+  <div class="receipt-title"><h2>PATIENT MEMO / RECEIPT</h2></div>
+  <div class="receipt-two">
+   <div><div class="receipt-section-title">Patient Information</div><div class="receipt-patient-name" id="rPatientName"></div><div id="rPatientInfo"></div></div>
+   <div><div class="receipt-section-title">Memo Information</div><div id="rMemoInfo"></div></div>
+  </div>
+  <table class="receipt-table"><thead><tr><th>Service</th><th>Qty</th><th>Rate</th><th>Discount</th><th>Total</th></tr></thead><tbody id="rItems"></tbody></table>
+  <div class="receipt-summary" id="rSummary"></div>
+  <div class="receipt-actions"><button class="btn btn-blue" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button><button class="btn btn-red" onclick="closeReceipt()">Close</button></div>
+ </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const currentUser=JSON.parse(sessionStorage.getItem('clinic_user')||'null');
+if(!currentUser) location.href='login.html';
+
+let setup={doctors:[],services:[],insuranceCompanies:[],paymentMethods:[],company:{}};
+let memos=[];
+let editingMemo=null;
+let editLines=[];
+
+async function api(url,options={}){
+ const response=await fetch(url,options);
+ let data={};
+ try{data=await response.json()}catch(_){}
+ if(!response.ok) throw new Error(data.message||('Request failed ('+response.status+')'));
+ return data;
+}
+function esc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;")}
+function money(v){return Number(v||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function date(v){if(!v)return '-';return new Date(String(v).substring(0,10)+'T00:00:00').toLocaleDateString('en-GB')}
+function age(v){if(!v)return '-';const d=new Date(String(v).substring(0,10)+'T00:00:00'),t=new Date();let a=t.getFullYear()-d.getFullYear();const m=t.getMonth()-d.getMonth();if(m<0||(m===0&&t.getDate()<d.getDate()))a--;return a>=0?a+' yrs':'-'}
+function idText(p){return p?.id_passport_no||p?.national_id||p?.passport_id||'-'}
+function isMaldivian(p){return String(p?.nationality||'').trim().toLowerCase()==='maldivian'}
+function toast(text,type='success'){const el=$('toast');el.textContent=text;el.className='toast '+type+' show';setTimeout(()=>el.classList.remove('show'),3500)}
+
+async function init(){
+ try{
+  const data=await api('/api/memos?mode=setup');
+  setup=data;
+  fillSetup();
+  await loadMemos();
+ }catch(e){toast(e.message,'error')}
+}
+function fillSetup(){
+ $('doctorSelect').innerHTML='<option value="">Select doctor</option>'+setup.doctors.map(x=>`<option value="${x.id}">${esc(x.full_name)}</option>`).join('');
+ $('insuranceSelect').innerHTML='<option value="">No Primary Insurance</option>'+setup.insuranceCompanies.filter(x=>!x.is_government).map(x=>`<option value="${x.id}">${esc(x.company_name)}</option>`).join('');
+ $('serviceSelect').innerHTML='<option value="">Select service</option>'+setup.services.map(x=>`<option value="${x.id}">${esc(x.service_name)} — MVR ${money(x.price)}</option>`).join('');
+ $('paymentMethod').innerHTML='<option value="">Select payment method</option>'+setup.paymentMethods.map(x=>`<option value="${x.id}">${esc(x.method_name)}</option>`).join('');
+}
+async function loadMemos(){
+ $('memoRows').innerHTML='<tr><td colspan="11" class="empty">Loading...</td></tr>';
+ const qs=new URLSearchParams({mode:'search'});
+ if($('searchText').value.trim())qs.set('q',$('searchText').value.trim());
+ if($('fromDate').value)qs.set('from',$('fromDate').value);
+ if($('toDate').value)qs.set('to',$('toDate').value);
+ if($('statusFilter').value)qs.set('status',$('statusFilter').value);
+ try{
+  const data=await api('/api/memos?'+qs.toString());
+  memos=data.memos||[];
+  renderMemos();
+ }catch(e){$('memoRows').innerHTML=`<tr><td colspan="11" class="empty">${esc(e.message)}</td></tr>`}
+}
+function renderMemos(){
+ if(!memos.length){$('memoRows').innerHTML='<tr><td colspan="11" class="empty">No memos found.</td></tr>';return}
+ $('memoRows').innerHTML=memos.map(m=>`<tr>
+  <td>${date(m.memo_date)}</td>
+  <td><div class="receipt-no">${esc(m.receipt_no||m.memo_no)}</div><div class="small">${esc(m.memo_no||'')}</div></td>
+  <td><div class="patient-name">${esc(m.patient_name||'')}</div><div class="small">${esc(m.patient_no||'')} · ${esc(idText(m))}</div></td>
+  <td>${esc(m.doctor_name||'-')}</td><td>${esc(m.insurance_name||'-')}</td>
+  <td>MVR ${money(m.total_amount)}</td><td>MVR ${money(m.patient_payable)}</td><td>MVR ${money(m.paid_amount)}</td><td>MVR ${money(m.balance_amount)}</td>
+  <td><span class="badge ${m.status==='PAID'?'badge-paid':'badge-partial'}">${esc(m.status||'-')}</span></td>
+  <td><div class="actions"><button class="icon-btn view" title="View" onclick="viewMemo(${m.id})"><i class="fa-solid fa-eye"></i></button><button class="icon-btn edit" title="Edit" onclick="editMemo(${m.id})"><i class="fa-solid fa-pen"></i></button><button class="icon-btn print" title="Print" onclick="printMemo(${m.id})"><i class="fa-solid fa-print"></i></button></div></td>
+ </tr>`).join('');
+}
+async function getMemo(id){const d=await api('/api/memos?mode=detail&id='+encodeURIComponent(id));return d.memo}
+async function viewMemo(id){try{showReceipt(await getMemo(id))}catch(e){toast(e.message,'error')}}
+async function printMemo(id){try{showReceipt(await getMemo(id));setTimeout(()=>window.print(),150)}catch(e){toast(e.message,'error')}}
+async function editMemo(id){
+ try{
+  editingMemo=await getMemo(id);
+  editLines=(editingMemo.items||[]).map(x=>({serviceId:Number(x.service_id),serviceName:x.service_name,qty:Number(x.quantity||1),price:Number(x.unit_price||x.base_price||0),govtRate:Number(x.aasandha_unit_price||0),discountMethod:x.discount_method||'none',discountValue:Number(x.discount_value||0)}));
+  $('editReceipt').textContent=editingMemo.receipt_no||'';
+  $('editReceiptInfo').textContent=editingMemo.receipt_no||editingMemo.memo_no||'-';
+  $('editMemoDate').textContent=date(editingMemo.memo_date);
+  $('editPatient').textContent=editingMemo.patient.full_name||'-';
+  $('editPatientExtra').textContent=(editingMemo.patient.patient_no||'')+' · '+idText(editingMemo.patient);
+  $('doctorSelect').value=editingMemo.doctor_user_id||'';
+  $('insuranceSelect').value=editingMemo.primary_insurance_id||'';
+  $('insuranceMethod').value=editingMemo.primary_insurance_method||'percent';
+  $('insuranceValue').value=Number(editingMemo.primary_insurance_value||0);
+  $('billDiscountMethod').value=editingMemo.bill_discount_method||'none';
+  $('billDiscountValue').value=Number(editingMemo.bill_discount_value||0);
+  $('paymentMethod').value=editingMemo.payment_method_id||'';
+  $('amountPaid').value=Number(editingMemo.paid_amount||0);
+  $('paymentReference').value=editingMemo.payment_reference||'';
+  $('remarks').value=editingMemo.remarks||'';
+  renderEditItems();recalcEdit();
+  $('editModal').classList.add('show');
+ }catch(e){toast(e.message,'error')}
+}
+function closeEdit(){$('editModal').classList.remove('show');editingMemo=null;editLines=[]}
+function addService(){
+ const id=Number($('serviceSelect').value),qty=Math.max(1,Math.floor(Number($('serviceQty').value)||1));
+ const s=setup.services.find(x=>Number(x.id)===id);if(!s)return toast('Select a service.','error');
+ editLines.push({serviceId:id,serviceName:s.service_name,qty,price:Number(s.price||0),govtRate:Number(s.aasandha_price||0),discountMethod:'none',discountValue:0});
+ renderEditItems();recalcEdit();$('serviceSelect').value='';$('serviceQty').value=1;
+}
+function renderEditItems(){
+ if(!editLines.length){$('editItems').innerHTML='<tr><td colspan="8" class="empty">Add at least one service.</td></tr>';return}
+ $('editItems').innerHTML=editLines.map((x,i)=>`<tr>
+ <td><b>${esc(x.serviceName)}</b></td>
+ <td><input class="small-input" type="number" min="1" value="${x.qty}" onchange="changeLine(${i},'qty',this.value)"></td>
+ <td>MVR ${money(x.price)}</td>
+ <td><select onchange="changeLine(${i},'discountMethod',this.value)"><option value="none" ${x.discountMethod==='none'?'selected':''}>None</option><option value="percent" ${x.discountMethod==='percent'?'selected':''}>%</option><option value="fixed" ${x.discountMethod==='fixed'?'selected':''}>Fixed</option></select></td>
+ <td><input type="number" min="0" step=".01" value="${x.discountValue}" onchange="changeLine(${i},'discountValue',this.value)"></td>
+ <td>MVR ${money(x.govtRate)}</td><td id="lineTotal${i}">-</td>
+ <td><button class="icon-btn" style="background:#fff0f2;color:#e95067" onclick="removeLine(${i})"><i class="fa-solid fa-trash"></i></button></td></tr>`).join('');
+}
+function changeLine(i,key,value){if(key==='qty')editLines[i][key]=Math.max(1,Math.floor(Number(value)||1));else if(key==='discountValue')editLines[i][key]=Math.max(0,Number(value)||0);else editLines[i][key]=value;recalcEdit()}
+function removeLine(i){editLines.splice(i,1);renderEditItems();recalcEdit()}
+function calculate(){
+ let subtotal=0,serviceDiscount=0,serviceNet=0,govtEligible=0;
+ editLines.forEach((x,i)=>{
+  const ls=x.price*x.qty;let da=0;
+  if(x.discountMethod==='percent')da=ls*Math.min(100,x.discountValue)/100;
+  if(x.discountMethod==='fixed')da=Math.min(ls,x.discountValue);
+  const total=Math.max(0,ls-da);
+  subtotal+=ls;serviceDiscount+=da;serviceNet+=total;govtEligible+=Math.min(total,x.govtRate*x.qty);
+  const cell=$('lineTotal'+i);if(cell)cell.textContent='MVR '+money(total);
+ });
+ let billDiscount=0,bdv=Math.max(0,Number($('billDiscountValue').value)||0),bdm=$('billDiscountMethod').value;
+ if(bdm==='percent')billDiscount=serviceNet*Math.min(100,bdv)/100;
+ if(bdm==='fixed')billDiscount=Math.min(serviceNet,bdv);
+ const afterDiscount=Math.max(0,serviceNet-billDiscount);
+ let primary=0,iv=Math.max(0,Number($('insuranceValue').value)||0);
+ if($('insuranceSelect').value){primary=$('insuranceMethod').value==='fixed'?Math.min(afterDiscount,iv):afterDiscount*Math.min(100,iv)/100}
+ const remaining=Math.max(0,afterDiscount-primary);
+ const govt=isMaldivian(editingMemo?.patient)?Math.min(remaining,govtEligible):0;
+ const payable=Math.max(0,afterDiscount-primary-govt);
+ let paid=Math.max(0,Number($('amountPaid').value)||0);
+ const pm=setup.paymentMethods.find(x=>Number(x.id)===Number($('paymentMethod').value));
+ const name=String(pm?.method_name||'').toLowerCase(),partial=name.includes('cash')||name.includes('transfer');
+ if(payable<=0)paid=0;else if(pm&&!partial)paid=payable;else paid=Math.min(payable,paid);
+ return {subtotal,serviceDiscount,billDiscount,afterDiscount,primary,govt,payable,paid,balance:Math.max(0,payable-paid)}
+}
+function recalcEdit(){
+ if(!editingMemo)return;
+ const c=calculate();
+ $('editSummary').innerHTML=`<div class="sum-row"><span>Subtotal</span><b>MVR ${money(c.subtotal)}</b></div>${c.serviceDiscount>0?`<div class="sum-row"><span>Service Discount</span><b>- MVR ${money(c.serviceDiscount)}</b></div>`:''}${c.billDiscount>0?`<div class="sum-row"><span>Bill Discount</span><b>- MVR ${money(c.billDiscount)}</b></div>`:''}${c.primary>0?`<div class="sum-row"><span>Primary Insurance</span><b>- MVR ${money(c.primary)}</b></div>`:''}${c.govt>0?`<div class="sum-row"><span>Aasandha</span><b>- MVR ${money(c.govt)}</b></div>`:''}<div class="sum-row sum-total"><span>Patient Payable</span><b>MVR ${money(c.payable)}</b></div><div class="sum-row"><span>Paid</span><b>MVR ${money(c.paid)}</b></div><div class="sum-row"><span>Balance</span><b>MVR ${money(c.balance)}</b></div>`;
+}
+async function saveEdit(){
+ if(!editingMemo)return;if(!editLines.length)return toast('Add at least one service.','error');if(!$('doctorSelect').value)return toast('Select a doctor.','error');
+ const btn=$('saveEditBtn');btn.disabled=true;
+ try{
+  const data=await api('/api/memos',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+   userId:currentUser.id,memoId:editingMemo.id,doctorUserId:Number($('doctorSelect').value),
+   primaryInsuranceId:$('insuranceSelect').value?Number($('insuranceSelect').value):null,
+   insuranceMethod:$('insuranceMethod').value,insuranceValue:Number($('insuranceValue').value)||0,
+   billDiscountMethod:$('billDiscountMethod').value,billDiscountValue:Number($('billDiscountValue').value)||0,
+   paymentMethodId:$('paymentMethod').value?Number($('paymentMethod').value):null,
+   amountPaid:Number($('amountPaid').value)||0,paymentReference:$('paymentReference').value.trim(),remarks:$('remarks').value.trim(),
+   services:editLines.map(x=>({serviceId:x.serviceId,qty:x.qty,discountMethod:x.discountMethod,discountValue:x.discountValue}))
+  })});
+  toast('Memo updated successfully.');closeEdit();await loadMemos();showReceipt(data.memo);
+ }catch(e){toast(e.message,'error')}finally{btn.disabled=false}
+}
+function showReceipt(m){
+ const c=m.company||setup.company||{},p=m.patient||{};
+ $('rCompany').textContent=c.company_name||c.name||'Clinic';
+ $('rCompanyInfo').innerHTML=[c.company_address||c.address,c.company_phone||c.phone,c.company_email||c.email,c.company_registration_no||c.registrationNo?('Reg: '+(c.company_registration_no||c.registrationNo)):null].filter(Boolean).map(esc).join('<br>');
+ $('rPatientName').textContent=p.full_name||p.name||m.patient_name||'-';
+ const patientLines=[['Patient No.',p.patient_no||p.patientNo],['ID / Passport',idText(p)],['DOB',date(p.date_of_birth||p.dateOfBirth)],['Age',age(p.date_of_birth||p.dateOfBirth)],['Nationality',p.nationality],['Contact',p.phone||p.contact],['Address',p.address],['Email',p.email]].filter(x=>x[1]&&x[1]!=='-');
+ $('rPatientInfo').innerHTML=patientLines.map(x=>`<div class="receipt-line"><span>${esc(x[0])}</span><strong>${esc(x[1])}</strong></div>`).join('');
+ const memoLines=[['Receipt No.',m.receipt_no||m.receiptNo],['Memo No.',m.memo_no],['Date',date(m.memo_date||m.memoDate)],['Doctor',m.doctor_name||m.doctorName],['Insurance',m.primary_insurance_name||m.primaryInsuranceName],['Payment',m.payment_method_name||m.paymentMethodName]].filter(x=>x[1]);
+ $('rMemoInfo').innerHTML=memoLines.map(x=>`<div class="receipt-line"><span>${esc(x[0])}</span><strong>${esc(x[1])}</strong></div>`).join('');
+ $('rItems').innerHTML=(m.items||[]).map(x=>`<tr><td>${esc(x.service_name||x.serviceName)}</td><td>${Number(x.quantity||x.qty||1)}</td><td>MVR ${money(x.unit_price??x.price)}</td><td>${Number(x.discount_amount??x.discountAmount||0)>0?'MVR '+money(x.discount_amount??x.discountAmount):'-'}</td><td>MVR ${money(x.line_total??x.lineTotal??x.amount)}</td></tr>`).join('');
+ const sd=Number(m.service_discount??m.serviceDiscount||0),bd=Number(m.bill_discount_amount??m.billDiscountAmount||0),pi=Number(m.primary_insurance_cover??m.primaryInsuranceCover||0),gi=Number(m.government_insurance_cover??m.governmentInsuranceCover||0),pay=Number(m.patient_payable??m.patientPayable||0),paid=Number(m.paid_amount??m.paidAmount||0),bal=Number(m.balance_amount??m.balanceAmount||0);
+ $('rSummary').innerHTML=`<div class="sum-row"><span>Subtotal</span><b>MVR ${money(m.subtotal)}</b></div>${sd>0?`<div class="sum-row"><span>Service Discount</span><b>- MVR ${money(sd)}</b></div>`:''}${bd>0?`<div class="sum-row"><span>Bill Discount</span><b>- MVR ${money(bd)}</b></div>`:''}${pi>0?`<div class="sum-row"><span>${esc(m.primary_insurance_name||m.primaryInsuranceName||'Insurance')}</span><b>- MVR ${money(pi)}</b></div>`:''}${gi>0?`<div class="sum-row"><span>Aasandha</span><b>- MVR ${money(gi)}</b></div>`:''}<div class="sum-row sum-total"><span>Patient Payable</span><b>MVR ${money(pay)}</b></div>${paid>0?`<div class="sum-row"><span>Paid</span><b>MVR ${money(paid)}</b></div>`:''}${bal>0?`<div class="sum-row"><span>Balance</span><b>MVR ${money(bal)}</b></div>`:''}`;
+ $('receiptOverlay').classList.add('show');
+}
+function closeReceipt(){$('receiptOverlay').classList.remove('show')}
+function logout(){if(confirm('Do you want to logout?')){sessionStorage.removeItem('clinic_user');location.href='login.html'}}
+
+$('searchBtn').onclick=loadMemos;
+$('searchText').addEventListener('keydown',e=>{if(e.key==='Enter')loadMemos()});
+$('addServiceBtn').onclick=addService;
+['insuranceSelect','insuranceMethod','insuranceValue','billDiscountMethod','billDiscountValue','paymentMethod','amountPaid'].forEach(id=>$(id).addEventListener('input',recalcEdit));
+$('insuranceSelect').addEventListener('change',()=>{
+ const x=setup.insuranceCompanies.find(v=>Number(v.id)===Number($('insuranceSelect').value));
+ if(x){$('insuranceMethod').value=x.charge_method||'percent';$('insuranceValue').value=Number(x.charge_value||0)}
+ recalcEdit();
+});
+$('saveEditBtn').onclick=saveEdit;
+init();
+</script>
+</body>
+</html>
