@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>User Approval</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:
+        Inter,
+        Segoe UI,
+        Arial,
+        sans-serif;
+
+    background:#f1f5f9;
+
+    color:#0f172a;
+}
+
+.header{
+    background:white;
+
+    padding:18px 30px;
+
+    display:flex;
+
+    justify-content:
+        space-between;
+
+    align-items:center;
+
+    border-bottom:
+        1px solid #e2e8f0;
+}
+
+.container{
+    max-width:1000px;
+
+    margin:35px auto;
+
+    padding:0 20px;
+}
+
+.card{
+    background:white;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(15,23,42,.06);
+}
+
+h2{
+    margin-top:0;
+}
+
+.user{
+    display:grid;
+
+    grid-template-columns:
+        2fr
+        1.5fr
+        1fr
+        auto;
+
+    gap:12px;
+
+    align-items:center;
+
+    padding:15px 0;
+
+    border-bottom:
+        1px solid #e2e8f0;
+}
+
+.name{
+    font-weight:700;
+}
+
+.username{
+    color:#64748b;
+}
+
+select{
+    padding:10px;
+
+    border:
+        1px solid #cbd5e1;
+
+    border-radius:9px;
+}
+
+button{
+    border:0;
+
+    padding:10px 16px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+
+    font-weight:600;
+}
+
+.approve{
+    background:#16a34a;
+
+    color:white;
+}
+
+.approved{
+    background:#dcfce7;
+
+    color:#166534;
+}
+
+@media(max-width:700px){
+
+    .user{
+        grid-template-columns:1fr;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<header class="header">
+
+    <strong>
+        Clinic Administration
+    </strong>
+
+    <span>
+        User Approval
+    </span>
+
+</header>
+
+
+<div class="container">
+
+<div class="card">
+
+    <h2>
+        Registered Users
+    </h2>
+
+    <div id="users">
+        Loading...
+    </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const currentUser =
+    JSON.parse(
+        sessionStorage
+            .getItem(
+                'clinic_user'
+            ) || 'null'
+    );
+
+
+if (
+    !currentUser ||
+    currentUser.role !== 'admin'
+) {
+
+    alert(
+        'Administrator access required.'
+    );
+
+    window.location.href =
+        'login.html';
+}
+
+
+async function loadUsers() {
+
+    try {
+
+        const response =
+            await fetch(
+                '/api/admin-users'
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        renderUsers(
+            data.users
+        );
+
+
+    } catch(error) {
+
+        document
+            .getElementById(
+                'users'
+            )
+            .textContent =
+                error.message;
+    }
+}
+
+
+
+function renderUsers(users) {
+
+    const container =
+        document.getElementById(
+            'users'
+        );
+
+
+    if (!users.length) {
+
+        container.textContent =
+            'No users found.';
+
+        return;
+    }
+
+
+    container.innerHTML =
+        users.map(user => `
+
+            <div class="user">
+
+                <div>
+
+                    <div class="name">
+                        ${escapeHtml(
+                            user.full_name
+                        )}
+                    </div>
+
+                    <div class="username">
+                        @${escapeHtml(
+                            user.username
+                        )}
+                    </div>
+
+                </div>
+
+
+                <select
+                    id="role-${user.id}"
+                >
+
+                    <option
+                        value="reception"
+                        ${
+                            user.role ===
+                            'reception'
+                                ? 'selected'
+                                : ''
+                        }
+                    >
+                        Reception
+                    </option>
+
+                    <option
+                        value="doctor"
+                        ${
+                            user.role ===
+                            'doctor'
+                                ? 'selected'
+                                : ''
+                        }
+                    >
+                        Doctor
+                    </option>
+
+                    <option
+                        value="accounts"
+                        ${
+                            user.role ===
+                            'accounts'
+                                ? 'selected'
+                                : ''
+                        }
+                    >
+                        Accounts
+                    </option>
+
+                    <option
+                        value="admin"
+                        ${
+                            user.role ===
+                            'admin'
+                                ? 'selected'
+                                : ''
+                        }
+                    >
+                        Admin
+                    </option>
+
+                </select>
+
+
+                <div>
+
+                    ${
+                        user.approved
+                        ?
+                        '<span class="approved">Approved</span>'
+                        :
+                        'Pending'
+                    }
+
+                </div>
+
+
+                <button
+                    class="approve"
+                    onclick="
+                        approveUser(
+                            ${user.id}
+                        )
+                    "
+                >
+                    ${
+                        user.approved
+                        ?
+                        'Update'
+                        :
+                        'Approve'
+                    }
+                </button>
+
+            </div>
+
+        `).join('');
+}
+
+
+
+async function approveUser(
+    userId
+) {
+
+    const role =
+        document
+        .getElementById(
+            `role-${userId}`
+        )
+        .value;
+
+
+    try {
+
+        const response =
+            await fetch(
+                '/api/approve-user',
+                {
+
+                    method:'POST',
+
+                    headers:{
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body:
+                        JSON.stringify({
+                            userId,
+                            role
+                        })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        await loadUsers();
+
+
+    } catch(error) {
+
+        alert(
+            error.message
+        );
+    }
+}
+
+
+
+function escapeHtml(text) {
+
+    return String(
+        text || ''
+    )
+    .replaceAll(
+        '&',
+        '&amp;'
+    )
+    .replaceAll(
+        '<',
+        '&lt;'
+    )
+    .replaceAll(
+        '>',
+        '&gt;'
+    )
+    .replaceAll(
+        '"',
+        '&quot;'
+    )
+    .replaceAll(
+        "'",
+        '&#039;'
+    );
+}
+
+
+loadUsers();
+
+</script>
+
+</body>
+</html>
