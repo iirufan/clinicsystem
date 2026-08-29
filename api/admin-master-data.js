@@ -1,13 +1,13 @@
 import sql from '../lib/db.js';
 
 
-const ALLOWED_ROLES = [
-    'admin',
-    'supervisor'
-];
+/* =========================================================
+   VERIFY USER
+========================================================= */
 
-
-async function checkAccess(userId) {
+async function verifyUser(
+    userId
+) {
 
     if (!userId) {
         return null;
@@ -19,18 +19,18 @@ async function checkAccess(userId) {
             SELECT
                 id,
                 username,
+                full_name,
                 role,
                 approved,
                 active
+
             FROM users
-            WHERE id = ${userId}
+
+            WHERE id =
+                ${Number(userId)}
+
             LIMIT 1
         `;
-
-
-    if (!rows.length) {
-        return null;
-    }
 
 
     const user =
@@ -38,11 +38,17 @@ async function checkAccess(userId) {
 
 
     if (
+        !user ||
         !user.approved ||
-        !user.active ||
-        !ALLOWED_ROLES.includes(
-            user.role
-        )
+        !user.active
+    ) {
+        return null;
+    }
+
+
+    if (
+        user.role !== 'admin' &&
+        user.role !== 'supervisor'
     ) {
         return null;
     }
@@ -52,6 +58,10 @@ async function checkAccess(userId) {
 }
 
 
+/* =========================================================
+   HANDLER
+========================================================= */
+
 export default async function handler(
     req,
     res
@@ -59,13 +69,36 @@ export default async function handler(
 
     try {
 
-        /* =================================================
-           READ DATA
-        ================================================= */
+
+        /* =====================================================
+           GET
+        ===================================================== */
 
         if (
             req.method === 'GET'
         ) {
+
+            const user =
+                await verifyUser(
+                    req.query.userId
+                );
+
+
+            if (!user) {
+
+                return res
+                    .status(403)
+                    .json({
+
+                        success:false,
+
+                        message:
+                            'Admin or Supervisor access required.'
+                    });
+            }
+
+
+            /* SERVICES */
 
             const services =
                 await sql`
@@ -75,31 +108,66 @@ export default async function handler(
                         price,
                         aasandha_price,
                         active,
-                        created_at
+                        created_at,
+                        updated_at
+
                     FROM services
+
                     ORDER BY
-                        active DESC,
                         service_name
                 `;
 
+
+            /* INSURANCE */
 
             const insurance =
                 await sql`
                     SELECT
                         id,
+                        company_code,
                         company_name,
                         short_name,
+
+                        contact_person,
                         phone,
                         email,
+                        address,
+
+                        discount_percent,
+
+                        COALESCE(
+                            is_government,
+                            FALSE
+                        )
+                        AS is_government,
+
+                        COALESCE(
+                            charge_method,
+                            'percent'
+                        )
+                        AS charge_method,
+
+                        COALESCE(
+                            charge_value,
+                            0
+                        )
+                        AS charge_value,
+
                         notes,
+
                         active,
-                        created_at
+
+                        created_at,
+                        updated_at
+
                     FROM insurance_companies
+
                     ORDER BY
-                        active DESC,
                         company_name
                 `;
 
+
+            /* PAYMENT METHODS */
 
             const paymentMethods =
                 await sql`
@@ -107,13 +175,17 @@ export default async function handler(
                         id,
                         method_name,
                         active,
-                        created_at
+                        created_at,
+                        updated_at
+
                     FROM payment_methods
+
                     ORDER BY
-                        active DESC,
                         method_name
                 `;
 
+
+            /* CURRENCIES */
 
             const currencies =
                 await sql`
@@ -125,26 +197,66 @@ export default async function handler(
                         exchange_rate,
                         is_default,
                         active,
-                        created_at
+                        created_at,
+                        updated_at
+
                     FROM currencies
+
                     ORDER BY
                         is_default DESC,
-                        active DESC,
                         currency_code
+                `;
+
+
+            /* COMPANY SETTINGS */
+
+            const companyRows =
+                await sql`
+                    SELECT
+                        id,
+                        company_name,
+                        company_address,
+                        company_phone,
+                        company_email,
+                        company_registration_no,
+                        receipt_prefix,
+                        receipt_next_number,
+                        receipt_digits,
+                        updated_at,
+                        updated_by
+
+                    FROM clinic_settings
+
+                    WHERE id = 1
+
+                    LIMIT 1
                 `;
 
 
             return res
                 .status(200)
                 .json({
+
                     success:true,
+
                     services,
+
                     insurance,
+
                     paymentMethods,
-                    currencies
+
+                    currencies,
+
+                    company:
+                        companyRows[0] ||
+                        null
                 });
         }
 
+
+        /* =====================================================
+           ONLY POST / PUT BELOW
+        ===================================================== */
 
         if (
             req.method !== 'POST' &&
@@ -154,7 +266,9 @@ export default async function handler(
             return res
                 .status(405)
                 .json({
+
                     success:false,
+
                     message:
                         'Method not allowed.'
                 });
@@ -162,11 +276,12 @@ export default async function handler(
 
 
         const body =
-            req.body || {};
+            req.body ||
+            {};
 
 
         const user =
-            await checkAccess(
+            await verifyUser(
                 body.userId
             );
 
@@ -176,169 +291,37 @@ export default async function handler(
             return res
                 .status(403)
                 .json({
+
                     success:false,
+
                     message:
                         'Admin or Supervisor access required.'
                 });
         }
 
 
-        /* =================================================
-           TOGGLE
-        ================================================= */
-
-        if (
-            req.method === 'PUT' &&
-            body.type === 'toggle'
-        ) {
-
-            const id =
-                Number(body.id);
+        const type =
+            String(
+                body.type ||
+                ''
+            )
+            .trim()
+            .toLowerCase();
 
 
-            const active =
-                Boolean(
-                    body.active
-                );
-
-
-            if (!id) {
-
-                return res
-                    .status(400)
-                    .json({
-                        success:false,
-                        message:
-                            'Invalid item.'
-                    });
-            }
-
-
-            switch(
-                body.entity
-            ) {
-
-                case 'service':
-
-                    await sql`
-                        UPDATE services
-
-                        SET
-                            active =
-                                ${active},
-
-                            updated_at =
-                                NOW()
-
-                        WHERE id =
-                            ${id}
-                    `;
-
-                    break;
-
-
-                case 'insurance':
-
-                    await sql`
-                        UPDATE insurance_companies
-
-                        SET
-                            active =
-                                ${active},
-
-                            updated_at =
-                                NOW()
-
-                        WHERE id =
-                            ${id}
-                    `;
-
-                    break;
-
-
-                case 'payment':
-
-                    await sql`
-                        UPDATE payment_methods
-
-                        SET
-                            active =
-                                ${active},
-
-                            updated_at =
-                                NOW()
-
-                        WHERE id =
-                            ${id}
-                    `;
-
-                    break;
-
-
-                case 'currency':
-
-                    await sql`
-                        UPDATE currencies
-
-                        SET
-                            active =
-                                ${active},
-
-                            updated_at =
-                                NOW()
-
-                        WHERE id =
-                            ${id}
-                    `;
-
-                    break;
-
-
-                default:
-
-                    return res
-                        .status(400)
-                        .json({
-                            success:false,
-                            message:
-                                'Invalid type.'
-                        });
-            }
-
-
-            return res
-                .status(200)
-                .json({
-                    success:true
-                });
-        }
-
-
-        /* =================================================
+        /* =====================================================
            SERVICE
-        ================================================= */
+        ===================================================== */
 
         if (
-            body.type === 'service'
+            type === 'service'
         ) {
 
             const serviceName =
                 String(
-                    body.service_name ||
+                    body.serviceName ||
                     ''
                 ).trim();
-
-
-            const price =
-                Number(
-                    body.price
-                );
-
-
-            const aasandhaPrice =
-                Number(
-                    body.aasandha_price
-                );
 
 
             if (!serviceName) {
@@ -346,30 +329,33 @@ export default async function handler(
                 return res
                     .status(400)
                     .json({
+
                         success:false,
+
                         message:
-                            'Service name required.'
+                            'Service name is required.'
                     });
             }
 
 
-            if (
-                !Number.isFinite(price) ||
-                !Number.isFinite(
-                    aasandhaPrice
-                ) ||
-                price < 0 ||
-                aasandhaPrice < 0
-            ) {
+            const price =
+                Math.max(
+                    0,
+                    Number(
+                        body.price ||
+                        0
+                    )
+                );
 
-                return res
-                    .status(400)
-                    .json({
-                        success:false,
-                        message:
-                            'Invalid service price.'
-                    });
-            }
+
+            const aasandhaPrice =
+                Math.max(
+                    0,
+                    Number(
+                        body.aasandhaPrice ||
+                        0
+                    )
+                );
 
 
             if (
@@ -378,23 +364,44 @@ export default async function handler(
 
                 await sql`
                     INSERT INTO services (
+
                         service_name,
                         price,
                         aasandha_price,
                         active,
-                        created_by
+                        created_by,
+                        created_at,
+                        updated_at
+
                     )
 
                     VALUES (
+
                         ${serviceName},
                         ${price},
                         ${aasandhaPrice},
                         TRUE,
-                        ${user.id}
+                        ${user.id},
+                        NOW(),
+                        NOW()
                     )
                 `;
 
             } else {
+
+                if (!body.id) {
+
+                    return res
+                        .status(400)
+                        .json({
+
+                            success:false,
+
+                            message:
+                                'Service ID required.'
+                        });
+                }
+
 
                 await sql`
                     UPDATE services
@@ -413,26 +420,30 @@ export default async function handler(
                             NOW()
 
                     WHERE id =
-                        ${Number(
-                            body.id
-                        )}
+                        ${Number(body.id)}
                 `;
             }
+
+
+            return res
+                .status(200)
+                .json({
+                    success:true
+                });
         }
 
 
-        /* =================================================
+        /* =====================================================
            INSURANCE
-        ================================================= */
+        ===================================================== */
 
-        else if (
-            body.type ===
-            'insurance'
+        if (
+            type === 'insurance'
         ) {
 
             const companyName =
                 String(
-                    body.company_name ||
+                    body.companyName ||
                     ''
                 ).trim();
 
@@ -442,39 +453,86 @@ export default async function handler(
                 return res
                     .status(400)
                     .json({
+
                         success:false,
+
                         message:
-                            'Insurance company name required.'
+                            'Insurance company name is required.'
                     });
             }
 
 
+            const companyCode =
+                String(
+                    body.companyCode ||
+                    ''
+                )
+                .trim()
+                .toUpperCase();
+
+
             const shortName =
                 String(
-                    body.short_name ||
+                    body.shortName ||
                     ''
                 ).trim();
 
 
-            const phone =
-                String(
-                    body.phone ||
-                    ''
-                ).trim();
+            const method =
+                body.chargeMethod ===
+                'fixed'
+                ?
+                'fixed'
+                :
+                'percent';
 
 
-            const email =
-                String(
-                    body.email ||
-                    ''
-                ).trim();
+            const value =
+                Math.max(
+                    0,
+                    Number(
+                        body.chargeValue ||
+                        0
+                    )
+                );
 
 
-            const notes =
-                String(
-                    body.notes ||
-                    ''
-                ).trim();
+            const isGovernment =
+                Boolean(
+                    body.isGovernment
+                );
+
+
+            /*
+             Only one active government insurance
+             should normally exist.
+            */
+
+            if (isGovernment) {
+
+                await sql`
+                    UPDATE insurance_companies
+
+                    SET
+                        is_government =
+                            FALSE,
+
+                        updated_at =
+                            NOW()
+
+                    WHERE
+                        is_government =
+                            TRUE
+
+                        AND (
+                            ${body.id || null}::bigint
+                            IS NULL
+
+                            OR id !=
+                            ${body.id || null}
+                        )
+                `;
+            }
 
 
             if (
@@ -483,69 +541,184 @@ export default async function handler(
 
                 await sql`
                     INSERT INTO insurance_companies (
+
+                        company_code,
                         company_name,
                         short_name,
+
                         phone,
                         email,
+
+                        charge_method,
+                        charge_value,
+
+                        is_government,
+
                         notes,
-                        active
+
+                        active,
+
+                        created_at,
+                        updated_at
+
                     )
 
                     VALUES (
+
+                        ${
+                            companyCode ||
+                            null
+                        },
+
                         ${companyName},
-                        ${shortName || null},
-                        ${phone || null},
-                        ${email || null},
-                        ${notes || null},
-                        TRUE
+
+                        ${
+                            shortName ||
+                            null
+                        },
+
+                        ${
+                            String(
+                                body.phone ||
+                                ''
+                            ).trim()
+                            ||
+                            null
+                        },
+
+                        ${
+                            String(
+                                body.email ||
+                                ''
+                            ).trim()
+                            ||
+                            null
+                        },
+
+                        ${method},
+
+                        ${value},
+
+                        ${isGovernment},
+
+                        ${
+                            String(
+                                body.notes ||
+                                ''
+                            ).trim()
+                            ||
+                            null
+                        },
+
+                        TRUE,
+
+                        NOW(),
+                        NOW()
                     )
                 `;
 
             } else {
 
+                if (!body.id) {
+
+                    return res
+                        .status(400)
+                        .json({
+
+                            success:false,
+
+                            message:
+                                'Insurance ID required.'
+                        });
+                }
+
+
                 await sql`
                     UPDATE insurance_companies
 
                     SET
+                        company_code =
+                            ${
+                                companyCode ||
+                                null
+                            },
+
                         company_name =
                             ${companyName},
 
                         short_name =
-                            ${shortName || null},
+                            ${
+                                shortName ||
+                                null
+                            },
 
                         phone =
-                            ${phone || null},
+                            ${
+                                String(
+                                    body.phone ||
+                                    ''
+                                ).trim()
+                                ||
+                                null
+                            },
 
                         email =
-                            ${email || null},
+                            ${
+                                String(
+                                    body.email ||
+                                    ''
+                                ).trim()
+                                ||
+                                null
+                            },
+
+                        charge_method =
+                            ${method},
+
+                        charge_value =
+                            ${value},
+
+                        is_government =
+                            ${isGovernment},
 
                         notes =
-                            ${notes || null},
+                            ${
+                                String(
+                                    body.notes ||
+                                    ''
+                                ).trim()
+                                ||
+                                null
+                            },
 
                         updated_at =
                             NOW()
 
                     WHERE id =
-                        ${Number(
-                            body.id
-                        )}
+                        ${Number(body.id)}
                 `;
             }
+
+
+            return res
+                .status(200)
+                .json({
+                    success:true
+                });
         }
 
 
-        /* =================================================
-           PAYMENT
-        ================================================= */
+        /* =====================================================
+           PAYMENT METHOD
+        ===================================================== */
 
-        else if (
-            body.type ===
-            'payment'
+        if (
+            type === 'payment'
         ) {
 
             const methodName =
                 String(
-                    body.method_name ||
+                    body.methodName ||
                     ''
                 ).trim();
 
@@ -555,9 +728,11 @@ export default async function handler(
                 return res
                     .status(400)
                     .json({
+
                         success:false,
+
                         message:
-                            'Payment method required.'
+                            'Payment method name required.'
                     });
             }
 
@@ -568,19 +743,40 @@ export default async function handler(
 
                 await sql`
                     INSERT INTO payment_methods (
+
                         method_name,
                         active,
-                        created_by
+                        created_by,
+                        created_at,
+                        updated_at
+
                     )
 
                     VALUES (
+
                         ${methodName},
                         TRUE,
-                        ${user.id}
+                        ${user.id},
+                        NOW(),
+                        NOW()
                     )
                 `;
 
             } else {
+
+                if (!body.id) {
+
+                    return res
+                        .status(400)
+                        .json({
+
+                            success:false,
+
+                            message:
+                                'Payment method ID required.'
+                        });
+                }
+
 
                 await sql`
                     UPDATE payment_methods
@@ -593,26 +789,30 @@ export default async function handler(
                             NOW()
 
                     WHERE id =
-                        ${Number(
-                            body.id
-                        )}
+                        ${Number(body.id)}
                 `;
             }
+
+
+            return res
+                .status(200)
+                .json({
+                    success:true
+                });
         }
 
 
-        /* =================================================
+        /* =====================================================
            CURRENCY
-        ================================================= */
+        ===================================================== */
 
-        else if (
-            body.type ===
-            'currency'
+        if (
+            type === 'currency'
         ) {
 
             const currencyCode =
                 String(
-                    body.currency_code ||
+                    body.currencyCode ||
                     ''
                 )
                 .trim()
@@ -621,28 +821,9 @@ export default async function handler(
 
             const currencyName =
                 String(
-                    body.currency_name ||
+                    body.currencyName ||
                     ''
                 ).trim();
-
-
-            const symbol =
-                String(
-                    body.symbol ||
-                    ''
-                ).trim();
-
-
-            const exchangeRate =
-                Number(
-                    body.exchange_rate
-                );
-
-
-            const isDefault =
-                Boolean(
-                    body.is_default
-                );
 
 
             if (
@@ -653,39 +834,32 @@ export default async function handler(
                 return res
                     .status(400)
                     .json({
+
                         success:false,
+
                         message:
-                            'Currency code and name required.'
+                            'Currency code and name are required.'
                     });
             }
 
 
-            if (
-                !Number.isFinite(
-                    exchangeRate
-                ) ||
-                exchangeRate <= 0
-            ) {
+            const isDefault =
+                Boolean(
+                    body.isDefault
+                );
 
-                return res
-                    .status(400)
-                    .json({
-                        success:false,
-                        message:
-                            'Invalid exchange rate.'
-                    });
-            }
-
-
-            /*
-            Only one default currency.
-            */
 
             if (isDefault) {
 
                 await sql`
                     UPDATE currencies
-                    SET is_default = FALSE
+
+                    SET
+                        is_default =
+                            FALSE,
+
+                        updated_at =
+                            NOW()
                 `;
             }
 
@@ -696,27 +870,70 @@ export default async function handler(
 
                 await sql`
                     INSERT INTO currencies (
+
                         currency_code,
                         currency_name,
                         symbol,
                         exchange_rate,
                         is_default,
                         active,
-                        created_by
+                        created_by,
+                        created_at,
+                        updated_at
+
                     )
 
                     VALUES (
+
                         ${currencyCode},
+
                         ${currencyName},
-                        ${symbol || null},
-                        ${exchangeRate},
+
+                        ${
+                            String(
+                                body.symbol ||
+                                ''
+                            ).trim()
+                            ||
+                            null
+                        },
+
+                        ${
+                            Math.max(
+                                0,
+                                Number(
+                                    body.exchangeRate ||
+                                    1
+                                )
+                            )
+                        },
+
                         ${isDefault},
+
                         TRUE,
-                        ${user.id}
+
+                        ${user.id},
+
+                        NOW(),
+                        NOW()
                     )
                 `;
 
             } else {
+
+                if (!body.id) {
+
+                    return res
+                        .status(400)
+                        .json({
+
+                            success:false,
+
+                            message:
+                                'Currency ID required.'
+                        });
+                }
+
 
                 await sql`
                     UPDATE currencies
@@ -729,10 +946,25 @@ export default async function handler(
                             ${currencyName},
 
                         symbol =
-                            ${symbol || null},
+                            ${
+                                String(
+                                    body.symbol ||
+                                    ''
+                                ).trim()
+                                ||
+                                null
+                            },
 
                         exchange_rate =
-                            ${exchangeRate},
+                            ${
+                                Math.max(
+                                    0,
+                                    Number(
+                                        body.exchangeRate ||
+                                        1
+                                    )
+                                )
+                            },
 
                         is_default =
                             ${isDefault},
@@ -741,62 +973,424 @@ export default async function handler(
                             NOW()
 
                     WHERE id =
-                        ${Number(
-                            body.id
-                        )}
+                        ${Number(body.id)}
                 `;
             }
-        }
 
-
-        else {
 
             return res
-                .status(400)
+                .status(200)
                 .json({
-                    success:false,
-                    message:
-                        'Invalid data type.'
+                    success:true
                 });
         }
 
 
-        /* =================================================
-           AUDIT
-        ================================================= */
+        /* =====================================================
+           COMPANY SETTINGS
+        ===================================================== */
 
-        await sql`
-            INSERT INTO audit_logs (
-                user_id,
-                action,
-                table_name,
-                description
-            )
+        if (
+            type === 'company'
+        ) {
 
-            VALUES (
-                ${user.id},
-                'MASTER_DATA_UPDATE',
-                ${body.type},
-                ${'Master data changed by ' +
-                  user.username}
-            )
-        `;
+            const companyName =
+                String(
+                    body.companyName ||
+                    ''
+                ).trim();
+
+
+            if (!companyName) {
+
+                return res
+                    .status(400)
+                    .json({
+
+                        success:false,
+
+                        message:
+                            'Company / Clinic name required.'
+                    });
+            }
+
+
+            /*
+             Admin may change receipt numbering.
+             Supervisor may change company information only.
+            */
+
+            if (
+                user.role === 'admin'
+            ) {
+
+                const receiptPrefix =
+                    String(
+                        body.receiptPrefix ||
+                        ''
+                    ).trim();
+
+
+                const nextNumber =
+                    Math.max(
+                        1,
+                        Math.floor(
+                            Number(
+                                body.receiptNextNumber ||
+                                1
+                            )
+                        )
+                    );
+
+
+                const digits =
+                    Math.min(
+                        12,
+                        Math.max(
+                            1,
+                            Math.floor(
+                                Number(
+                                    body.receiptDigits ||
+                                    6
+                                )
+                            )
+                        )
+                    );
+
+
+                await sql`
+                    INSERT INTO clinic_settings (
+
+                        id,
+
+                        company_name,
+                        company_address,
+                        company_phone,
+                        company_email,
+                        company_registration_no,
+
+                        receipt_prefix,
+                        receipt_next_number,
+                        receipt_digits,
+
+                        updated_by,
+                        updated_at
+
+                    )
+
+                    VALUES (
+
+                        1,
+
+                        ${companyName},
+
+                        ${
+                            String(
+                                body.companyAddress ||
+                                ''
+                            ).trim()
+                            ||
+                            null
+                        },
+
+                        ${
+                            String(
+                                body.companyPhone ||
+                                ''
+                            ).trim()
+                            ||
+                            null
+                        },
+
+                        ${
+                            String(
+                                body.companyEmail ||
+                                ''
+                            ).trim()
+                            ||
+                            null
+                        },
+
+                        ${
+                            String(
+                                body.companyRegistrationNo ||
+                                ''
+                            ).trim()
+                            ||
+                            null
+                        },
+
+                        ${receiptPrefix},
+
+                        ${nextNumber},
+
+                        ${digits},
+
+                        ${user.id},
+
+                        NOW()
+                    )
+
+                    ON CONFLICT (id)
+
+                    DO UPDATE SET
+
+                        company_name =
+                            EXCLUDED.company_name,
+
+                        company_address =
+                            EXCLUDED.company_address,
+
+                        company_phone =
+                            EXCLUDED.company_phone,
+
+                        company_email =
+                            EXCLUDED.company_email,
+
+                        company_registration_no =
+                            EXCLUDED.company_registration_no,
+
+                        receipt_prefix =
+                            EXCLUDED.receipt_prefix,
+
+                        receipt_next_number =
+                            EXCLUDED.receipt_next_number,
+
+                        receipt_digits =
+                            EXCLUDED.receipt_digits,
+
+                        updated_by =
+                            EXCLUDED.updated_by,
+
+                        updated_at =
+                            NOW()
+                `;
+
+            } else {
+
+                await sql`
+                    UPDATE clinic_settings
+
+                    SET
+                        company_name =
+                            ${companyName},
+
+                        company_address =
+                            ${
+                                String(
+                                    body.companyAddress ||
+                                    ''
+                                ).trim()
+                                ||
+                                null
+                            },
+
+                        company_phone =
+                            ${
+                                String(
+                                    body.companyPhone ||
+                                    ''
+                                ).trim()
+                                ||
+                                null
+                            },
+
+                        company_email =
+                            ${
+                                String(
+                                    body.companyEmail ||
+                                    ''
+                                ).trim()
+                                ||
+                                null
+                            },
+
+                        company_registration_no =
+                            ${
+                                String(
+                                    body.companyRegistrationNo ||
+                                    ''
+                                ).trim()
+                                ||
+                                null
+                            },
+
+                        updated_by =
+                            ${user.id},
+
+                        updated_at =
+                            NOW()
+
+                    WHERE id = 1
+                `;
+            }
+
+
+            return res
+                .status(200)
+                .json({
+                    success:true
+                });
+        }
+
+
+        /* =====================================================
+           TOGGLE ACTIVE STATUS
+        ===================================================== */
+
+        if (
+            type === 'toggle'
+        ) {
+
+            const id =
+                Number(
+                    body.id
+                );
+
+
+            const active =
+                Boolean(
+                    body.active
+                );
+
+
+            const entity =
+                String(
+                    body.entity ||
+                    ''
+                );
+
+
+            if (!id) {
+
+                return res
+                    .status(400)
+                    .json({
+
+                        success:false,
+
+                        message:
+                            'Record ID required.'
+                    });
+            }
+
+
+            if (
+                entity === 'service'
+            ) {
+
+                await sql`
+                    UPDATE services
+
+                    SET
+                        active =
+                            ${active},
+
+                        updated_at =
+                            NOW()
+
+                    WHERE id =
+                        ${id}
+                `;
+
+            } else if (
+                entity === 'insurance'
+            ) {
+
+                await sql`
+                    UPDATE insurance_companies
+
+                    SET
+                        active =
+                            ${active},
+
+                        updated_at =
+                            NOW()
+
+                    WHERE id =
+                        ${id}
+                `;
+
+            } else if (
+                entity === 'payment'
+            ) {
+
+                await sql`
+                    UPDATE payment_methods
+
+                    SET
+                        active =
+                            ${active},
+
+                        updated_at =
+                            NOW()
+
+                    WHERE id =
+                        ${id}
+                `;
+
+            } else if (
+                entity === 'currency'
+            ) {
+
+                await sql`
+                    UPDATE currencies
+
+                    SET
+                        active =
+                            ${active},
+
+                        updated_at =
+                            NOW()
+
+                    WHERE id =
+                        ${id}
+                `;
+
+            } else {
+
+                return res
+                    .status(400)
+                    .json({
+
+                        success:false,
+
+                        message:
+                            'Invalid entity.'
+                    });
+            }
+
+
+            return res
+                .status(200)
+                .json({
+                    success:true
+                });
+        }
 
 
         return res
-            .status(200)
+            .status(400)
             .json({
-                success:true
+
+                success:false,
+
+                message:
+                    'Invalid Master Data request.'
             });
 
 
     } catch(error) {
 
         console.error(
-            'MASTER DATA ERROR:',
+            'ADMIN MASTER DATA ERROR:',
             error
         );
 
+
+        /*
+         PostgreSQL duplicate value
+        */
 
         if (
             error.code ===
@@ -806,9 +1400,11 @@ export default async function handler(
             return res
                 .status(409)
                 .json({
+
                     success:false,
+
                     message:
-                        'This item already exists.'
+                        'A record with this name or code already exists.'
                 });
         }
 
@@ -816,10 +1412,12 @@ export default async function handler(
         return res
             .status(500)
             .json({
+
                 success:false,
+
                 message:
                     error.message ||
-                    'Unable to save data.'
+                    'Unable to process Master Data.'
             });
     }
 }
