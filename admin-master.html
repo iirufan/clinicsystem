@@ -10,17 +10,6 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>Clinic Master Data</title><!DOCTYPE html>
-<html lang="en">
-<head>
-
-<meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
 <title>Master Data | Clinic</title>
 
 <link
@@ -37,50 +26,55 @@
 }
 
 :root{
-    --blue:#0b7ee8;
-    --green:#12aa78;
+    --primary:#1685e8;
+    --primary-dark:#0b6fc9;
+    --green:#12a978;
     --purple:#7654e8;
-    --orange:#f3a13d;
+    --orange:#ef971e;
     --red:#e95067;
 
-    --text:#13213c;
-    --muted:#718099;
-    --border:#dfe8f2;
+    --text:#14213d;
+    --muted:#718096;
+    --border:#dfe7f1;
     --bg:#f4f8fc;
-    --white:#fff;
+    --white:#ffffff;
 
     --shadow:
-        0 9px 28px
-        rgba(30,65,105,.08);
+        0 10px 30px
+        rgba(35,65,100,.08);
 }
 
 body{
+    min-height:100vh;
+
     font-family:
         Inter,
         "Segoe UI",
         Arial,
         sans-serif;
 
-    min-height:100vh;
+    color:var(--text);
 
     background:
         linear-gradient(
             135deg,
-            #eef8ff,
+            #edf8ff,
             #fafcff,
-            #eefcf8
+            #eefcf7
         );
-
-    color:var(--text);
 }
 
 
-/* =========================================================
+/* ==========================================================
    HEADER
-========================================================= */
+========================================================== */
 
 .header{
     min-height:72px;
+
+    position:sticky;
+    top:0;
+    z-index:1000;
 
     display:flex;
     align-items:center;
@@ -92,13 +86,9 @@ body{
     border-bottom:
         1px solid var(--border);
 
-    position:sticky;
-    top:0;
-    z-index:100;
-
     box-shadow:
-        0 4px 15px
-        rgba(30,60,100,.04);
+        0 4px 16px
+        rgba(20,50,90,.04);
 }
 
 .brand{
@@ -113,8 +103,8 @@ body{
 }
 
 .brand-icon{
-    width:45px;
-    height:45px;
+    width:46px;
+    height:46px;
 
     display:flex;
     align-items:center;
@@ -124,21 +114,37 @@ body{
 
     color:#fff;
 
+    font-size:19px;
+
     background:
         linear-gradient(
             135deg,
-            #7654e8,
-            #1685e8
+            var(--purple),
+            var(--primary)
         );
-
-    font-size:19px;
 }
 
-.actions{
+.header-right{
     margin-left:auto;
 
     display:flex;
+    align-items:center;
+
     gap:8px;
+}
+
+.user-chip{
+    padding:8px 11px;
+
+    border-radius:10px;
+
+    background:#f2f7fc;
+
+    color:#53647a;
+
+    font-size:10px;
+
+    font-weight:700;
 }
 
 .header-btn{
@@ -150,28 +156,30 @@ body{
 
     cursor:pointer;
 
-    font-weight:700;
+    font-weight:800;
 }
 
 .dashboard-btn{
-    background:#e9f4ff;
-    color:var(--blue);
+    background:#eaf5ff;
+
+    color:var(--primary);
 }
 
 .logout-btn{
     background:#fff0f2;
+
     color:var(--red);
 }
 
 
-/* =========================================================
+/* ==========================================================
    PAGE
-========================================================= */
+========================================================== */
 
 .container{
-    max-width:1400px;
+    max-width:1420px;
 
-    margin:25px auto;
+    margin:24px auto;
 
     padding:
         0
@@ -190,26 +198,26 @@ body{
 .page-head p{
     margin-top:5px;
 
-    color:var(--muted);
+    font-size:11px;
 
-    font-size:12px;
+    color:var(--muted);
 }
 
 
-/* =========================================================
+/* ==========================================================
    TABS
-========================================================= */
+========================================================== */
 
 .tabs{
     display:flex;
 
     gap:6px;
 
-    overflow-x:auto;
+    margin-bottom:18px;
 
     padding:7px;
 
-    margin-bottom:18px;
+    overflow-x:auto;
 
     border:
         1px solid var(--border);
@@ -230,7 +238,7 @@ body{
 
     border-radius:10px;
 
-    padding:11px 12px;
+    padding:11px 13px;
 
     background:transparent;
 
@@ -238,7 +246,9 @@ body{
 
     cursor:pointer;
 
-    font-weight:700;
+    font-size:11px;
+
+    font-weight:800;
 
     white-space:nowrap;
 }
@@ -253,15 +263,15 @@ body{
     background:
         linear-gradient(
             135deg,
-            #1685e8,
-            #7654e8
+            var(--primary),
+            var(--purple)
         );
 }
 
 
-/* =========================================================
-   PANELS / CARDS
-========================================================= */
+/* ==========================================================
+   PANELS
+========================================================== */
 
 .panel{
     display:none;
@@ -270,6 +280,11 @@ body{
 .panel.active{
     display:block;
 }
+
+
+/* ==========================================================
+   CARD
+========================================================== */
 
 .card{
     background:#fff;
@@ -290,7 +305,6 @@ body{
 
 .card-head{
     display:flex;
-
     align-items:center;
 
     gap:11px;
@@ -306,31 +320,79 @@ body{
     align-items:center;
     justify-content:center;
 
+    flex:none;
+
     border-radius:12px;
 
-    background:#e9f5ff;
+    background:#eaf5ff;
 
-    color:var(--blue);
+    color:var(--primary);
 
-    font-size:18px;
+    font-size:17px;
 }
 
 .card-head h2{
-    font-size:16px;
+    font-size:15px;
 }
 
 .card-head p{
     margin-top:3px;
 
-    font-size:10px;
-
     color:var(--muted);
+
+    font-size:9px;
 }
 
 
-/* =========================================================
+/* ==========================================================
+   GRID
+========================================================== */
+
+.form-grid{
+    display:grid;
+
+    grid-template-columns:
+        370px
+        1fr;
+
+    gap:18px;
+}
+
+.company-grid{
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        .8fr;
+
+    gap:18px;
+}
+
+.row2{
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap:10px;
+}
+
+.row3{
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        1fr
+        1fr;
+
+    gap:10px;
+}
+
+
+/* ==========================================================
    FORM
-========================================================= */
+========================================================== */
 
 .field{
     margin-bottom:13px;
@@ -339,7 +401,7 @@ body{
 label{
     display:block;
 
-    margin-bottom:7px;
+    margin-bottom:6px;
 
     color:#394962;
 
@@ -353,16 +415,16 @@ select,
 textarea{
     width:100%;
 
+    padding:10px 11px;
+
     border:
-        1px solid #d5e0ec;
+        1px solid #d5e0eb;
 
     border-radius:10px;
 
-    background:#fbfdff;
-
-    padding:10px 11px;
-
     outline:none;
+
+    background:#fbfdff;
 
     font-family:inherit;
 
@@ -378,44 +440,45 @@ textarea{
 input:focus,
 select:focus,
 textarea:focus{
-    border-color:var(--blue);
+    border-color:var(--primary);
 
     box-shadow:
         0 0 0 3px
-        rgba(11,126,232,.08);
+        rgba(22,133,232,.08);
 }
 
-.row2{
-    display:grid;
+input:disabled{
+    background:#f1f4f7;
 
-    grid-template-columns:
-        1fr 1fr;
-
-    gap:11px;
-}
-
-.row3{
-    display:grid;
-
-    grid-template-columns:
-        1fr 1fr 1fr;
-
-    gap:11px;
-}
-
-.form-grid{
-    display:grid;
-
-    grid-template-columns:
-        370px 1fr;
-
-    gap:18px;
+    color:#8490a1;
 }
 
 
-/* =========================================================
+/* ==========================================================
+   CHECK
+========================================================== */
+
+.check-row{
+    display:flex;
+    align-items:center;
+
+    gap:8px;
+
+    margin-bottom:14px;
+}
+
+.check-row input{
+    width:auto;
+}
+
+.check-row label{
+    margin:0;
+}
+
+
+/* ==========================================================
    BUTTON
-========================================================= */
+========================================================== */
 
 .save-btn{
     width:100%;
@@ -431,8 +494,8 @@ textarea:focus{
     background:
         linear-gradient(
             135deg,
-            #1685e8,
-            #10a980
+            var(--primary),
+            var(--green)
         );
 
     cursor:pointer;
@@ -451,46 +514,46 @@ textarea:focus{
 
     padding:10px;
 
-    background:#eef2f6;
+    background:#edf2f7;
 
-    color:#58667a;
+    color:#59697d;
 
     cursor:pointer;
 
-    font-weight:700;
+    font-weight:800;
 }
 
 
-/* =========================================================
+/* ==========================================================
    SEARCH
-========================================================= */
+========================================================== */
 
 .search-box{
-    margin-bottom:13px;
-
     position:relative;
+
+    margin-bottom:13px;
 }
 
 .search-box input{
-    padding-right:38px;
+    padding-right:40px;
 }
 
 .search-box i{
     position:absolute;
 
     top:50%;
-    right:13px;
+    right:14px;
 
     transform:
         translateY(-50%);
 
-    color:#8290a5;
+    color:#8190a4;
 }
 
 
-/* =========================================================
+/* ==========================================================
    TABLE
-========================================================= */
+========================================================== */
 
 .table-wrap{
     overflow-x:auto;
@@ -507,11 +570,11 @@ th{
 
     background:#f5f9fd;
 
-    color:#64738b;
+    color:#637389;
 
     text-align:left;
 
-    font-size:9px;
+    font-size:8px;
 }
 
 td{
@@ -520,12 +583,27 @@ td{
     border-bottom:
         1px solid #edf1f5;
 
-    font-size:10px;
+    font-size:9px;
+
+    vertical-align:middle;
 }
 
 .table-name{
     font-weight:800;
 }
+
+.subtext{
+    margin-top:3px;
+
+    color:#8592a3;
+
+    font-size:8px;
+}
+
+
+/* ==========================================================
+   BADGES
+========================================================== */
 
 .badge{
     display:inline-block;
@@ -548,59 +626,61 @@ td{
 .badge.inactive{
     background:#fff0f2;
 
-    color:#d64a5f;
+    color:#d44b5f;
 }
 
 .badge.govt{
     background:#e8f4ff;
 
-    color:#156fc3;
+    color:#176fc1;
 }
+
+.badge.default{
+    background:#f1edff;
+
+    color:#7053d5;
+}
+
+
+/* ==========================================================
+   ACTION BUTTON
+========================================================== */
 
 .action-btn{
     width:29px;
     height:29px;
+
+    margin-right:3px;
 
     border:0;
 
     border-radius:8px;
 
     cursor:pointer;
-
-    margin-right:3px;
 }
 
 .edit-btn{
     background:#e8f4ff;
 
-    color:var(--blue);
+    color:var(--primary);
 }
 
 .toggle-btn{
     background:#fff4e5;
 
-    color:#dc8419;
+    color:#d8841b;
 }
 
 
-/* =========================================================
+/* ==========================================================
    COMPANY PREVIEW
-========================================================= */
-
-.company-layout{
-    display:grid;
-
-    grid-template-columns:
-        1fr .8fr;
-
-    gap:18px;
-}
+========================================================== */
 
 .company-preview{
     padding:24px;
 
     border:
-        1px solid #dde6ef;
+        1px solid #dce5ef;
 
     border-radius:15px;
 
@@ -615,71 +695,100 @@ td{
 }
 
 .company-preview h2{
-    font-size:21px;
-
     margin-bottom:6px;
+
+    font-size:22px;
 }
 
 .company-preview div{
     margin-top:3px;
 
-    color:#6a788d;
+    color:#6d7a8e;
 
-    font-size:10px;
+    font-size:9px;
 }
 
 .receipt-preview{
-    margin-top:18px;
+    margin-top:20px;
 
-    padding:14px;
+    padding:15px;
 
     border:
-        1px dashed #cfd9e6;
+        1px dashed #cad6e2;
 
     border-radius:12px;
 
     background:#fff;
 }
 
-.receipt-preview-title{
-    color:#718099;
+.receipt-preview-label{
+    color:#748296;
 
     font-size:9px;
 }
 
 .receipt-preview-number{
-    margin-top:7px;
+    margin-top:8px;
 
-    color:var(--blue);
+    color:var(--primary);
 
-    font-size:23px;
+    font-size:24px;
 
-    font-weight:800;
+    font-weight:900;
 }
 
 
-/* =========================================================
-   CHECK
-========================================================= */
+/* ==========================================================
+   EMPTY
+========================================================== */
 
-.check-row{
-    display:flex;
+.empty{
+    padding:35px;
 
-    align-items:center;
+    text-align:center;
 
-    gap:8px;
+    color:#8996a8;
 
-    min-height:38px;
+    font-size:10px;
 }
 
-.check-row input{
-    width:auto;
+.empty i{
+    display:block;
+
+    margin-bottom:9px;
+
+    font-size:25px;
 }
 
 
-/* =========================================================
+/* ==========================================================
+   LOADING
+========================================================== */
+
+.loading-box{
+    padding:30px;
+
+    text-align:center;
+
+    color:#76869b;
+
+    font-size:10px;
+}
+
+.loading-box i{
+    display:block;
+
+    margin-bottom:8px;
+
+    font-size:22px;
+
+    color:var(--primary);
+}
+
+
+/* ==========================================================
    TOAST
-========================================================= */
+========================================================== */
 
 .toast{
     position:fixed;
@@ -697,7 +806,7 @@ td{
 
     font-size:10px;
 
-    font-weight:700;
+    font-weight:800;
 
     opacity:0;
 
@@ -706,7 +815,7 @@ td{
 
     transition:.25s;
 
-    z-index:9999;
+    z-index:5000;
 }
 
 .toast.show{
@@ -725,14 +834,14 @@ td{
 }
 
 
-/* =========================================================
+/* ==========================================================
    RESPONSIVE
-========================================================= */
+========================================================== */
 
 @media(max-width:950px){
 
     .form-grid,
-    .company-layout{
+    .company-grid{
         grid-template-columns:1fr;
     }
 }
@@ -743,7 +852,8 @@ td{
         padding:0 12px;
     }
 
-    .brand span{
+    .brand span,
+    .user-chip{
         display:none;
     }
 
@@ -758,10 +868,16 @@ td{
         grid-template-columns:
             1fr 1fr;
     }
+
+    .tab{
+        min-width:0;
+    }
 }
 
 </style>
+
 </head>
+
 
 <body>
 
@@ -775,13 +891,21 @@ td{
         </div>
 
         <span>
-            Master Data
+            Clinic Master Data
         </span>
 
     </div>
 
 
-    <div class="actions">
+    <div class="header-right">
+
+        <div
+            class="user-chip"
+            id="userChip"
+        >
+            -
+        </div>
+
 
         <button
             class="header-btn dashboard-btn"
@@ -811,12 +935,12 @@ td{
     <div class="page-head">
 
         <h1>
-            Clinic Master Data
+            Master Data
         </h1>
 
         <p>
-            Manage services, insurance, payment methods,
-            currencies and receipt information.
+            Manage clinic services, insurance companies,
+            payments, currencies and receipt settings.
         </p>
 
     </div>
@@ -827,6 +951,7 @@ td{
     ====================================================== -->
 
     <div class="tabs">
+
 
         <button
             class="tab active"
@@ -859,7 +984,7 @@ td{
             class="tab"
             data-tab="currencies"
         >
-            <i class="fa-solid fa-money-bill-transfer"></i>
+            <i class="fa-solid fa-coins"></i>
             Currencies
         </button>
 
@@ -887,7 +1012,7 @@ td{
         <div class="form-grid">
 
 
-            <!-- SERVICE FORM -->
+            <!-- FORM -->
 
             <div class="card">
 
@@ -904,7 +1029,7 @@ td{
                         </h2>
 
                         <p>
-                            Service and government price
+                            Normal and Aasandha prices
                         </p>
 
                     </div>
@@ -913,8 +1038,8 @@ td{
 
 
                 <input
-                    type="hidden"
                     id="serviceId"
+                    type="hidden"
                 >
 
 
@@ -972,7 +1097,7 @@ td{
 
                 <button
                     class="save-btn"
-                    onclick="saveService()"
+                    id="saveServiceButton"
                 >
                     <i class="fa-solid fa-floppy-disk"></i>
                     Save Service
@@ -981,7 +1106,7 @@ td{
 
                 <button
                     class="reset-btn"
-                    onclick="resetServiceForm()"
+                    id="clearServiceButton"
                 >
                     Clear
                 </button>
@@ -989,19 +1114,13 @@ td{
             </div>
 
 
-            <!-- SERVICE LIST -->
+            <!-- LIST -->
 
             <div class="card">
 
                 <div class="card-head">
 
-                    <div
-                        class="card-icon"
-                        style="
-                            background:#e8faf2;
-                            color:#12aa78;
-                        "
-                    >
+                    <div class="card-icon">
                         <i class="fa-solid fa-list"></i>
                     </div>
 
@@ -1012,7 +1131,7 @@ td{
                         </h2>
 
                         <p>
-                            Active and inactive services
+                            All clinic services
                         </p>
 
                     </div>
@@ -1025,7 +1144,6 @@ td{
                     <input
                         id="serviceSearch"
                         placeholder="Search service..."
-                        oninput="renderServices()"
                     >
 
                     <i class="fa-solid fa-search"></i>
@@ -1036,7 +1154,17 @@ td{
                 <div
                     class="table-wrap"
                     id="servicesTable"
-                ></div>
+                >
+
+                    <div class="loading-box">
+
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+
+                        Loading services...
+
+                    </div>
+
+                </div>
 
             </div>
 
@@ -1057,7 +1185,7 @@ td{
         <div class="form-grid">
 
 
-            <!-- INSURANCE FORM -->
+            <!-- FORM -->
 
             <div class="card">
 
@@ -1066,8 +1194,8 @@ td{
                     <div
                         class="card-icon"
                         style="
-                            background:#fff3e2;
-                            color:#e9911c;
+                            background:#fff4e6;
+                            color:#e58b16;
                         "
                     >
                         <i class="fa-solid fa-shield-heart"></i>
@@ -1080,7 +1208,7 @@ td{
                         </h2>
 
                         <p>
-                            Company and default coverage
+                            Insurance details and coverage
                         </p>
 
                     </div>
@@ -1089,8 +1217,8 @@ td{
 
 
                 <input
-                    type="hidden"
                     id="insuranceId"
+                    type="hidden"
                 >
 
 
@@ -1145,7 +1273,7 @@ td{
                     <div class="field">
 
                         <label>
-                            Default Charging Method
+                            Coverage Type
                         </label>
 
                         <select id="insuranceChargeMethod">
@@ -1166,7 +1294,7 @@ td{
                     <div class="field">
 
                         <label>
-                            Default Amount / %
+                            Amount / %
                         </label>
 
                         <input
@@ -1229,10 +1357,7 @@ td{
                         type="checkbox"
                     >
 
-                    <label
-                        for="insuranceGovernment"
-                        style="margin:0;"
-                    >
+                    <label for="insuranceGovernment">
                         Government Insurance / Aasandha
                     </label>
 
@@ -1241,7 +1366,7 @@ td{
 
                 <button
                     class="save-btn"
-                    onclick="saveInsurance()"
+                    id="saveInsuranceButton"
                 >
                     <i class="fa-solid fa-floppy-disk"></i>
                     Save Insurance
@@ -1250,7 +1375,7 @@ td{
 
                 <button
                     class="reset-btn"
-                    onclick="resetInsuranceForm()"
+                    id="clearInsuranceButton"
                 >
                     Clear
                 </button>
@@ -1258,7 +1383,7 @@ td{
             </div>
 
 
-            <!-- INSURANCE LIST -->
+            <!-- LIST -->
 
             <div class="card">
 
@@ -1288,7 +1413,6 @@ td{
                     <input
                         id="insuranceSearch"
                         placeholder="Search insurance..."
-                        oninput="renderInsurance()"
                     >
 
                     <i class="fa-solid fa-search"></i>
@@ -1309,7 +1433,7 @@ td{
 
 
     <!-- =====================================================
-         PAYMENT METHODS
+         PAYMENT
     ====================================================== -->
 
     <section
@@ -1350,15 +1474,15 @@ td{
 
 
                 <input
-                    type="hidden"
                     id="paymentId"
+                    type="hidden"
                 >
 
 
                 <div class="field">
 
                     <label>
-                        Payment Method Name
+                        Payment Method
                     </label>
 
                     <input
@@ -1371,7 +1495,7 @@ td{
 
                 <button
                     class="save-btn"
-                    onclick="savePaymentMethod()"
+                    id="savePaymentButton"
                 >
                     <i class="fa-solid fa-floppy-disk"></i>
                     Save Payment Method
@@ -1380,7 +1504,7 @@ td{
 
                 <button
                     class="reset-btn"
-                    onclick="resetPaymentForm()"
+                    id="clearPaymentButton"
                 >
                     Clear
                 </button>
@@ -1403,7 +1527,7 @@ td{
                         </h2>
 
                         <p>
-                            Available payment types
+                            Available patient payment methods
                         </p>
 
                     </div>
@@ -1443,7 +1567,7 @@ td{
                         class="card-icon"
                         style="
                             background:#e8faf2;
-                            color:#12aa78;
+                            color:#12a978;
                         "
                     >
                         <i class="fa-solid fa-coins"></i>
@@ -1465,8 +1589,8 @@ td{
 
 
                 <input
-                    type="hidden"
                     id="currencyId"
+                    type="hidden"
                 >
 
 
@@ -1540,10 +1664,7 @@ td{
                         type="checkbox"
                     >
 
-                    <label
-                        for="currencyDefault"
-                        style="margin:0;"
-                    >
+                    <label for="currencyDefault">
                         Default Currency
                     </label>
 
@@ -1552,7 +1673,7 @@ td{
 
                 <button
                     class="save-btn"
-                    onclick="saveCurrency()"
+                    id="saveCurrencyButton"
                 >
                     <i class="fa-solid fa-floppy-disk"></i>
                     Save Currency
@@ -1561,7 +1682,7 @@ td{
 
                 <button
                     class="reset-btn"
-                    onclick="resetCurrencyForm()"
+                    id="clearCurrencyButton"
                 >
                     Clear
                 </button>
@@ -1584,7 +1705,7 @@ td{
                         </h2>
 
                         <p>
-                            Active clinic currencies
+                            Clinic currency configuration
                         </p>
 
                     </div>
@@ -1605,7 +1726,7 @@ td{
 
 
     <!-- =====================================================
-         COMPANY / RECEIPT
+         COMPANY
     ====================================================== -->
 
     <section
@@ -1613,10 +1734,8 @@ td{
         id="companyPanel"
     >
 
-        <div class="company-layout">
+        <div class="company-grid">
 
-
-            <!-- COMPANY FORM -->
 
             <div class="card">
 
@@ -1635,11 +1754,11 @@ td{
                     <div>
 
                         <h2>
-                            Company Information
+                            Company / Clinic Information
                         </h2>
 
                         <p>
-                            Printed on patient memo / receipt
+                            Printed at the top of receipts
                         </p>
 
                     </div>
@@ -1653,11 +1772,7 @@ td{
                         Company / Clinic Name
                     </label>
 
-                    <input
-                        id="companyName"
-                        placeholder="Clinic name"
-                        oninput="updateCompanyPreview()"
-                    >
+                    <input id="companyName">
 
                 </div>
 
@@ -1668,11 +1783,7 @@ td{
                         Address
                     </label>
 
-                    <textarea
-                        id="companyAddress"
-                        placeholder="Company address"
-                        oninput="updateCompanyPreview()"
-                    ></textarea>
+                    <textarea id="companyAddress"></textarea>
 
                 </div>
 
@@ -1685,10 +1796,7 @@ td{
                             Phone
                         </label>
 
-                        <input
-                            id="companyPhone"
-                            oninput="updateCompanyPreview()"
-                        >
+                        <input id="companyPhone">
 
                     </div>
 
@@ -1702,7 +1810,6 @@ td{
                         <input
                             id="companyEmail"
                             type="email"
-                            oninput="updateCompanyPreview()"
                         >
 
                     </div>
@@ -1716,10 +1823,7 @@ td{
                         Registration No.
                     </label>
 
-                    <input
-                        id="companyRegistration"
-                        oninput="updateCompanyPreview()"
-                    >
+                    <input id="companyRegistration">
 
                 </div>
 
@@ -1727,7 +1831,7 @@ td{
                 <hr
                     style="
                         border:0;
-                        border-top:1px solid #e6ecf5;
+                        border-top:1px solid #e5ecf3;
                         margin:20px 0;
                     "
                 >
@@ -1735,17 +1839,16 @@ td{
 
                 <div
                     style="
+                        margin-bottom:13px;
                         font-size:13px;
                         font-weight:800;
-                        margin-bottom:13px;
                     "
                 >
-                    Receipt Number
+                    Receipt Number Setup
                 </div>
 
 
                 <div class="row3">
-
 
                     <div class="field">
 
@@ -1756,7 +1859,6 @@ td{
                         <input
                             id="receiptPrefix"
                             placeholder="R"
-                            oninput="updateCompanyPreview()"
                         >
 
                     </div>
@@ -1765,7 +1867,7 @@ td{
                     <div class="field">
 
                         <label>
-                            Next Receipt No.
+                            Next Receipt Number
                         </label>
 
                         <input
@@ -1773,7 +1875,6 @@ td{
                             type="number"
                             min="1"
                             value="1"
-                            oninput="updateCompanyPreview()"
                         >
 
                     </div>
@@ -1782,7 +1883,7 @@ td{
                     <div class="field">
 
                         <label>
-                            Number Digits
+                            Digits
                         </label>
 
                         <input
@@ -1791,7 +1892,6 @@ td{
                             min="1"
                             max="12"
                             value="6"
-                            oninput="updateCompanyPreview()"
                         >
 
                     </div>
@@ -1800,26 +1900,26 @@ td{
 
 
                 <div
-                    id="receiptAdminWarning"
+                    id="receiptPermissionNotice"
                     style="
                         display:none;
-                        padding:10px;
                         margin-bottom:12px;
+                        padding:10px;
                         border-radius:10px;
                         background:#fff5e7;
-                        color:#95691b;
+                        color:#8c641d;
                         font-size:9px;
                         line-height:1.5;
                     "
                 >
-                    Receipt sequence settings can only be
-                    changed by an Administrator.
+                    Supervisors can update clinic information,
+                    but only Admin can change the receipt sequence.
                 </div>
 
 
                 <button
                     class="save-btn"
-                    onclick="saveCompanySettings()"
+                    id="saveCompanyButton"
                 >
                     <i class="fa-solid fa-floppy-disk"></i>
                     Save Company Settings
@@ -1845,7 +1945,7 @@ td{
                         </h2>
 
                         <p>
-                            Example of printed company information
+                            Preview of printed clinic information
                         </p>
 
                     </div>
@@ -1860,17 +1960,17 @@ td{
                     </h2>
 
 
-                    <div id="previewAddress"></div>
+                    <div id="previewCompanyAddress"></div>
 
-                    <div id="previewContact"></div>
+                    <div id="previewCompanyContact"></div>
 
-                    <div id="previewRegistration"></div>
+                    <div id="previewCompanyRegistration"></div>
 
 
                     <div class="receipt-preview">
 
-                        <div class="receipt-preview-title">
-                            Next Receipt Number
+                        <div class="receipt-preview-label">
+                            Next Receipt
                         </div>
 
                         <div
@@ -1901,10 +2001,23 @@ td{
 
 <script>
 
+/*
+ =============================================================
+ IMPORTANT:
+ This page contains ONE currentUser declaration only.
+ Do not append your previous JavaScript below this script.
+ =============================================================
+*/
+
+
 const $ =
     id =>
         document.getElementById(id);
 
+
+/* ==========================================================
+   LOGIN USER
+========================================================== */
 
 const currentUser =
     JSON.parse(
@@ -1916,15 +2029,33 @@ const currentUser =
 
 if (!currentUser){
 
-    location.href =
-        'login.html';
+    window.location.replace(
+        'login.html'
+    );
 
-}else if (
-    currentUser.role !==
-    'admin'
+    throw new Error(
+        'No logged in clinic user.'
+    );
+}
+
+
+/*
+ Normalize role so Admin / ADMIN / admin all work.
+*/
+
+const currentRole =
+    String(
+        currentUser.role ||
+        ''
+    )
+    .trim()
+    .toLowerCase();
+
+
+if (
+    currentRole !== 'admin'
     &&
-    currentUser.role !==
-    'supervisor'
+    currentRole !== 'supervisor'
 ){
 
     alert(
@@ -1932,14 +2063,20 @@ if (!currentUser){
     );
 
 
-    location.href =
-        'dashboard.html';
+    window.location.replace(
+        'dashboard.html'
+    );
+
+
+    throw new Error(
+        'Master Data access denied.'
+    );
 }
 
 
-/* =========================================================
-   DATA
-========================================================= */
+/* ==========================================================
+   STATE
+========================================================== */
 
 let services = [];
 
@@ -1953,26 +2090,146 @@ let companySettings =
     null;
 
 
-/* =========================================================
+/* ==========================================================
    START
-========================================================= */
+========================================================== */
 
 document.addEventListener(
     'DOMContentLoaded',
     () => {
 
+        $('userChip').textContent =
+            (
+                currentUser.full_name ||
+                currentUser.username ||
+                'User'
+            )
+            +
+            ' • '
+            +
+            currentRole.toUpperCase();
+
+
         setupTabs();
 
-        applyRoleRestrictions();
+        setupEvents();
+
+        applyRolePermissions();
 
         loadMasterData();
     }
 );
 
 
-/* =========================================================
+/* ==========================================================
+   EVENTS
+========================================================== */
+
+function setupEvents(){
+
+    $('serviceSearch')
+        .addEventListener(
+            'input',
+            renderServices
+        );
+
+
+    $('insuranceSearch')
+        .addEventListener(
+            'input',
+            renderInsurance
+        );
+
+
+    $('saveServiceButton')
+        .addEventListener(
+            'click',
+            saveService
+        );
+
+
+    $('clearServiceButton')
+        .addEventListener(
+            'click',
+            resetServiceForm
+        );
+
+
+    $('saveInsuranceButton')
+        .addEventListener(
+            'click',
+            saveInsurance
+        );
+
+
+    $('clearInsuranceButton')
+        .addEventListener(
+            'click',
+            resetInsuranceForm
+        );
+
+
+    $('savePaymentButton')
+        .addEventListener(
+            'click',
+            savePaymentMethod
+        );
+
+
+    $('clearPaymentButton')
+        .addEventListener(
+            'click',
+            resetPaymentForm
+        );
+
+
+    $('saveCurrencyButton')
+        .addEventListener(
+            'click',
+            saveCurrency
+        );
+
+
+    $('clearCurrencyButton')
+        .addEventListener(
+            'click',
+            resetCurrencyForm
+        );
+
+
+    $('saveCompanyButton')
+        .addEventListener(
+            'click',
+            saveCompanySettings
+        );
+
+
+    [
+        'companyName',
+        'companyAddress',
+        'companyPhone',
+        'companyEmail',
+        'companyRegistration',
+        'receiptPrefix',
+        'receiptNextNumber',
+        'receiptDigits'
+    ]
+    .forEach(
+        id => {
+
+            $(id)
+                .addEventListener(
+                    'input',
+                    updateCompanyPreview
+                );
+        }
+    );
+}
+
+
+/* ==========================================================
    TABS
-========================================================= */
+========================================================== */
 
 function setupTabs(){
 
@@ -2008,8 +2265,7 @@ function openTab(name){
 
                 button.classList.toggle(
                     'active',
-                    button.dataset.tab ===
-                    name
+                    button.dataset.tab === name
                 );
             }
         );
@@ -2029,30 +2285,30 @@ function openTab(name){
         );
 
 
-    const target =
+    const panel =
         $(
             name +
             'Panel'
         );
 
 
-    if (target){
+    if (panel){
 
-        target.classList.add(
+        panel.classList.add(
             'active'
         );
     }
 }
 
 
-/* =========================================================
-   ROLE RESTRICTIONS
-========================================================= */
+/* ==========================================================
+   ROLE
+========================================================== */
 
-function applyRoleRestrictions(){
+function applyRolePermissions(){
 
     if (
-        currentUser.role ===
+        currentRole ===
         'admin'
     ){
 
@@ -2060,7 +2316,7 @@ function applyRoleRestrictions(){
     }
 
 
-    $('receiptAdminWarning')
+    $('receiptPermissionNotice')
         .style
         .display =
             'block';
@@ -2082,14 +2338,18 @@ function applyRoleRestrictions(){
 }
 
 
-/* =========================================================
+/* ==========================================================
    API
-========================================================= */
+========================================================== */
 
-async function api(
+async function masterApi(
     method,
-    body=null
+    payload=null
 ){
+
+    let url =
+        '/api/admin-master-data';
+
 
     const options = {
 
@@ -2102,12 +2362,28 @@ async function api(
     };
 
 
-    if (body){
+    /*
+     GET cannot rely on request body.
+     Send the logged-in user's ID in query string.
+    */
+
+    if (
+        method === 'GET'
+    ){
+
+        url +=
+            '?userId='
+            +
+            encodeURIComponent(
+                currentUser.id
+            );
+
+    }else{
 
         options.body =
             JSON.stringify({
 
-                ...body,
+                ...(payload || {}),
 
                 userId:
                     currentUser.id
@@ -2117,20 +2393,51 @@ async function api(
 
     const response =
         await fetch(
-            '/api/admin-master-data',
+            url,
             options
         );
 
 
-    const data =
-        await response.json();
+    let data;
+
+
+    try{
+
+        data =
+            await response.json();
+
+    }catch(error){
+
+        console.error(
+            'Invalid API response:',
+            error
+        );
+
+
+        throw new Error(
+            'The server returned an invalid response.'
+        );
+    }
 
 
     if (!response.ok){
 
+        console.error(
+            'Master Data API:',
+            response.status,
+            data
+        );
+
+
         throw new Error(
             data.message ||
-            'Request failed.'
+            (
+                'Master Data request failed ('
+                +
+                response.status
+                +
+                ')'
+            )
         );
     }
 
@@ -2139,16 +2446,16 @@ async function api(
 }
 
 
-/* =========================================================
-   LOAD
-========================================================= */
+/* ==========================================================
+   LOAD DATA
+========================================================== */
 
 async function loadMasterData(){
 
     try{
 
         const data =
-            await api(
+            await masterApi(
                 'GET'
             );
 
@@ -2192,42 +2499,49 @@ async function loadMasterData(){
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            error
+        );
 
 
         showToast(
             error.message,
             'error'
         );
+
+
+        $('servicesTable')
+            .innerHTML =
+                errorHtml(
+                    error.message
+                );
     }
 }
 
 
-/* =========================================================
+/* ==========================================================
    SERVICES
-========================================================= */
+========================================================== */
 
 async function saveService(){
 
     const id =
-        $('serviceId')
-            .value
+        $('serviceId').value
         ?
         Number(
-            $('serviceId')
-                .value
+            $('serviceId').value
         )
         :
         null;
 
 
-    const name =
+    const serviceName =
         $('serviceName')
             .value
             .trim();
 
 
-    if (!name){
+    if (!serviceName){
 
         return showToast(
             'Enter service name.',
@@ -2238,7 +2552,7 @@ async function saveService(){
 
     try{
 
-        await api(
+        await masterApi(
             id
             ?
             'PUT'
@@ -2251,8 +2565,7 @@ async function saveService(){
 
                 id,
 
-                serviceName:
-                    name,
+                serviceName,
 
                 price:
                     Number(
@@ -2294,7 +2607,7 @@ async function saveService(){
 
 function renderServices(){
 
-    const search =
+    const query =
         $('serviceSearch')
             .value
             .trim()
@@ -2303,149 +2616,159 @@ function renderServices(){
 
     const rows =
         services.filter(
-            item =>
-                String(
-                    item.service_name ||
+            row => {
+
+                return String(
+                    row.service_name ||
                     ''
                 )
                 .toLowerCase()
                 .includes(
-                    search
-                )
+                    query
+                );
+            }
         );
 
 
+    if (!rows.length){
+
+        $('servicesTable')
+            .innerHTML =
+                emptyHtml(
+                    'No services found.'
+                );
+
+        return;
+    }
+
+
     $('servicesTable')
-        .innerHTML =
-            rows.length
-            ?
-            `
+        .innerHTML = `
 
-            <table>
+        <table>
 
-                <thead>
+            <thead>
 
-                    <tr>
+                <tr>
 
-                        <th>
-                            Service
-                        </th>
+                    <th>Service</th>
 
-                        <th>
-                            Price
-                        </th>
+                    <th>Price</th>
 
-                        <th>
-                            Aasandha
-                        </th>
+                    <th>Aasandha</th>
 
-                        <th>
-                            Status
-                        </th>
+                    <th>Status</th>
 
-                        <th>
-                            Action
-                        </th>
+                    <th>Action</th>
 
-                    </tr>
+                </tr>
 
-                </thead>
+            </thead>
 
-                <tbody>
 
-                    ${
-                        rows.map(
-                            row => `
+            <tbody>
 
-                                <tr>
+                ${
+                    rows.map(
+                        row => `
 
-                                    <td class="table-name">
+                            <tr>
 
-                                        ${escapeHtml(
-                                            row.service_name
-                                        )}
+                                <td class="table-name">
 
-                                    </td>
+                                    ${escapeHtml(
+                                        row.service_name
+                                    )}
 
-                                    <td>
-                                        MVR
-                                        ${money(
-                                            row.price
-                                        )}
-                                    </td>
+                                </td>
 
-                                    <td>
-                                        MVR
-                                        ${money(
-                                            row.aasandha_price
-                                        )}
-                                    </td>
 
-                                    <td>
+                                <td>
 
-                                        <span
-                                            class="badge ${
-                                                row.active
-                                                ?
-                                                'active'
-                                                :
-                                                'inactive'
-                                            }"
-                                        >
-                                            ${
-                                                row.active
-                                                ?
-                                                'Active'
-                                                :
-                                                'Inactive'
-                                            }
-                                        </span>
+                                    MVR
+                                    ${money(
+                                        row.price
+                                    )}
 
-                                    </td>
+                                </td>
 
-                                    <td>
 
-                                        <button
-                                            class="action-btn edit-btn"
-                                            onclick="
-                                                editService(
-                                                    ${row.id}
-                                                )
-                                            "
-                                        >
-                                            <i class="fa-solid fa-pen"></i>
-                                        </button>
+                                <td>
 
-                                        <button
-                                            class="action-btn toggle-btn"
-                                            onclick="
-                                                toggleEntity(
-                                                    'service',
-                                                    ${row.id},
-                                                    ${!row.active}
-                                                )
-                                            "
-                                        >
-                                            <i class="fa-solid fa-power-off"></i>
-                                        </button>
+                                    MVR
+                                    ${money(
+                                        row.aasandha_price
+                                    )}
 
-                                    </td>
+                                </td>
 
-                                </tr>
 
-                            `
-                        ).join('')
-                    }
+                                <td>
 
-                </tbody>
+                                    <span
+                                        class="badge ${
+                                            row.active
+                                            ?
+                                            'active'
+                                            :
+                                            'inactive'
+                                        }"
+                                    >
 
-            </table>
+                                        ${
+                                            row.active
+                                            ?
+                                            'Active'
+                                            :
+                                            'Inactive'
+                                        }
 
-            `
-            :
-            emptyHtml(
-                'No services found.'
-            );
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <button
+                                        class="action-btn edit-btn"
+
+                                        onclick="
+                                            editService(
+                                                ${row.id}
+                                            )
+                                        "
+                                    >
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
+
+
+                                    <button
+                                        class="action-btn toggle-btn"
+
+                                        onclick="
+                                            toggleEntity(
+                                                'service',
+                                                ${row.id},
+                                                ${!row.active}
+                                            )
+                                        "
+                                    >
+                                        <i class="fa-solid fa-power-off"></i>
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                        `
+                    ).join('')
+                }
+
+            </tbody>
+
+        </table>
+    `;
 }
 
 
@@ -2465,31 +2788,27 @@ function(id){
     }
 
 
-    $('serviceId')
-        .value =
-            row.id;
+    $('serviceId').value =
+        row.id;
 
 
-    $('serviceName')
-        .value =
-            row.service_name ||
-            '';
+    $('serviceName').value =
+        row.service_name ||
+        '';
 
 
-    $('servicePrice')
-        .value =
-            Number(
-                row.price ||
-                0
-            );
+    $('servicePrice').value =
+        Number(
+            row.price ||
+            0
+        );
 
 
-    $('aasandhaPrice')
-        .value =
-            Number(
-                row.aasandha_price ||
-                0
-            );
+    $('aasandhaPrice').value =
+        Number(
+            row.aasandha_price ||
+            0
+        );
 
 
     $('serviceFormTitle')
@@ -2514,31 +2833,29 @@ function resetServiceForm(){
 }
 
 
-/* =========================================================
+/* ==========================================================
    INSURANCE
-========================================================= */
+========================================================== */
 
 async function saveInsurance(){
 
     const id =
-        $('insuranceId')
-            .value
+        $('insuranceId').value
         ?
         Number(
-            $('insuranceId')
-                .value
+            $('insuranceId').value
         )
         :
         null;
 
 
-    const name =
+    const companyName =
         $('insuranceName')
             .value
             .trim();
 
 
-    if (!name){
+    if (!companyName){
 
         return showToast(
             'Enter insurance company name.',
@@ -2549,7 +2866,7 @@ async function saveInsurance(){
 
     try{
 
-        await api(
+        await masterApi(
             id
             ?
             'PUT'
@@ -2562,8 +2879,7 @@ async function saveInsurance(){
 
                 id,
 
-                companyName:
-                    name,
+                companyName,
 
                 shortName:
                     $('insuranceShortName')
@@ -2631,7 +2947,7 @@ async function saveInsurance(){
 
 function renderInsurance(){
 
-    const search =
+    const query =
         $('insuranceSearch')
             .value
             .trim()
@@ -2640,190 +2956,203 @@ function renderInsurance(){
 
     const rows =
         insuranceCompanies.filter(
-            item =>
-                String(
-                    item.company_name ||
-                    ''
-                )
-                .toLowerCase()
-                .includes(
-                    search
-                )
+            row => {
+
+                const text =
+                    [
+                        row.company_name,
+                        row.short_name,
+                        row.company_code
+                    ]
+                    .join(
+                        ' '
+                    )
+                    .toLowerCase();
+
+
+                return text.includes(
+                    query
+                );
+            }
         );
 
 
+    if (!rows.length){
+
+        $('insuranceTable')
+            .innerHTML =
+                emptyHtml(
+                    'No insurance companies found.'
+                );
+
+        return;
+    }
+
+
     $('insuranceTable')
-        .innerHTML =
-            rows.length
-            ?
-            `
+        .innerHTML = `
 
-            <table>
+        <table>
 
-                <thead>
+            <thead>
 
-                    <tr>
+                <tr>
 
-                        <th>
-                            Company
-                        </th>
+                    <th>Company</th>
 
-                        <th>
-                            Charging
-                        </th>
+                    <th>Coverage</th>
 
-                        <th>
-                            Govt.
-                        </th>
+                    <th>Type</th>
 
-                        <th>
-                            Status
-                        </th>
+                    <th>Status</th>
 
-                        <th>
-                            Action
-                        </th>
+                    <th>Action</th>
 
-                    </tr>
+                </tr>
 
-                </thead>
+            </thead>
 
-                <tbody>
 
-                    ${
-                        rows.map(
-                            row => `
+            <tbody>
 
-                                <tr>
+                ${
+                    rows.map(
+                        row => `
 
-                                    <td>
+                            <tr>
 
-                                        <div class="table-name">
+                                <td>
 
-                                            ${escapeHtml(
-                                                row.company_name
-                                            )}
+                                    <div class="table-name">
 
-                                        </div>
+                                        ${escapeHtml(
+                                            row.company_name
+                                        )}
 
-                                        <div
-                                            style="
-                                                margin-top:3px;
-                                                color:#7b889b;
-                                                font-size:8px;
-                                            "
-                                        >
-                                            ${escapeHtml(
-                                                row.short_name ||
-                                                row.company_code ||
-                                                ''
-                                            )}
-                                        </div>
+                                    </div>
 
-                                    </td>
+                                    <div class="subtext">
 
-                                    <td>
+                                        ${escapeHtml(
+                                            row.short_name ||
+                                            row.company_code ||
+                                            ''
+                                        )}
 
-                                        ${
-                                            row.charge_method ===
-                                            'fixed'
-                                            ?
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    ${
+                                        row.charge_method ===
+                                        'fixed'
+                                        ?
+                                        (
                                             'MVR '
                                             +
                                             money(
                                                 row.charge_value
                                             )
-                                            :
+                                        )
+                                        :
+                                        (
                                             money(
                                                 row.charge_value
                                             )
                                             +
                                             '%'
-                                        }
+                                        )
+                                    }
 
-                                    </td>
+                                </td>
 
-                                    <td>
+
+                                <td>
+
+                                    ${
+                                        row.is_government
+                                        ?
+                                        `
+                                        <span class="badge govt">
+                                            Government
+                                        </span>
+                                        `
+                                        :
+                                        'Private'
+                                    }
+
+                                </td>
+
+
+                                <td>
+
+                                    <span
+                                        class="badge ${
+                                            row.active
+                                            ?
+                                            'active'
+                                            :
+                                            'inactive'
+                                        }"
+                                    >
 
                                         ${
-                                            row.is_government
+                                            row.active
                                             ?
-                                            `
-                                            <span class="badge govt">
-                                                Government
-                                            </span>
-                                            `
+                                            'Active'
                                             :
-                                            '-'
+                                            'Inactive'
                                         }
 
-                                    </td>
+                                    </span>
 
-                                    <td>
+                                </td>
 
-                                        <span
-                                            class="badge ${
-                                                row.active
-                                                ?
-                                                'active'
-                                                :
-                                                'inactive'
-                                            }"
-                                        >
-                                            ${
-                                                row.active
-                                                ?
-                                                'Active'
-                                                :
-                                                'Inactive'
-                                            }
-                                        </span>
 
-                                    </td>
+                                <td>
 
-                                    <td>
+                                    <button
+                                        class="action-btn edit-btn"
 
-                                        <button
-                                            class="action-btn edit-btn"
-                                            onclick="
-                                                editInsurance(
-                                                    ${row.id}
-                                                )
-                                            "
-                                        >
-                                            <i class="fa-solid fa-pen"></i>
-                                        </button>
+                                        onclick="
+                                            editInsurance(
+                                                ${row.id}
+                                            )
+                                        "
+                                    >
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
 
-                                        <button
-                                            class="action-btn toggle-btn"
-                                            onclick="
-                                                toggleEntity(
-                                                    'insurance',
-                                                    ${row.id},
-                                                    ${!row.active}
-                                                )
-                                            "
-                                        >
-                                            <i class="fa-solid fa-power-off"></i>
-                                        </button>
 
-                                    </td>
+                                    <button
+                                        class="action-btn toggle-btn"
 
-                                </tr>
+                                        onclick="
+                                            toggleEntity(
+                                                'insurance',
+                                                ${row.id},
+                                                ${!row.active}
+                                            )
+                                        "
+                                    >
+                                        <i class="fa-solid fa-power-off"></i>
+                                    </button>
 
-                            `
-                        ).join('')
-                    }
+                                </td>
 
-                </tbody>
+                            </tr>
 
-            </table>
+                        `
+                    ).join('')
+                }
 
-            `
-            :
-            emptyHtml(
-                'No insurance companies found.'
-            );
+            </tbody>
+
+        </table>
+    `;
 }
 
 
@@ -2932,31 +3261,29 @@ function resetInsuranceForm(){
 }
 
 
-/* =========================================================
-   PAYMENT
-========================================================= */
+/* ==========================================================
+   PAYMENT METHODS
+========================================================== */
 
 async function savePaymentMethod(){
 
     const id =
-        $('paymentId')
-            .value
+        $('paymentId').value
         ?
         Number(
-            $('paymentId')
-                .value
+            $('paymentId').value
         )
         :
         null;
 
 
-    const name =
+    const methodName =
         $('paymentName')
             .value
             .trim();
 
 
-    if (!name){
+    if (!methodName){
 
         return showToast(
             'Enter payment method.',
@@ -2967,7 +3294,7 @@ async function savePaymentMethod(){
 
     try{
 
-        await api(
+        await masterApi(
             id
             ?
             'PUT'
@@ -2980,8 +3307,7 @@ async function savePaymentMethod(){
 
                 id,
 
-                methodName:
-                    name
+                methodName
             }
         );
 
@@ -3009,119 +3335,131 @@ async function savePaymentMethod(){
 
 function renderPaymentMethods(){
 
+    if (!paymentMethods.length){
+
+        $('paymentsTable')
+            .innerHTML =
+                emptyHtml(
+                    'No payment methods.'
+                );
+
+        return;
+    }
+
+
     $('paymentsTable')
-        .innerHTML =
-            paymentMethods.length
-            ?
-            `
+        .innerHTML = `
 
-            <table>
+        <table>
 
-                <thead>
+            <thead>
 
-                    <tr>
+                <tr>
 
-                        <th>
-                            Payment Method
-                        </th>
+                    <th>
+                        Payment Method
+                    </th>
 
-                        <th>
-                            Status
-                        </th>
+                    <th>
+                        Status
+                    </th>
 
-                        <th>
-                            Action
-                        </th>
+                    <th>
+                        Action
+                    </th>
 
-                    </tr>
+                </tr>
 
-                </thead>
+            </thead>
 
-                <tbody>
 
-                    ${
-                        paymentMethods.map(
-                            row => `
+            <tbody>
 
-                                <tr>
+                ${
+                    paymentMethods.map(
+                        row => `
 
-                                    <td class="table-name">
+                            <tr>
 
-                                        ${escapeHtml(
-                                            row.method_name
-                                        )}
+                                <td class="table-name">
 
-                                    </td>
+                                    ${escapeHtml(
+                                        row.method_name
+                                    )}
 
-                                    <td>
+                                </td>
 
-                                        <span
-                                            class="badge ${
-                                                row.active
-                                                ?
-                                                'active'
-                                                :
-                                                'inactive'
-                                            }"
-                                        >
-                                            ${
-                                                row.active
-                                                ?
-                                                'Active'
-                                                :
-                                                'Inactive'
-                                            }
-                                        </span>
 
-                                    </td>
+                                <td>
 
-                                    <td>
+                                    <span
+                                        class="badge ${
+                                            row.active
+                                            ?
+                                            'active'
+                                            :
+                                            'inactive'
+                                        }"
+                                    >
 
-                                        <button
-                                            class="action-btn edit-btn"
-                                            onclick="
-                                                editPaymentMethod(
-                                                    ${row.id}
-                                                )
-                                            "
-                                        >
-                                            <i class="fa-solid fa-pen"></i>
-                                        </button>
+                                        ${
+                                            row.active
+                                            ?
+                                            'Active'
+                                            :
+                                            'Inactive'
+                                        }
 
-                                        <button
-                                            class="action-btn toggle-btn"
-                                            onclick="
-                                                toggleEntity(
-                                                    'payment',
-                                                    ${row.id},
-                                                    ${!row.active}
-                                                )
-                                            "
-                                        >
-                                            <i class="fa-solid fa-power-off"></i>
-                                        </button>
+                                    </span>
 
-                                    </td>
+                                </td>
 
-                                </tr>
 
-                            `
-                        ).join('')
-                    }
+                                <td>
 
-                </tbody>
+                                    <button
+                                        class="action-btn edit-btn"
 
-            </table>
+                                        onclick="
+                                            editPayment(
+                                                ${row.id}
+                                            )
+                                        "
+                                    >
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
 
-            `
-            :
-            emptyHtml(
-                'No payment methods.'
-            );
+
+                                    <button
+                                        class="action-btn toggle-btn"
+
+                                        onclick="
+                                            toggleEntity(
+                                                'payment',
+                                                ${row.id},
+                                                ${!row.active}
+                                            )
+                                        "
+                                    >
+                                        <i class="fa-solid fa-power-off"></i>
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                        `
+                    ).join('')
+                }
+
+            </tbody>
+
+        </table>
+    `;
 }
 
 
-window.editPaymentMethod =
+window.editPayment =
 function(id){
 
     const row =
@@ -3164,44 +3502,42 @@ function resetPaymentForm(){
 }
 
 
-/* =========================================================
-   CURRENCY
-========================================================= */
+/* ==========================================================
+   CURRENCIES
+========================================================== */
 
 async function saveCurrency(){
 
     const id =
-        $('currencyId')
-            .value
+        $('currencyId').value
         ?
         Number(
-            $('currencyId')
-                .value
+            $('currencyId').value
         )
         :
         null;
 
 
-    const code =
+    const currencyCode =
         $('currencyCode')
             .value
             .trim()
             .toUpperCase();
 
 
-    const name =
+    const currencyName =
         $('currencyName')
             .value
             .trim();
 
 
     if (
-        !code ||
-        !name
+        !currencyCode ||
+        !currencyName
     ){
 
         return showToast(
-            'Currency code and name are required.',
+            'Currency code and currency name are required.',
             'error'
         );
     }
@@ -3209,7 +3545,7 @@ async function saveCurrency(){
 
     try{
 
-        await api(
+        await masterApi(
             id
             ?
             'PUT'
@@ -3222,11 +3558,9 @@ async function saveCurrency(){
 
                 id,
 
-                currencyCode:
-                    code,
+                currencyCode,
 
-                currencyName:
-                    name,
+                currencyName,
 
                 symbol:
                     $('currencySymbol')
@@ -3270,169 +3604,175 @@ async function saveCurrency(){
 
 function renderCurrencies(){
 
+    if (!currencies.length){
+
+        $('currenciesTable')
+            .innerHTML =
+                emptyHtml(
+                    'No currencies.'
+                );
+
+        return;
+    }
+
+
     $('currenciesTable')
-        .innerHTML =
-            currencies.length
-            ?
-            `
+        .innerHTML = `
 
-            <table>
+        <table>
 
-                <thead>
+            <thead>
 
-                    <tr>
+                <tr>
 
-                        <th>
-                            Code
-                        </th>
+                    <th>Code</th>
 
-                        <th>
-                            Currency
-                        </th>
+                    <th>Currency</th>
 
-                        <th>
-                            Symbol
-                        </th>
+                    <th>Symbol</th>
 
-                        <th>
-                            Rate
-                        </th>
+                    <th>Rate</th>
 
-                        <th>
-                            Default
-                        </th>
+                    <th>Default</th>
 
-                        <th>
-                            Status
-                        </th>
+                    <th>Status</th>
 
-                        <th>
-                            Action
-                        </th>
+                    <th>Action</th>
 
-                    </tr>
+                </tr>
 
-                </thead>
+            </thead>
 
-                <tbody>
 
-                    ${
-                        currencies.map(
-                            row => `
+            <tbody>
 
-                                <tr>
+                ${
+                    currencies.map(
+                        row => `
 
-                                    <td class="table-name">
+                            <tr>
 
-                                        ${escapeHtml(
-                                            row.currency_code
-                                        )}
+                                <td class="table-name">
 
-                                    </td>
+                                    ${escapeHtml(
+                                        row.currency_code
+                                    )}
 
-                                    <td>
+                                </td>
 
-                                        ${escapeHtml(
-                                            row.currency_name
-                                        )}
 
-                                    </td>
+                                <td>
 
-                                    <td>
+                                    ${escapeHtml(
+                                        row.currency_name
+                                    )}
 
-                                        ${escapeHtml(
-                                            row.symbol ||
-                                            ''
-                                        )}
+                                </td>
 
-                                    </td>
 
-                                    <td>
+                                <td>
 
-                                        ${Number(
-                                            row.exchange_rate ||
-                                            0
-                                        )}
+                                    ${escapeHtml(
+                                        row.symbol ||
+                                        ''
+                                    )}
 
-                                    </td>
+                                </td>
 
-                                    <td>
+
+                                <td>
+
+                                    ${Number(
+                                        row.exchange_rate ||
+                                        0
+                                    )}
+
+                                </td>
+
+
+                                <td>
+
+                                    ${
+                                        row.is_default
+                                        ?
+                                        `
+                                        <span class="badge default">
+                                            Default
+                                        </span>
+                                        `
+                                        :
+                                        '-'
+                                    }
+
+                                </td>
+
+
+                                <td>
+
+                                    <span
+                                        class="badge ${
+                                            row.active
+                                            ?
+                                            'active'
+                                            :
+                                            'inactive'
+                                        }"
+                                    >
 
                                         ${
-                                            row.is_default
+                                            row.active
                                             ?
-                                            '<span class="badge govt">Default</span>'
+                                            'Active'
                                             :
-                                            '-'
+                                            'Inactive'
                                         }
 
-                                    </td>
+                                    </span>
 
-                                    <td>
+                                </td>
 
-                                        <span
-                                            class="badge ${
-                                                row.active
-                                                ?
-                                                'active'
-                                                :
-                                                'inactive'
-                                            }"
-                                        >
-                                            ${
-                                                row.active
-                                                ?
-                                                'Active'
-                                                :
-                                                'Inactive'
-                                            }
-                                        </span>
 
-                                    </td>
+                                <td>
 
-                                    <td>
+                                    <button
+                                        class="action-btn edit-btn"
 
-                                        <button
-                                            class="action-btn edit-btn"
-                                            onclick="
-                                                editCurrency(
-                                                    ${row.id}
-                                                )
-                                            "
-                                        >
-                                            <i class="fa-solid fa-pen"></i>
-                                        </button>
+                                        onclick="
+                                            editCurrency(
+                                                ${row.id}
+                                            )
+                                        "
+                                    >
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
 
-                                        <button
-                                            class="action-btn toggle-btn"
-                                            onclick="
-                                                toggleEntity(
-                                                    'currency',
-                                                    ${row.id},
-                                                    ${!row.active}
-                                                )
-                                            "
-                                        >
-                                            <i class="fa-solid fa-power-off"></i>
-                                        </button>
 
-                                    </td>
+                                    <button
+                                        class="action-btn toggle-btn"
 
-                                </tr>
+                                        onclick="
+                                            toggleEntity(
+                                                'currency',
+                                                ${row.id},
+                                                ${!row.active}
+                                            )
+                                        "
+                                    >
+                                        <i class="fa-solid fa-power-off"></i>
+                                    </button>
 
-                            `
-                        ).join('')
-                    }
+                                </td>
 
-                </tbody>
+                            </tr>
 
-            </table>
+                        `
+                    ).join('')
+                }
 
-            `
-            :
-            emptyHtml(
-                'No currencies.'
-            );
+            </tbody>
+
+        </table>
+    `;
 }
 
 
@@ -3511,9 +3851,9 @@ function resetCurrencyForm(){
 }
 
 
-/* =========================================================
-   COMPANY
-========================================================= */
+/* ==========================================================
+   COMPANY SETTINGS
+========================================================== */
 
 function fillCompanySettings(){
 
@@ -3587,7 +3927,7 @@ async function saveCompanySettings(){
     }
 
 
-    const body = {
+    const payload = {
 
         type:
             'company',
@@ -3616,18 +3956,22 @@ async function saveCompanySettings(){
     };
 
 
+    /*
+     Only admin sends receipt number changes.
+    */
+
     if (
-        currentUser.role ===
+        currentRole ===
         'admin'
     ){
 
-        body.receiptPrefix =
+        payload.receiptPrefix =
             $('receiptPrefix')
                 .value
                 .trim();
 
 
-        body.receiptNextNumber =
+        payload.receiptNextNumber =
             Number(
                 $('receiptNextNumber')
                     .value ||
@@ -3635,7 +3979,7 @@ async function saveCompanySettings(){
             );
 
 
-        body.receiptDigits =
+        payload.receiptDigits =
             Number(
                 $('receiptDigits')
                     .value ||
@@ -3646,9 +3990,9 @@ async function saveCompanySettings(){
 
     try{
 
-        await api(
+        await masterApi(
             'PUT',
-            body
+            payload
         );
 
 
@@ -3681,10 +4025,20 @@ function updateCompanyPreview(){
         'Clinic Name';
 
 
-    const address =
-        $('companyAddress')
-            .value
-            .trim();
+    $('previewCompanyName')
+        .textContent =
+            companyName;
+
+
+    $('previewCompanyAddress')
+        .textContent =
+            $('companyAddress')
+                .value
+                .trim();
+
+
+    const contact =
+        [];
 
 
     const phone =
@@ -3697,25 +4051,6 @@ function updateCompanyPreview(){
         $('companyEmail')
             .value
             .trim();
-
-
-    const registration =
-        $('companyRegistration')
-            .value
-            .trim();
-
-
-    $('previewCompanyName')
-        .textContent =
-            companyName;
-
-
-    $('previewAddress')
-        .textContent =
-            address;
-
-
-    const contact = [];
 
 
     if (phone){
@@ -3735,20 +4070,28 @@ function updateCompanyPreview(){
     }
 
 
-    $('previewContact')
+    $('previewCompanyContact')
         .textContent =
             contact.join(
                 ' • '
             );
 
 
-    $('previewRegistration')
+    const registration =
+        $('companyRegistration')
+            .value
+            .trim();
+
+
+    $('previewCompanyRegistration')
         .textContent =
             registration
             ?
-            'Registration No: '
-            +
-            registration
+            (
+                'Registration No: '
+                +
+                registration
+            )
             :
             '';
 
@@ -3759,7 +4102,7 @@ function updateCompanyPreview(){
             .trim();
 
 
-    const nextNumber =
+    const number =
         Math.max(
             1,
             Number(
@@ -3786,7 +4129,7 @@ function updateCompanyPreview(){
             prefix
             +
             String(
-                nextNumber
+                number
             ).padStart(
                 digits,
                 '0'
@@ -3794,9 +4137,9 @@ function updateCompanyPreview(){
 }
 
 
-/* =========================================================
+/* ==========================================================
    TOGGLE
-========================================================= */
+========================================================== */
 
 window.toggleEntity =
 async function(
@@ -3807,7 +4150,7 @@ async function(
 
     try{
 
-        await api(
+        await masterApi(
             'PUT',
             {
 
@@ -3842,39 +4185,9 @@ async function(
 };
 
 
-/* =========================================================
+/* ==========================================================
    HELPERS
-========================================================= */
-
-function emptyHtml(message){
-
-    return `
-
-        <div
-            style="
-                text-align:center;
-                padding:35px;
-                color:#8996a8;
-                font-size:10px;
-            "
-        >
-            <i
-                class="fa-solid fa-folder-open"
-                style="
-                    display:block;
-                    margin-bottom:8px;
-                    font-size:24px;
-                "
-            ></i>
-
-            ${escapeHtml(
-                message
-            )}
-
-        </div>
-    `;
-}
-
+========================================================== */
 
 function money(value){
 
@@ -3920,6 +4233,43 @@ function escapeHtml(value){
 }
 
 
+function emptyHtml(message){
+
+    return `
+
+        <div class="empty">
+
+            <i class="fa-solid fa-folder-open"></i>
+
+            ${escapeHtml(
+                message
+            )}
+
+        </div>
+    `;
+}
+
+
+function errorHtml(message){
+
+    return `
+
+        <div
+            class="empty"
+            style="color:#d94c61;"
+        >
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+            ${escapeHtml(
+                message
+            )}
+
+        </div>
+    `;
+}
+
+
 let toastTimer;
 
 
@@ -3958,7 +4308,7 @@ function showToast(
                 );
 
             },
-            3300
+            3500
         );
 }
 
@@ -3980,2835 +4330,11 @@ function logout(){
     );
 
 
-    location.href =
+    window.location.href =
         'login.html';
 }
 
 </script>
 
 </body>
-</html>
-
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-/>
-
-<style>
-
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
-
-:root{
-    --primary:#1685e8;
-    --primary-dark:#0863be;
-    --green:#10a978;
-    --purple:#7655e8;
-    --orange:#f59a35;
-    --red:#e95067;
-
-    --text:#14223d;
-    --muted:#718198;
-    --border:#e1e9f2;
-    --bg:#f3f8fd;
-    --white:#fff;
-
-    --shadow:
-        0 10px 30px
-        rgba(27,65,105,.08);
-}
-
-body{
-    font-family:
-        Inter,
-        "Segoe UI",
-        Arial,
-        sans-serif;
-
-    background:
-        linear-gradient(
-            135deg,
-            #edf8ff,
-            #f8fbff,
-            #edfdf8
-        );
-
-    color:var(--text);
-
-    min-height:100vh;
-}
-
-
-/* =====================================================
-   HEADER
-===================================================== */
-
-.header{
-    height:72px;
-
-    background:white;
-
-    border-bottom:
-        1px solid var(--border);
-
-    display:flex;
-
-    align-items:center;
-
-    padding:0 28px;
-
-    position:sticky;
-
-    top:0;
-
-    z-index:100;
-
-    box-shadow:
-        0 4px 18px
-        rgba(40,68,100,.04);
-}
-
-.brand{
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    font-weight:800;
-
-    font-size:19px;
-}
-
-.brand-icon{
-    width:44px;
-    height:44px;
-
-    border-radius:13px;
-
-    display:flex;
-
-    justify-content:center;
-    align-items:center;
-
-    color:white;
-
-    background:
-        linear-gradient(
-            135deg,
-            #1685e8,
-            #10b5a0
-        );
-
-    font-size:21px;
-}
-
-.header-actions{
-    margin-left:auto;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-}
-
-.user-info{
-    text-align:right;
-}
-
-.user-name{
-    font-size:13px;
-    font-weight:800;
-}
-
-.user-role{
-    font-size:10px;
-    color:var(--green);
-    margin-top:2px;
-}
-
-.back-btn{
-    border:0;
-
-    background:#eef6ff;
-
-    color:var(--primary);
-
-    padding:10px 15px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    font-weight:700;
-}
-
-
-/* =====================================================
-   CONTENT
-===================================================== */
-
-.container{
-    max-width:1250px;
-
-    margin:30px auto;
-
-    padding:0 20px 40px;
-}
-
-.title-row{
-    margin-bottom:24px;
-}
-
-.title-row h1{
-    font-size:28px;
-}
-
-.title-row p{
-    margin-top:7px;
-
-    color:var(--muted);
-
-    font-size:14px;
-}
-
-
-/* =====================================================
-   TABS
-===================================================== */
-
-.tabs{
-    background:white;
-
-    padding:7px;
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(4,1fr);
-
-    gap:7px;
-
-    border:
-        1px solid var(--border);
-
-    border-radius:16px;
-
-    box-shadow:var(--shadow);
-
-    margin-bottom:22px;
-}
-
-.tab{
-    border:0;
-
-    background:transparent;
-
-    padding:14px 10px;
-
-    border-radius:11px;
-
-    cursor:pointer;
-
-    color:#60718a;
-
-    font-weight:700;
-
-    transition:.2s;
-}
-
-.tab i{
-    margin-right:7px;
-}
-
-.tab.active{
-    background:
-        linear-gradient(
-            135deg,
-            #1685e8,
-            #1472cf
-        );
-
-    color:white;
-
-    box-shadow:
-        0 5px 13px
-        rgba(22,133,232,.25);
-}
-
-
-/* =====================================================
-   PANEL
-===================================================== */
-
-.panel{
-    display:none;
-}
-
-.panel.active{
-    display:block;
-}
-
-.layout{
-    display:grid;
-
-    grid-template-columns:
-        360px 1fr;
-
-    gap:20px;
-}
-
-
-/* =====================================================
-   CARD
-===================================================== */
-
-.card{
-    background:white;
-
-    border:
-        1px solid var(--border);
-
-    border-radius:18px;
-
-    padding:22px;
-
-    box-shadow:var(--shadow);
-}
-
-.card-title{
-    display:flex;
-
-    align-items:center;
-
-    gap:11px;
-
-    margin-bottom:21px;
-}
-
-.card-title-icon{
-    width:42px;
-    height:42px;
-
-    border-radius:12px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    background:#eaf5ff;
-
-    color:var(--primary);
-
-    font-size:18px;
-}
-
-.card-title h2{
-    font-size:17px;
-}
-
-.card-title p{
-    color:var(--muted);
-
-    font-size:10px;
-
-    margin-top:3px;
-}
-
-
-/* =====================================================
-   INPUT
-===================================================== */
-
-.field{
-    margin-bottom:16px;
-}
-
-label{
-    display:block;
-
-    margin-bottom:7px;
-
-    font-size:12px;
-
-    font-weight:700;
-}
-
-input,
-textarea,
-select{
-    width:100%;
-
-    border:
-        1px solid #d6e1ed;
-
-    background:#fbfdff;
-
-    border-radius:10px;
-
-    padding:11px 12px;
-
-    font-family:inherit;
-
-    font-size:13px;
-
-    outline:none;
-}
-
-textarea{
-    min-height:75px;
-    resize:vertical;
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-    border-color:var(--primary);
-
-    box-shadow:
-        0 0 0 3px
-        rgba(22,133,232,.10);
-}
-
-.two-fields{
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    gap:11px;
-}
-
-.form-buttons{
-    display:flex;
-
-    gap:8px;
-
-    margin-top:10px;
-}
-
-.save-btn{
-    flex:1;
-
-    border:0;
-
-    color:white;
-
-    background:
-        linear-gradient(
-            135deg,
-            #1685e8,
-            #146dcc
-        );
-
-    padding:12px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    font-weight:800;
-}
-
-.cancel-btn{
-    display:none;
-
-    border:0;
-
-    background:#eef2f7;
-
-    color:#55657d;
-
-    padding:12px 16px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    font-weight:700;
-}
-
-
-/* =====================================================
-   SEARCH
-===================================================== */
-
-.list-head{
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:10px;
-
-    margin-bottom:15px;
-}
-
-.list-head h2{
-    font-size:17px;
-}
-
-.search{
-    width:240px;
-
-    position:relative;
-}
-
-.search input{
-    padding-right:36px;
-}
-
-.search i{
-    position:absolute;
-
-    right:12px;
-
-    top:50%;
-
-    transform:
-        translateY(-50%);
-
-    color:#8a99ae;
-}
-
-
-/* =====================================================
-   TABLE
-===================================================== */
-
-.table-wrap{
-    overflow-x:auto;
-}
-
-table{
-    width:100%;
-
-    border-collapse:collapse;
-}
-
-th{
-    background:#f5f9fd;
-
-    color:#63748d;
-
-    font-size:10px;
-
-    text-transform:uppercase;
-
-    letter-spacing:.5px;
-
-    padding:12px;
-
-    text-align:left;
-}
-
-td{
-    padding:13px 12px;
-
-    font-size:12px;
-
-    border-bottom:
-        1px solid #edf1f6;
-
-    vertical-align:middle;
-}
-
-tbody tr:hover{
-    background:#fbfdff;
-}
-
-.name-cell{
-    font-weight:700;
-}
-
-.price{
-    font-weight:800;
-}
-
-.aasandha{
-    color:#7a50e4;
-    font-weight:800;
-}
-
-.status{
-    display:inline-flex;
-
-    align-items:center;
-
-    padding:5px 9px;
-
-    border-radius:20px;
-
-    font-size:9px;
-
-    font-weight:800;
-}
-
-.status.active{
-    background:#e5faf1;
-
-    color:#0e9365;
-}
-
-.status.inactive{
-    background:#f2f4f7;
-
-    color:#7a8798;
-}
-
-.action-btn{
-    width:31px;
-    height:31px;
-
-    border:0;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-    margin-right:3px;
-}
-
-.edit-btn{
-    background:#e8f3ff;
-
-    color:var(--primary);
-}
-
-.toggle-btn{
-    background:#fff3df;
-
-    color:#e78c1e;
-}
-
-
-/* =====================================================
-   EMPTY
-===================================================== */
-
-.empty{
-    text-align:center;
-
-    padding:45px 20px;
-
-    color:#8795a9;
-}
-
-.empty i{
-    font-size:34px;
-
-    color:#c3cfdd;
-
-    margin-bottom:12px;
-}
-
-
-/* =====================================================
-   TOAST
-===================================================== */
-
-.toast{
-    position:fixed;
-
-    right:20px;
-
-    bottom:20px;
-
-    min-width:280px;
-
-    max-width:400px;
-
-    padding:14px 17px;
-
-    border-radius:12px;
-
-    color:white;
-
-    font-size:12px;
-
-    font-weight:700;
-
-    box-shadow:
-        0 15px 35px
-        rgba(0,0,0,.16);
-
-    transform:
-        translateY(100px);
-
-    opacity:0;
-
-    transition:.25s;
-
-    z-index:9999;
-}
-
-.toast.show{
-    transform:
-        translateY(0);
-
-    opacity:1;
-}
-
-.toast.success{
-    background:#10a978;
-}
-
-.toast.error{
-    background:#df4b5f;
-}
-
-
-/* =====================================================
-   RESPONSIVE
-===================================================== */
-
-@media(max-width:850px){
-
-    .layout{
-        grid-template-columns:1fr;
-    }
-
-    .tabs{
-        grid-template-columns:
-            repeat(2,1fr);
-    }
-
-    .list-head{
-        align-items:flex-start;
-
-        flex-direction:column;
-    }
-
-    .search{
-        width:100%;
-    }
-}
-
-@media(max-width:500px){
-
-    .header{
-        padding:0 14px;
-    }
-
-    .brand span{
-        display:none;
-    }
-
-    .user-info{
-        display:none;
-    }
-
-    .container{
-        padding:
-            0 12px
-            30px;
-    }
-
-    .tabs{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .tab{
-        font-size:11px;
-    }
-
-    .two-fields{
-        grid-template-columns:1fr;
-    }
-}
-
-</style>
-
-</head>
-
-
-<body>
-
-<header class="header">
-
-    <div class="brand">
-
-        <div class="brand-icon">
-            <i class="fa-solid fa-heart-pulse"></i>
-        </div>
-
-        <span>
-            Clinic Administration
-        </span>
-
-    </div>
-
-
-    <div class="header-actions">
-
-        <div class="user-info">
-
-            <div
-                class="user-name"
-                id="userName"
-            >
-                -
-            </div>
-
-            <div
-                class="user-role"
-                id="userRole"
-            >
-                -
-            </div>
-
-        </div>
-
-
-        <button
-            class="back-btn"
-            onclick="
-                location.href='dashboard.html'
-            "
-        >
-            <i class="fa-solid fa-arrow-left"></i>
-            Dashboard
-        </button>
-
-    </div>
-
-</header>
-
-
-<main class="container">
-
-    <div class="title-row">
-
-        <h1>
-            Master Data
-        </h1>
-
-        <p>
-            Manage clinic services, insurance companies,
-            payment methods and currencies.
-        </p>
-
-    </div>
-
-
-    <!-- TABS -->
-
-    <div class="tabs">
-
-        <button
-            class="tab active"
-            data-tab="services"
-            onclick="
-                changeTab('services', this)
-            "
-        >
-            <i class="fa-solid fa-stethoscope"></i>
-            Services
-        </button>
-
-
-        <button
-            class="tab"
-            data-tab="insurance"
-            onclick="
-                changeTab('insurance', this)
-            "
-        >
-            <i class="fa-solid fa-shield-heart"></i>
-            Insurance
-        </button>
-
-
-        <button
-            class="tab"
-            data-tab="payments"
-            onclick="
-                changeTab('payments', this)
-            "
-        >
-            <i class="fa-solid fa-credit-card"></i>
-            Payments
-        </button>
-
-
-        <button
-            class="tab"
-            data-tab="currencies"
-            onclick="
-                changeTab('currencies', this)
-            "
-        >
-            <i class="fa-solid fa-coins"></i>
-            Currencies
-        </button>
-
-    </div>
-
-
-    <!-- =================================================
-         SERVICES
-    ================================================== -->
-
-    <section
-        class="panel active"
-        id="panel-services"
-    >
-
-        <div class="layout">
-
-            <div class="card">
-
-                <div class="card-title">
-
-                    <div class="card-title-icon">
-                        <i class="fa-solid fa-stethoscope"></i>
-                    </div>
-
-                    <div>
-                        <h2 id="serviceFormTitle">
-                            Add Service
-                        </h2>
-
-                        <p>
-                            Clinic service and pricing
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <input
-                    type="hidden"
-                    id="serviceId"
-                >
-
-
-                <div class="field">
-
-                    <label>
-                        Service Name *
-                    </label>
-
-                    <input
-                        id="serviceName"
-                        placeholder="Example: Doctor Consultation"
-                    >
-
-                </div>
-
-
-                <div class="two-fields">
-
-                    <div class="field">
-
-                        <label>
-                            Price (MVR) *
-                        </label>
-
-                        <input
-                            id="servicePrice"
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            placeholder="0.00"
-                        >
-
-                    </div>
-
-
-                    <div class="field">
-
-                        <label>
-                            Aasandha Price *
-                        </label>
-
-                        <input
-                            id="aasandhaPrice"
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            placeholder="0.00"
-                        >
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-buttons">
-
-                    <button
-                        class="save-btn"
-                        onclick="saveService()"
-                    >
-                        <i class="fa-solid fa-floppy-disk"></i>
-                        Save Service
-                    </button>
-
-                    <button
-                        class="cancel-btn"
-                        id="cancelService"
-                        onclick="resetServiceForm()"
-                    >
-                        Cancel
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div class="card">
-
-                <div class="list-head">
-
-                    <h2>
-                        Services
-                    </h2>
-
-
-                    <div class="search">
-
-                        <input
-                            id="serviceSearch"
-                            placeholder="Search services..."
-                            oninput="renderServices()"
-                        >
-
-                        <i class="fa-solid fa-search"></i>
-
-                    </div>
-
-                </div>
-
-
-                <div
-                    class="table-wrap"
-                    id="servicesTable"
-                ></div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =================================================
-         INSURANCE
-    ================================================== -->
-
-    <section
-        class="panel"
-        id="panel-insurance"
-    >
-
-        <div class="layout">
-
-            <div class="card">
-
-                <div class="card-title">
-
-                    <div class="card-title-icon">
-                        <i class="fa-solid fa-shield-heart"></i>
-                    </div>
-
-                    <div>
-                        <h2 id="insuranceFormTitle">
-                            Add Insurance Company
-                        </h2>
-
-                        <p>
-                            Insurance provider information
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <input
-                    type="hidden"
-                    id="insuranceId"
-                >
-
-
-                <div class="field">
-
-                    <label>
-                        Company Name *
-                    </label>
-
-                    <input
-                        id="insuranceName"
-                        placeholder="Insurance company name"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        Short Name
-                    </label>
-
-                    <input
-                        id="insuranceShortName"
-                        placeholder="Example: Aasandha"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        Contact Number
-                    </label>
-
-                    <input
-                        id="insurancePhone"
-                        placeholder="Phone"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        Email
-                    </label>
-
-                    <input
-                        id="insuranceEmail"
-                        type="email"
-                        placeholder="Email"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        Notes
-                    </label>
-
-                    <textarea
-                        id="insuranceNotes"
-                        placeholder="Optional notes..."
-                    ></textarea>
-
-                </div>
-
-
-                <div class="form-buttons">
-
-                    <button
-                        class="save-btn"
-                        onclick="saveInsurance()"
-                    >
-                        <i class="fa-solid fa-floppy-disk"></i>
-                        Save Company
-                    </button>
-
-                    <button
-                        class="cancel-btn"
-                        id="cancelInsurance"
-                        onclick="resetInsuranceForm()"
-                    >
-                        Cancel
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div class="card">
-
-                <div class="list-head">
-
-                    <h2>
-                        Insurance Companies
-                    </h2>
-
-
-                    <div class="search">
-
-                        <input
-                            id="insuranceSearch"
-                            placeholder="Search insurance..."
-                            oninput="renderInsurance()"
-                        >
-
-                        <i class="fa-solid fa-search"></i>
-
-                    </div>
-
-                </div>
-
-
-                <div
-                    class="table-wrap"
-                    id="insuranceTable"
-                ></div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =================================================
-         PAYMENT METHODS
-    ================================================== -->
-
-    <section
-        class="panel"
-        id="panel-payments"
-    >
-
-        <div class="layout">
-
-            <div class="card">
-
-                <div class="card-title">
-
-                    <div class="card-title-icon">
-                        <i class="fa-solid fa-credit-card"></i>
-                    </div>
-
-                    <div>
-                        <h2 id="paymentFormTitle">
-                            Add Payment Method
-                        </h2>
-
-                        <p>
-                            Available payment types
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <input
-                    type="hidden"
-                    id="paymentId"
-                >
-
-
-                <div class="field">
-
-                    <label>
-                        Payment Method *
-                    </label>
-
-                    <input
-                        id="paymentName"
-                        placeholder="Example: Cash"
-                    >
-
-                </div>
-
-
-                <div class="form-buttons">
-
-                    <button
-                        class="save-btn"
-                        onclick="savePayment()"
-                    >
-                        <i class="fa-solid fa-floppy-disk"></i>
-                        Save Method
-                    </button>
-
-                    <button
-                        class="cancel-btn"
-                        id="cancelPayment"
-                        onclick="resetPaymentForm()"
-                    >
-                        Cancel
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div class="card">
-
-                <div class="list-head">
-
-                    <h2>
-                        Payment Methods
-                    </h2>
-
-                </div>
-
-
-                <div
-                    class="table-wrap"
-                    id="paymentsTable"
-                ></div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =================================================
-         CURRENCIES
-    ================================================== -->
-
-    <section
-        class="panel"
-        id="panel-currencies"
-    >
-
-        <div class="layout">
-
-            <div class="card">
-
-                <div class="card-title">
-
-                    <div class="card-title-icon">
-                        <i class="fa-solid fa-coins"></i>
-                    </div>
-
-                    <div>
-                        <h2 id="currencyFormTitle">
-                            Add Currency
-                        </h2>
-
-                        <p>
-                            Billing currency configuration
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <input
-                    type="hidden"
-                    id="currencyId"
-                >
-
-
-                <div class="two-fields">
-
-                    <div class="field">
-
-                        <label>
-                            Currency Code *
-                        </label>
-
-                        <input
-                            id="currencyCode"
-                            placeholder="USD"
-                            maxlength="10"
-                        >
-
-                    </div>
-
-
-                    <div class="field">
-
-                        <label>
-                            Symbol
-                        </label>
-
-                        <input
-                            id="currencySymbol"
-                            placeholder="$"
-                        >
-
-                    </div>
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        Currency Name *
-                    </label>
-
-                    <input
-                        id="currencyName"
-                        placeholder="US Dollar"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        Exchange Rate
-                    </label>
-
-                    <input
-                        id="currencyRate"
-                        type="number"
-                        step="0.000001"
-                        value="1"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        <input
-                            id="currencyDefault"
-                            type="checkbox"
-                            style="
-                                width:auto;
-                                margin-right:7px;
-                            "
-                        >
-                        Default Currency
-                    </label>
-
-                </div>
-
-
-                <div class="form-buttons">
-
-                    <button
-                        class="save-btn"
-                        onclick="saveCurrency()"
-                    >
-                        <i class="fa-solid fa-floppy-disk"></i>
-                        Save Currency
-                    </button>
-
-                    <button
-                        class="cancel-btn"
-                        id="cancelCurrency"
-                        onclick="resetCurrencyForm()"
-                    >
-                        Cancel
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div class="card">
-
-                <div class="list-head">
-
-                    <h2>
-                        Currencies
-                    </h2>
-
-                </div>
-
-
-                <div
-                    class="table-wrap"
-                    id="currenciesTable"
-                ></div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-</main>
-
-
-<div
-    class="toast"
-    id="toast"
-></div>
-
-
-<script>
-
-/* =====================================================
-   LOGIN / ROLE CHECK
-===================================================== */
-
-const currentUser =
-    JSON.parse(
-        sessionStorage.getItem(
-            'clinic_user'
-        ) || 'null'
-    );
-
-
-if (!currentUser) {
-
-    location.href =
-        'login.html';
-
-} else if (
-    currentUser.role !== 'admin' &&
-    currentUser.role !== 'supervisor'
-) {
-
-    alert(
-        'Admin or Supervisor access required.'
-    );
-
-    location.href =
-        'dashboard.html';
-}
-
-
-document.getElementById(
-    'userName'
-).textContent =
-    currentUser?.fullName ||
-    currentUser?.username ||
-    'User';
-
-
-document.getElementById(
-    'userRole'
-).textContent =
-    currentUser?.role
-        ?.toUpperCase() || '';
-
-
-/* =====================================================
-   DATA
-===================================================== */
-
-let services = [];
-
-let insuranceCompanies = [];
-
-let paymentMethods = [];
-
-let currencies = [];
-
-
-/* =====================================================
-   TAB
-===================================================== */
-
-function changeTab(
-    tab,
-    button
-) {
-
-    document
-        .querySelectorAll(
-            '.panel'
-        )
-        .forEach(
-            panel =>
-                panel.classList.remove(
-                    'active'
-                )
-        );
-
-
-    document
-        .querySelectorAll(
-            '.tab'
-        )
-        .forEach(
-            tab =>
-                tab.classList.remove(
-                    'active'
-                )
-        );
-
-
-    document
-        .getElementById(
-            'panel-' + tab
-        )
-        .classList
-        .add('active');
-
-
-    button.classList.add(
-        'active'
-    );
-}
-
-
-/* =====================================================
-   API
-===================================================== */
-
-async function api(
-    method,
-    body = null
-) {
-
-    const options = {
-        method,
-        headers:{
-            'Content-Type':
-                'application/json'
-        }
-    };
-
-
-    if (body) {
-
-        options.body =
-            JSON.stringify({
-                ...body,
-
-                userId:
-                    currentUser.id
-            });
-    }
-
-
-    const response =
-        await fetch(
-            '/api/admin-master-data',
-            options
-        );
-
-
-    const data =
-        await response.json();
-
-
-    if (!response.ok) {
-
-        throw new Error(
-            data.message ||
-            'Request failed'
-        );
-    }
-
-
-    return data;
-}
-
-
-/* =====================================================
-   LOAD
-===================================================== */
-
-async function loadData() {
-
-    try {
-
-        const response =
-            await fetch(
-                '/api/admin-master-data'
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                data.message
-            );
-        }
-
-
-        services =
-            data.services || [];
-
-        insuranceCompanies =
-            data.insurance || [];
-
-        paymentMethods =
-            data.paymentMethods || [];
-
-        currencies =
-            data.currencies || [];
-
-
-        renderAll();
-
-
-    } catch(error) {
-
-        toast(
-            error.message,
-            'error'
-        );
-    }
-}
-
-
-function renderAll() {
-
-    renderServices();
-
-    renderInsurance();
-
-    renderPayments();
-
-    renderCurrencies();
-}
-
-
-/* =====================================================
-   SERVICES
-===================================================== */
-
-async function saveService() {
-
-    const id =
-        serviceId.value;
-
-    const service_name =
-        serviceName.value.trim();
-
-    const price =
-        Number(
-            servicePrice.value
-        );
-
-    const aasandha_price =
-        Number(
-            aasandhaPrice.value
-        );
-
-
-    if (!service_name) {
-
-        return toast(
-            'Enter service name.',
-            'error'
-        );
-    }
-
-
-    if (
-        price < 0 ||
-        aasandha_price < 0
-    ) {
-
-        return toast(
-            'Price cannot be negative.',
-            'error'
-        );
-    }
-
-
-    try {
-
-        await api(
-            id ? 'PUT' : 'POST',
-            {
-                type:'service',
-                id:
-                    id || null,
-                service_name,
-                price,
-                aasandha_price
-            }
-        );
-
-
-        toast(
-            id
-            ? 'Service updated.'
-            : 'Service added.',
-            'success'
-        );
-
-
-        resetServiceForm();
-
-        await loadData();
-
-
-    } catch(error) {
-
-        toast(
-            error.message,
-            'error'
-        );
-    }
-}
-
-
-function editService(id) {
-
-    const row =
-        services.find(
-            x =>
-                String(x.id) ===
-                String(id)
-        );
-
-
-    if (!row) {
-        return;
-    }
-
-
-    serviceId.value =
-        row.id;
-
-    serviceName.value =
-        row.service_name;
-
-    servicePrice.value =
-        row.price;
-
-    aasandhaPrice.value =
-        row.aasandha_price;
-
-
-    serviceFormTitle.textContent =
-        'Edit Service';
-
-
-    cancelService.style.display =
-        'block';
-
-
-    window.scrollTo({
-        top:100,
-        behavior:'smooth'
-    });
-}
-
-
-function resetServiceForm() {
-
-    serviceId.value = '';
-
-    serviceName.value = '';
-
-    servicePrice.value = '';
-
-    aasandhaPrice.value = '';
-
-    serviceFormTitle.textContent =
-        'Add Service';
-
-    cancelService.style.display =
-        'none';
-}
-
-
-function renderServices() {
-
-    const search =
-        (
-            serviceSearch?.value ||
-            ''
-        )
-        .toLowerCase();
-
-
-    const rows =
-        services.filter(
-            item =>
-                item.service_name
-                    .toLowerCase()
-                    .includes(search)
-        );
-
-
-    if (!rows.length) {
-
-        servicesTable.innerHTML =
-            emptyState(
-                'fa-stethoscope',
-                'No services found'
-            );
-
-        return;
-    }
-
-
-    servicesTable.innerHTML = `
-
-        <table>
-
-            <thead>
-
-                <tr>
-                    <th>Service</th>
-                    <th>Price</th>
-                    <th>Aasandha</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                ${rows.map(row => `
-
-                    <tr>
-
-                        <td class="name-cell">
-                            ${escapeHtml(
-                                row.service_name
-                            )}
-                        </td>
-
-                        <td class="price">
-                            MVR
-                            ${money(row.price)}
-                        </td>
-
-                        <td class="aasandha">
-                            MVR
-                            ${money(
-                                row.aasandha_price
-                            )}
-                        </td>
-
-                        <td>
-                            ${statusBadge(
-                                row.active
-                            )}
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="action-btn edit-btn"
-                                onclick="
-                                    editService(
-                                        ${row.id}
-                                    )
-                                "
-                            >
-                                <i class="fa-solid fa-pen"></i>
-                            </button>
-
-                            <button
-                                class="action-btn toggle-btn"
-                                onclick="
-                                    toggleItem(
-                                        'service',
-                                        ${row.id},
-                                        ${!row.active}
-                                    )
-                                "
-                            >
-                                <i class="fa-solid fa-power-off"></i>
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                `).join('')}
-
-            </tbody>
-
-        </table>
-    `;
-}
-
-
-/* =====================================================
-   INSURANCE
-===================================================== */
-
-async function saveInsurance() {
-
-    const id =
-        insuranceId.value;
-
-
-    const company_name =
-        insuranceName.value.trim();
-
-
-    if (!company_name) {
-
-        return toast(
-            'Enter insurance company name.',
-            'error'
-        );
-    }
-
-
-    try {
-
-        await api(
-            id ? 'PUT' : 'POST',
-            {
-                type:'insurance',
-
-                id:
-                    id || null,
-
-                company_name,
-
-                short_name:
-                    insuranceShortName
-                        .value
-                        .trim(),
-
-                phone:
-                    insurancePhone
-                        .value
-                        .trim(),
-
-                email:
-                    insuranceEmail
-                        .value
-                        .trim(),
-
-                notes:
-                    insuranceNotes
-                        .value
-                        .trim()
-            }
-        );
-
-
-        toast(
-            id
-            ? 'Insurance updated.'
-            : 'Insurance company added.',
-            'success'
-        );
-
-
-        resetInsuranceForm();
-
-        await loadData();
-
-
-    } catch(error) {
-
-        toast(
-            error.message,
-            'error'
-        );
-    }
-}
-
-
-function editInsurance(id) {
-
-    const row =
-        insuranceCompanies.find(
-            x =>
-                String(x.id) ===
-                String(id)
-        );
-
-
-    if (!row) {
-        return;
-    }
-
-
-    insuranceId.value =
-        row.id;
-
-    insuranceName.value =
-        row.company_name || '';
-
-    insuranceShortName.value =
-        row.short_name || '';
-
-    insurancePhone.value =
-        row.phone || '';
-
-    insuranceEmail.value =
-        row.email || '';
-
-    insuranceNotes.value =
-        row.notes || '';
-
-
-    insuranceFormTitle.textContent =
-        'Edit Insurance Company';
-
-
-    cancelInsurance.style.display =
-        'block';
-
-
-    window.scrollTo({
-        top:100,
-        behavior:'smooth'
-    });
-}
-
-
-function resetInsuranceForm() {
-
-    insuranceId.value = '';
-
-    insuranceName.value = '';
-
-    insuranceShortName.value = '';
-
-    insurancePhone.value = '';
-
-    insuranceEmail.value = '';
-
-    insuranceNotes.value = '';
-
-
-    insuranceFormTitle.textContent =
-        'Add Insurance Company';
-
-
-    cancelInsurance.style.display =
-        'none';
-}
-
-
-function renderInsurance() {
-
-    const search =
-        (
-            insuranceSearch?.value ||
-            ''
-        )
-        .toLowerCase();
-
-
-    const rows =
-        insuranceCompanies.filter(
-            x =>
-                (
-                    x.company_name +
-                    ' ' +
-                    (x.short_name || '')
-                )
-                .toLowerCase()
-                .includes(search)
-        );
-
-
-    if (!rows.length) {
-
-        insuranceTable.innerHTML =
-            emptyState(
-                'fa-shield-heart',
-                'No insurance companies'
-            );
-
-        return;
-    }
-
-
-    insuranceTable.innerHTML = `
-
-        <table>
-
-            <thead>
-
-                <tr>
-                    <th>Company</th>
-                    <th>Contact</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-            ${rows.map(row => `
-
-                <tr>
-
-                    <td>
-
-                        <div class="name-cell">
-                            ${escapeHtml(
-                                row.company_name
-                            )}
-                        </div>
-
-                        <small>
-                            ${escapeHtml(
-                                row.short_name ||
-                                ''
-                            )}
-                        </small>
-
-                    </td>
-
-                    <td>
-                        ${escapeHtml(
-                            row.phone || '-'
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHtml(
-                            row.email || '-'
-                        )}
-                    </td>
-
-                    <td>
-                        ${statusBadge(
-                            row.active
-                        )}
-                    </td>
-
-                    <td>
-
-                        <button
-                            class="action-btn edit-btn"
-                            onclick="
-                                editInsurance(
-                                    ${row.id}
-                                )
-                            "
-                        >
-                            <i class="fa-solid fa-pen"></i>
-                        </button>
-
-                        <button
-                            class="action-btn toggle-btn"
-                            onclick="
-                                toggleItem(
-                                    'insurance',
-                                    ${row.id},
-                                    ${!row.active}
-                                )
-                            "
-                        >
-                            <i class="fa-solid fa-power-off"></i>
-                        </button>
-
-                    </td>
-
-                </tr>
-
-            `).join('')}
-
-            </tbody>
-
-        </table>
-    `;
-}
-
-
-/* =====================================================
-   PAYMENT
-===================================================== */
-
-async function savePayment() {
-
-    const id =
-        paymentId.value;
-
-
-    const method_name =
-        paymentName.value.trim();
-
-
-    if (!method_name) {
-
-        return toast(
-            'Enter payment method.',
-            'error'
-        );
-    }
-
-
-    try {
-
-        await api(
-            id ? 'PUT' : 'POST',
-            {
-                type:
-                    'payment',
-
-                id:
-                    id || null,
-
-                method_name
-            }
-        );
-
-
-        resetPaymentForm();
-
-        await loadData();
-
-
-        toast(
-            'Payment method saved.',
-            'success'
-        );
-
-
-    } catch(error) {
-
-        toast(
-            error.message,
-            'error'
-        );
-    }
-}
-
-
-function editPayment(id) {
-
-    const row =
-        paymentMethods.find(
-            x =>
-                String(x.id) ===
-                String(id)
-        );
-
-
-    paymentId.value =
-        row.id;
-
-    paymentName.value =
-        row.method_name;
-
-
-    paymentFormTitle.textContent =
-        'Edit Payment Method';
-
-
-    cancelPayment.style.display =
-        'block';
-}
-
-
-function resetPaymentForm() {
-
-    paymentId.value = '';
-
-    paymentName.value = '';
-
-
-    paymentFormTitle.textContent =
-        'Add Payment Method';
-
-
-    cancelPayment.style.display =
-        'none';
-}
-
-
-function renderPayments() {
-
-    if (!paymentMethods.length) {
-
-        paymentsTable.innerHTML =
-            emptyState(
-                'fa-credit-card',
-                'No payment methods'
-            );
-
-        return;
-    }
-
-
-    paymentsTable.innerHTML = `
-
-        <table>
-
-            <thead>
-
-                <tr>
-                    <th>Payment Method</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                ${paymentMethods.map(row => `
-
-                    <tr>
-
-                        <td class="name-cell">
-                            ${escapeHtml(
-                                row.method_name
-                            )}
-                        </td>
-
-                        <td>
-                            ${statusBadge(
-                                row.active
-                            )}
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="action-btn edit-btn"
-                                onclick="
-                                    editPayment(
-                                        ${row.id}
-                                    )
-                                "
-                            >
-                                <i class="fa-solid fa-pen"></i>
-                            </button>
-
-                            <button
-                                class="action-btn toggle-btn"
-                                onclick="
-                                    toggleItem(
-                                        'payment',
-                                        ${row.id},
-                                        ${!row.active}
-                                    )
-                                "
-                            >
-                                <i class="fa-solid fa-power-off"></i>
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                `).join('')}
-
-            </tbody>
-
-        </table>
-    `;
-}
-
-
-/* =====================================================
-   CURRENCY
-===================================================== */
-
-async function saveCurrency() {
-
-    const id =
-        currencyId.value;
-
-
-    const currency_code =
-        currencyCode.value
-            .trim()
-            .toUpperCase();
-
-
-    const currency_name =
-        currencyName.value.trim();
-
-
-    if (
-        !currency_code ||
-        !currency_name
-    ) {
-
-        return toast(
-            'Currency code and name required.',
-            'error'
-        );
-    }
-
-
-    try {
-
-        await api(
-            id ? 'PUT' : 'POST',
-            {
-                type:'currency',
-
-                id:
-                    id || null,
-
-                currency_code,
-
-                currency_name,
-
-                symbol:
-                    currencySymbol
-                        .value
-                        .trim(),
-
-                exchange_rate:
-                    Number(
-                        currencyRate.value
-                    ) || 1,
-
-                is_default:
-                    currencyDefault.checked
-            }
-        );
-
-
-        resetCurrencyForm();
-
-        await loadData();
-
-
-        toast(
-            'Currency saved.',
-            'success'
-        );
-
-
-    } catch(error) {
-
-        toast(
-            error.message,
-            'error'
-        );
-    }
-}
-
-
-function editCurrency(id) {
-
-    const row =
-        currencies.find(
-            x =>
-                String(x.id) ===
-                String(id)
-        );
-
-
-    currencyId.value =
-        row.id;
-
-    currencyCode.value =
-        row.currency_code;
-
-    currencyName.value =
-        row.currency_name;
-
-    currencySymbol.value =
-        row.symbol || '';
-
-    currencyRate.value =
-        row.exchange_rate;
-
-    currencyDefault.checked =
-        row.is_default;
-
-
-    currencyFormTitle.textContent =
-        'Edit Currency';
-
-
-    cancelCurrency.style.display =
-        'block';
-}
-
-
-function resetCurrencyForm() {
-
-    currencyId.value = '';
-
-    currencyCode.value = '';
-
-    currencyName.value = '';
-
-    currencySymbol.value = '';
-
-    currencyRate.value = '1';
-
-    currencyDefault.checked =
-        false;
-
-
-    currencyFormTitle.textContent =
-        'Add Currency';
-
-
-    cancelCurrency.style.display =
-        'none';
-}
-
-
-function renderCurrencies() {
-
-    if (!currencies.length) {
-
-        currenciesTable.innerHTML =
-            emptyState(
-                'fa-coins',
-                'No currencies'
-            );
-
-        return;
-    }
-
-
-    currenciesTable.innerHTML = `
-
-        <table>
-
-            <thead>
-
-                <tr>
-                    <th>Code</th>
-                    <th>Currency</th>
-                    <th>Symbol</th>
-                    <th>Rate</th>
-                    <th>Default</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-            ${currencies.map(row => `
-
-                <tr>
-
-                    <td class="name-cell">
-                        ${escapeHtml(
-                            row.currency_code
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHtml(
-                            row.currency_name
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHtml(
-                            row.symbol || ''
-                        )}
-                    </td>
-
-                    <td>
-                        ${row.exchange_rate}
-                    </td>
-
-                    <td>
-                        ${
-                            row.is_default
-                            ?
-                            '✓ Default'
-                            :
-                            ''
-                        }
-                    </td>
-
-                    <td>
-                        ${statusBadge(
-                            row.active
-                        )}
-                    </td>
-
-                    <td>
-
-                        <button
-                            class="action-btn edit-btn"
-                            onclick="
-                                editCurrency(
-                                    ${row.id}
-                                )
-                            "
-                        >
-                            <i class="fa-solid fa-pen"></i>
-                        </button>
-
-                        <button
-                            class="action-btn toggle-btn"
-                            onclick="
-                                toggleItem(
-                                    'currency',
-                                    ${row.id},
-                                    ${!row.active}
-                                )
-                            "
-                        >
-                            <i class="fa-solid fa-power-off"></i>
-                        </button>
-
-                    </td>
-
-                </tr>
-
-            `).join('')}
-
-            </tbody>
-
-        </table>
-    `;
-}
-
-
-/* =====================================================
-   ACTIVE / INACTIVE
-===================================================== */
-
-async function toggleItem(
-    type,
-    id,
-    active
-) {
-
-    try {
-
-        await api(
-            'PUT',
-            {
-                type:'toggle',
-                entity:type,
-                id,
-                active
-            }
-        );
-
-
-        await loadData();
-
-
-        toast(
-            active
-            ? 'Item activated.'
-            : 'Item disabled.',
-            'success'
-        );
-
-
-    } catch(error) {
-
-        toast(
-            error.message,
-            'error'
-        );
-    }
-}
-
-
-/* =====================================================
-   HELPERS
-===================================================== */
-
-function money(value) {
-
-    return Number(
-        value || 0
-    ).toLocaleString(
-        undefined,
-        {
-            minimumFractionDigits:2,
-            maximumFractionDigits:2
-        }
-    );
-}
-
-
-function statusBadge(active) {
-
-    return active
-
-        ? '<span class="status active">Active</span>'
-
-        : '<span class="status inactive">Inactive</span>';
-}
-
-
-function emptyState(
-    icon,
-    text
-) {
-
-    return `
-
-        <div class="empty">
-
-            <i class="fa-solid ${icon}"></i>
-
-            <div>
-                ${text}
-            </div>
-
-        </div>
-    `;
-}
-
-
-function escapeHtml(value) {
-
-    return String(
-        value ?? ''
-    )
-    .replaceAll('&','&amp;')
-    .replaceAll('<','&lt;')
-    .replaceAll('>','&gt;')
-    .replaceAll('"','&quot;')
-    .replaceAll("'","&#039;");
-}
-
-
-let toastTimer;
-
-
-function toast(
-    message,
-    type='success'
-) {
-
-    const el =
-        document.getElementById(
-            'toast'
-        );
-
-
-    el.textContent =
-        message;
-
-
-    el.className =
-        `toast ${type} show`;
-
-
-    clearTimeout(
-        toastTimer
-    );
-
-
-    toastTimer =
-        setTimeout(
-            () => {
-
-                el.classList.remove(
-                    'show'
-                );
-
-            },
-            3000
-        );
-}
-
-
-/* =====================================================
-   START
-===================================================== */
-
-loadData();
-
-</script>
-
-</body>
-
 </html>
