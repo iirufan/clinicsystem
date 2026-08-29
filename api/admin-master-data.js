@@ -2,14 +2,21 @@ import sql from '../lib/db.js';
 
 
 /* =========================================================
-   VERIFY USER
+   VERIFY ADMIN / SUPERVISOR
 ========================================================= */
 
-async function verifyUser(
+async function getAuthorizedUser(
     userId
 ) {
 
-    if (!userId) {
+    const id =
+        Number(
+            userId
+        );
+
+
+    if (!id) {
+
         return null;
     }
 
@@ -17,49 +24,81 @@ async function verifyUser(
     const rows =
         await sql`
             SELECT
+
                 id,
                 username,
                 full_name,
                 role,
-                approved,
-                active
+
+                COALESCE(
+                    approved,
+                    FALSE
+                )
+                AS approved,
+
+                COALESCE(
+                    active,
+                    FALSE
+                )
+                AS active
 
             FROM users
 
             WHERE id =
-                ${Number(userId)}
+                ${id}
 
             LIMIT 1
         `;
+
+
+    if (!rows.length) {
+
+        return null;
+    }
 
 
     const user =
         rows[0];
 
 
+    const role =
+        String(
+            user.role ||
+            ''
+        )
+        .trim()
+        .toLowerCase();
+
+
     if (
-        !user ||
         !user.approved ||
         !user.active
     ) {
+
         return null;
     }
 
 
     if (
-        user.role !== 'admin' &&
-        user.role !== 'supervisor'
+        role !== 'admin' &&
+        role !== 'supervisor'
     ) {
+
         return null;
     }
 
 
-    return user;
+    return {
+
+        ...user,
+
+        role
+    };
 }
 
 
 /* =========================================================
-   HANDLER
+   API
 ========================================================= */
 
 export default async function handler(
@@ -75,11 +114,12 @@ export default async function handler(
         ===================================================== */
 
         if (
-            req.method === 'GET'
+            req.method ===
+            'GET'
         ) {
 
             const user =
-                await verifyUser(
+                await getAuthorizedUser(
                     req.query.userId
                 );
 
@@ -98,18 +138,20 @@ export default async function handler(
             }
 
 
-            /* SERVICES */
-
             const services =
                 await sql`
                     SELECT
+
                         id,
                         service_name,
                         price,
                         aasandha_price,
-                        active,
-                        created_at,
-                        updated_at
+
+                        COALESCE(
+                            active,
+                            TRUE
+                        )
+                        AS active
 
                     FROM services
 
@@ -118,28 +160,20 @@ export default async function handler(
                 `;
 
 
-            /* INSURANCE */
-
             const insurance =
                 await sql`
                     SELECT
+
                         id,
+
                         company_code,
                         company_name,
                         short_name,
 
-                        contact_person,
                         phone,
                         email,
-                        address,
 
-                        discount_percent,
-
-                        COALESCE(
-                            is_government,
-                            FALSE
-                        )
-                        AS is_government,
+                        notes,
 
                         COALESCE(
                             charge_method,
@@ -153,30 +187,40 @@ export default async function handler(
                         )
                         AS charge_value,
 
-                        notes,
+                        COALESCE(
+                            is_government,
+                            FALSE
+                        )
+                        AS is_government,
 
-                        active,
-
-                        created_at,
-                        updated_at
+                        COALESCE(
+                            active,
+                            TRUE
+                        )
+                        AS active
 
                     FROM insurance_companies
 
                     ORDER BY
+
+                        is_government DESC,
+
                         company_name
                 `;
 
 
-            /* PAYMENT METHODS */
-
             const paymentMethods =
                 await sql`
                     SELECT
+
                         id,
                         method_name,
-                        active,
-                        created_at,
-                        updated_at
+
+                        COALESCE(
+                            active,
+                            TRUE
+                        )
+                        AS active
 
                     FROM payment_methods
 
@@ -185,43 +229,56 @@ export default async function handler(
                 `;
 
 
-            /* CURRENCIES */
-
             const currencies =
                 await sql`
                     SELECT
+
                         id,
+
                         currency_code,
                         currency_name,
                         symbol,
+
                         exchange_rate,
-                        is_default,
-                        active,
-                        created_at,
-                        updated_at
+
+                        COALESCE(
+                            is_default,
+                            FALSE
+                        )
+                        AS is_default,
+
+                        COALESCE(
+                            active,
+                            TRUE
+                        )
+                        AS active
 
                     FROM currencies
 
                     ORDER BY
+
                         is_default DESC,
+
                         currency_code
                 `;
 
 
-            /* COMPANY SETTINGS */
-
             const companyRows =
                 await sql`
                     SELECT
+
                         id,
+
                         company_name,
                         company_address,
                         company_phone,
                         company_email,
                         company_registration_no,
+
                         receipt_prefix,
                         receipt_next_number,
                         receipt_digits,
+
                         updated_at,
                         updated_by
 
@@ -239,6 +296,17 @@ export default async function handler(
 
                     success:true,
 
+                    user:{
+                        id:
+                            user.id,
+
+                        fullName:
+                            user.full_name,
+
+                        role:
+                            user.role
+                    },
+
                     services,
 
                     insurance,
@@ -255,7 +323,7 @@ export default async function handler(
 
 
         /* =====================================================
-           ONLY POST / PUT BELOW
+           POST / PUT
         ===================================================== */
 
         if (
@@ -281,7 +349,7 @@ export default async function handler(
 
 
         const user =
-            await verifyUser(
+            await getAuthorizedUser(
                 body.userId
             );
 
@@ -321,7 +389,8 @@ export default async function handler(
                 String(
                     body.serviceName ||
                     ''
-                ).trim();
+                )
+                .trim();
 
 
             if (!serviceName) {
@@ -359,7 +428,8 @@ export default async function handler(
 
 
             if (
-                req.method === 'POST'
+                req.method ===
+                'POST'
             ) {
 
                 await sql`
@@ -368,11 +438,12 @@ export default async function handler(
                         service_name,
                         price,
                         aasandha_price,
+
                         active,
+
                         created_by,
                         created_at,
                         updated_at
-
                     )
 
                     VALUES (
@@ -380,7 +451,9 @@ export default async function handler(
                         ${serviceName},
                         ${price},
                         ${aasandhaPrice},
+
                         TRUE,
+
                         ${user.id},
                         NOW(),
                         NOW()
@@ -389,7 +462,13 @@ export default async function handler(
 
             } else {
 
-                if (!body.id) {
+                const id =
+                    Number(
+                        body.id
+                    );
+
+
+                if (!id) {
 
                     return res
                         .status(400)
@@ -398,7 +477,7 @@ export default async function handler(
                             success:false,
 
                             message:
-                                'Service ID required.'
+                                'Service ID is required.'
                         });
                 }
 
@@ -407,6 +486,7 @@ export default async function handler(
                     UPDATE services
 
                     SET
+
                         service_name =
                             ${serviceName},
 
@@ -420,7 +500,7 @@ export default async function handler(
                             NOW()
 
                     WHERE id =
-                        ${Number(body.id)}
+                        ${id}
                 `;
             }
 
@@ -428,6 +508,7 @@ export default async function handler(
             return res
                 .status(200)
                 .json({
+
                     success:true
                 });
         }
@@ -445,7 +526,8 @@ export default async function handler(
                 String(
                     body.companyName ||
                     ''
-                ).trim();
+                )
+                .trim();
 
 
             if (!companyName) {
@@ -462,6 +544,16 @@ export default async function handler(
             }
 
 
+            const id =
+                body.id
+                ?
+                Number(
+                    body.id
+                )
+                :
+                null;
+
+
             const companyCode =
                 String(
                     body.companyCode ||
@@ -475,10 +567,11 @@ export default async function handler(
                 String(
                     body.shortName ||
                     ''
-                ).trim();
+                )
+                .trim();
 
 
-            const method =
+            const chargeMethod =
                 body.chargeMethod ===
                 'fixed'
                 ?
@@ -487,7 +580,7 @@ export default async function handler(
                 'percent';
 
 
-            const value =
+            const chargeValue =
                 Math.max(
                     0,
                     Number(
@@ -504,39 +597,57 @@ export default async function handler(
 
 
             /*
-             Only one active government insurance
-             should normally exist.
+             Keep one government insurance.
             */
 
-            if (isGovernment) {
+            if (
+                isGovernment
+            ) {
 
-                await sql`
-                    UPDATE insurance_companies
+                if (id) {
 
-                    SET
-                        is_government =
-                            FALSE,
+                    await sql`
+                        UPDATE insurance_companies
 
-                        updated_at =
-                            NOW()
+                        SET
+                            is_government =
+                                FALSE,
 
-                    WHERE
-                        is_government =
-                            TRUE
+                            updated_at =
+                                NOW()
 
-                        AND (
-                            ${body.id || null}::bigint
-                            IS NULL
+                        WHERE
 
-                            OR id !=
-                            ${body.id || null}
-                        )
-                `;
+                            is_government =
+                                TRUE
+
+                            AND id !=
+                                ${id}
+                    `;
+
+                } else {
+
+                    await sql`
+                        UPDATE insurance_companies
+
+                        SET
+                            is_government =
+                                FALSE,
+
+                            updated_at =
+                                NOW()
+
+                        WHERE
+                            is_government =
+                                TRUE
+                    `;
+                }
             }
 
 
             if (
-                req.method === 'POST'
+                req.method ===
+                'POST'
             ) {
 
                 await sql`
@@ -560,7 +671,6 @@ export default async function handler(
 
                         created_at,
                         updated_at
-
                     )
 
                     VALUES (
@@ -581,7 +691,8 @@ export default async function handler(
                             String(
                                 body.phone ||
                                 ''
-                            ).trim()
+                            )
+                            .trim()
                             ||
                             null
                         },
@@ -590,14 +701,15 @@ export default async function handler(
                             String(
                                 body.email ||
                                 ''
-                            ).trim()
+                            )
+                            .trim()
                             ||
                             null
                         },
 
-                        ${method},
+                        ${chargeMethod},
 
-                        ${value},
+                        ${chargeValue},
 
                         ${isGovernment},
 
@@ -605,7 +717,8 @@ export default async function handler(
                             String(
                                 body.notes ||
                                 ''
-                            ).trim()
+                            )
+                            .trim()
                             ||
                             null
                         },
@@ -619,7 +732,7 @@ export default async function handler(
 
             } else {
 
-                if (!body.id) {
+                if (!id) {
 
                     return res
                         .status(400)
@@ -628,7 +741,7 @@ export default async function handler(
                             success:false,
 
                             message:
-                                'Insurance ID required.'
+                                'Insurance ID is required.'
                         });
                 }
 
@@ -637,6 +750,7 @@ export default async function handler(
                     UPDATE insurance_companies
 
                     SET
+
                         company_code =
                             ${
                                 companyCode ||
@@ -657,7 +771,8 @@ export default async function handler(
                                 String(
                                     body.phone ||
                                     ''
-                                ).trim()
+                                )
+                                .trim()
                                 ||
                                 null
                             },
@@ -667,16 +782,17 @@ export default async function handler(
                                 String(
                                     body.email ||
                                     ''
-                                ).trim()
+                                )
+                                .trim()
                                 ||
                                 null
                             },
 
                         charge_method =
-                            ${method},
+                            ${chargeMethod},
 
                         charge_value =
-                            ${value},
+                            ${chargeValue},
 
                         is_government =
                             ${isGovernment},
@@ -686,7 +802,8 @@ export default async function handler(
                                 String(
                                     body.notes ||
                                     ''
-                                ).trim()
+                                )
+                                .trim()
                                 ||
                                 null
                             },
@@ -695,7 +812,7 @@ export default async function handler(
                             NOW()
 
                     WHERE id =
-                        ${Number(body.id)}
+                        ${id}
                 `;
             }
 
@@ -703,6 +820,7 @@ export default async function handler(
             return res
                 .status(200)
                 .json({
+
                     success:true
                 });
         }
@@ -720,7 +838,8 @@ export default async function handler(
                 String(
                     body.methodName ||
                     ''
-                ).trim();
+                )
+                .trim();
 
 
             if (!methodName) {
@@ -732,13 +851,14 @@ export default async function handler(
                         success:false,
 
                         message:
-                            'Payment method name required.'
+                            'Payment method name is required.'
                     });
             }
 
 
             if (
-                req.method === 'POST'
+                req.method ===
+                'POST'
             ) {
 
                 await sql`
@@ -746,16 +866,17 @@ export default async function handler(
 
                         method_name,
                         active,
+
                         created_by,
                         created_at,
                         updated_at
-
                     )
 
                     VALUES (
 
                         ${methodName},
                         TRUE,
+
                         ${user.id},
                         NOW(),
                         NOW()
@@ -764,7 +885,13 @@ export default async function handler(
 
             } else {
 
-                if (!body.id) {
+                const id =
+                    Number(
+                        body.id
+                    );
+
+
+                if (!id) {
 
                     return res
                         .status(400)
@@ -782,6 +909,7 @@ export default async function handler(
                     UPDATE payment_methods
 
                     SET
+
                         method_name =
                             ${methodName},
 
@@ -789,7 +917,7 @@ export default async function handler(
                             NOW()
 
                     WHERE id =
-                        ${Number(body.id)}
+                        ${id}
                 `;
             }
 
@@ -797,6 +925,7 @@ export default async function handler(
             return res
                 .status(200)
                 .json({
+
                     success:true
                 });
         }
@@ -823,7 +952,8 @@ export default async function handler(
                 String(
                     body.currencyName ||
                     ''
-                ).trim();
+                )
+                .trim();
 
 
             if (
@@ -849,12 +979,15 @@ export default async function handler(
                 );
 
 
-            if (isDefault) {
+            if (
+                isDefault
+            ) {
 
                 await sql`
                     UPDATE currencies
 
                     SET
+
                         is_default =
                             FALSE,
 
@@ -864,8 +997,19 @@ export default async function handler(
             }
 
 
+            const rate =
+                Math.max(
+                    0,
+                    Number(
+                        body.exchangeRate ||
+                        1
+                    )
+                );
+
+
             if (
-                req.method === 'POST'
+                req.method ===
+                'POST'
             ) {
 
                 await sql`
@@ -874,13 +1018,15 @@ export default async function handler(
                         currency_code,
                         currency_name,
                         symbol,
+
                         exchange_rate,
+
                         is_default,
                         active,
+
                         created_by,
                         created_at,
                         updated_at
-
                     )
 
                     VALUES (
@@ -893,27 +1039,18 @@ export default async function handler(
                             String(
                                 body.symbol ||
                                 ''
-                            ).trim()
+                            )
+                            .trim()
                             ||
                             null
                         },
 
-                        ${
-                            Math.max(
-                                0,
-                                Number(
-                                    body.exchangeRate ||
-                                    1
-                                )
-                            )
-                        },
+                        ${rate},
 
                         ${isDefault},
-
                         TRUE,
 
                         ${user.id},
-
                         NOW(),
                         NOW()
                     )
@@ -921,7 +1058,13 @@ export default async function handler(
 
             } else {
 
-                if (!body.id) {
+                const id =
+                    Number(
+                        body.id
+                    );
+
+
+                if (!id) {
 
                     return res
                         .status(400)
@@ -939,6 +1082,7 @@ export default async function handler(
                     UPDATE currencies
 
                     SET
+
                         currency_code =
                             ${currencyCode},
 
@@ -950,21 +1094,14 @@ export default async function handler(
                                 String(
                                     body.symbol ||
                                     ''
-                                ).trim()
+                                )
+                                .trim()
                                 ||
                                 null
                             },
 
                         exchange_rate =
-                            ${
-                                Math.max(
-                                    0,
-                                    Number(
-                                        body.exchangeRate ||
-                                        1
-                                    )
-                                )
-                            },
+                            ${rate},
 
                         is_default =
                             ${isDefault},
@@ -973,7 +1110,7 @@ export default async function handler(
                             NOW()
 
                     WHERE id =
-                        ${Number(body.id)}
+                        ${id}
                 `;
             }
 
@@ -981,6 +1118,7 @@ export default async function handler(
             return res
                 .status(200)
                 .json({
+
                     success:true
                 });
         }
@@ -998,7 +1136,8 @@ export default async function handler(
                 String(
                     body.companyName ||
                     ''
-                ).trim();
+                )
+                .trim();
 
 
             if (!companyName) {
@@ -1010,25 +1149,27 @@ export default async function handler(
                         success:false,
 
                         message:
-                            'Company / Clinic name required.'
+                            'Company / Clinic name is required.'
                     });
             }
 
 
             /*
-             Admin may change receipt numbering.
-             Supervisor may change company information only.
+             ADMIN
+             Can change company + receipt sequence.
             */
 
             if (
-                user.role === 'admin'
+                user.role ===
+                'admin'
             ) {
 
                 const receiptPrefix =
                     String(
                         body.receiptPrefix ||
                         ''
-                    ).trim();
+                    )
+                    .trim();
 
 
                 const nextNumber =
@@ -1044,10 +1185,10 @@ export default async function handler(
 
 
                 const digits =
-                    Math.min(
-                        12,
-                        Math.max(
-                            1,
+                    Math.max(
+                        1,
+                        Math.min(
+                            12,
                             Math.floor(
                                 Number(
                                     body.receiptDigits ||
@@ -1075,7 +1216,6 @@ export default async function handler(
 
                         updated_by,
                         updated_at
-
                     )
 
                     VALUES (
@@ -1088,7 +1228,8 @@ export default async function handler(
                             String(
                                 body.companyAddress ||
                                 ''
-                            ).trim()
+                            )
+                            .trim()
                             ||
                             null
                         },
@@ -1097,7 +1238,8 @@ export default async function handler(
                             String(
                                 body.companyPhone ||
                                 ''
-                            ).trim()
+                            )
+                            .trim()
                             ||
                             null
                         },
@@ -1106,7 +1248,8 @@ export default async function handler(
                             String(
                                 body.companyEmail ||
                                 ''
-                            ).trim()
+                            )
+                            .trim()
                             ||
                             null
                         },
@@ -1115,7 +1258,8 @@ export default async function handler(
                             String(
                                 body.companyRegistrationNo ||
                                 ''
-                            ).trim()
+                            )
+                            .trim()
                             ||
                             null
                         },
@@ -1166,76 +1310,185 @@ export default async function handler(
                             NOW()
                 `;
 
+
             } else {
 
-                await sql`
-                    UPDATE clinic_settings
 
-                    SET
-                        company_name =
+                /*
+                 SUPERVISOR
+
+                 Ensure settings row exists,
+                 but do not allow changing
+                 receipt sequence.
+                */
+
+                const existing =
+                    await sql`
+                        SELECT id
+
+                        FROM clinic_settings
+
+                        WHERE id = 1
+
+                        LIMIT 1
+                    `;
+
+
+                if (
+                    existing.length
+                ) {
+
+                    await sql`
+                        UPDATE clinic_settings
+
+                        SET
+
+                            company_name =
+                                ${companyName},
+
+                            company_address =
+                                ${
+                                    String(
+                                        body.companyAddress ||
+                                        ''
+                                    )
+                                    .trim()
+                                    ||
+                                    null
+                                },
+
+                            company_phone =
+                                ${
+                                    String(
+                                        body.companyPhone ||
+                                        ''
+                                    )
+                                    .trim()
+                                    ||
+                                    null
+                                },
+
+                            company_email =
+                                ${
+                                    String(
+                                        body.companyEmail ||
+                                        ''
+                                    )
+                                    .trim()
+                                    ||
+                                    null
+                                },
+
+                            company_registration_no =
+                                ${
+                                    String(
+                                        body.companyRegistrationNo ||
+                                        ''
+                                    )
+                                    .trim()
+                                    ||
+                                    null
+                                },
+
+                            updated_by =
+                                ${user.id},
+
+                            updated_at =
+                                NOW()
+
+                        WHERE id = 1
+                    `;
+
+                } else {
+
+                    await sql`
+                        INSERT INTO clinic_settings (
+
+                            id,
+
+                            company_name,
+                            company_address,
+                            company_phone,
+                            company_email,
+                            company_registration_no,
+
+                            receipt_prefix,
+                            receipt_next_number,
+                            receipt_digits,
+
+                            updated_by,
+                            updated_at
+                        )
+
+                        VALUES (
+
+                            1,
+
                             ${companyName},
 
-                        company_address =
                             ${
                                 String(
                                     body.companyAddress ||
                                     ''
-                                ).trim()
+                                )
+                                .trim()
                                 ||
                                 null
                             },
 
-                        company_phone =
                             ${
                                 String(
                                     body.companyPhone ||
                                     ''
-                                ).trim()
+                                )
+                                .trim()
                                 ||
                                 null
                             },
 
-                        company_email =
                             ${
                                 String(
                                     body.companyEmail ||
                                     ''
-                                ).trim()
+                                )
+                                .trim()
                                 ||
                                 null
                             },
 
-                        company_registration_no =
                             ${
                                 String(
                                     body.companyRegistrationNo ||
                                     ''
-                                ).trim()
+                                )
+                                .trim()
                                 ||
                                 null
                             },
 
-                        updated_by =
+                            'R',
+                            1,
+                            6,
+
                             ${user.id},
-
-                        updated_at =
                             NOW()
-
-                    WHERE id = 1
-                `;
+                        )
+                    `;
+                }
             }
 
 
             return res
                 .status(200)
                 .json({
+
                     success:true
                 });
         }
 
 
         /* =====================================================
-           TOGGLE ACTIVE STATUS
+           ACTIVE / INACTIVE
         ===================================================== */
 
         if (
@@ -1258,7 +1511,9 @@ export default async function handler(
                 String(
                     body.entity ||
                     ''
-                );
+                )
+                .trim()
+                .toLowerCase();
 
 
             if (!id) {
@@ -1276,13 +1531,15 @@ export default async function handler(
 
 
             if (
-                entity === 'service'
+                entity ===
+                'service'
             ) {
 
                 await sql`
                     UPDATE services
 
                     SET
+
                         active =
                             ${active},
 
@@ -1293,14 +1550,17 @@ export default async function handler(
                         ${id}
                 `;
 
+
             } else if (
-                entity === 'insurance'
+                entity ===
+                'insurance'
             ) {
 
                 await sql`
                     UPDATE insurance_companies
 
                     SET
+
                         active =
                             ${active},
 
@@ -1311,14 +1571,17 @@ export default async function handler(
                         ${id}
                 `;
 
+
             } else if (
-                entity === 'payment'
+                entity ===
+                'payment'
             ) {
 
                 await sql`
                     UPDATE payment_methods
 
                     SET
+
                         active =
                             ${active},
 
@@ -1329,14 +1592,17 @@ export default async function handler(
                         ${id}
                 `;
 
+
             } else if (
-                entity === 'currency'
+                entity ===
+                'currency'
             ) {
 
                 await sql`
                     UPDATE currencies
 
                     SET
+
                         active =
                             ${active},
 
@@ -1346,6 +1612,7 @@ export default async function handler(
                     WHERE id =
                         ${id}
                 `;
+
 
             } else {
 
@@ -1356,7 +1623,7 @@ export default async function handler(
                         success:false,
 
                         message:
-                            'Invalid entity.'
+                            'Invalid Master Data type.'
                     });
             }
 
@@ -1364,6 +1631,7 @@ export default async function handler(
             return res
                 .status(200)
                 .json({
+
                     success:true
                 });
         }
@@ -1380,17 +1648,13 @@ export default async function handler(
             });
 
 
-    } catch(error) {
+    }catch(error){
 
         console.error(
             'ADMIN MASTER DATA ERROR:',
             error
         );
 
-
-        /*
-         PostgreSQL duplicate value
-        */
 
         if (
             error.code ===
@@ -1404,7 +1668,7 @@ export default async function handler(
                     success:false,
 
                     message:
-                        'A record with this name or code already exists.'
+                        'This name or code already exists.'
                 });
         }
 
