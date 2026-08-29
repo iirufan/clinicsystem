@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>Clinic Dashboard</title>
 
@@ -12,6 +16,7 @@
 />
 
 <style>
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -36,6 +41,7 @@
     --red-light:#fff0f3;
 
     --cyan:#13b8c8;
+    --cyan-light:#e7fafd;
 
     --text:#12213f;
     --muted:#71809c;
@@ -65,12 +71,14 @@ body{
     color:var(--text);
 }
 
+
 /* =========================================================
    SIDEBAR
 ========================================================= */
 
 .sidebar{
     position:fixed;
+
     left:0;
     top:0;
     bottom:0;
@@ -90,6 +98,7 @@ body{
     padding:22px 16px;
 
     display:flex;
+
     flex-direction:column;
 
     z-index:1000;
@@ -97,7 +106,9 @@ body{
 
 .brand{
     display:flex;
+
     align-items:center;
+
     gap:13px;
 
     padding:2px 7px 25px;
@@ -110,6 +121,7 @@ body{
     border-radius:15px;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
@@ -129,24 +141,31 @@ body{
 
 .brand-name{
     font-size:21px;
+
     font-weight:800;
 }
 
 .brand-sub{
     margin-top:3px;
+
     font-size:12px;
+
     opacity:.78;
 }
 
 .nav{
     display:flex;
+
     flex-direction:column;
+
     gap:7px;
 }
 
 .nav-item{
     display:flex;
+
     align-items:center;
+
     gap:14px;
 
     min-height:48px;
@@ -155,11 +174,18 @@ body{
 
     border-radius:12px;
 
-    color:rgba(255,255,255,.88);
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .88
+        );
 
     text-decoration:none;
 
     font-size:14px;
+
     font-weight:600;
 
     transition:.2s;
@@ -167,12 +193,21 @@ body{
 
 .nav-item i{
     width:23px;
+
     font-size:18px;
+
     text-align:center;
 }
 
 .nav-item:hover{
-    background:rgba(255,255,255,.13);
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .13
+        );
+
     color:white;
 }
 
@@ -180,13 +215,28 @@ body{
     background:
         linear-gradient(
             135deg,
-            rgba(71,170,255,.95),
-            rgba(44,138,244,.9)
+            rgba(
+                71,
+                170,
+                255,
+                .95
+            ),
+            rgba(
+                44,
+                138,
+                244,
+                .9
+            )
         );
 
     box-shadow:
         0 8px 18px
-        rgba(0,0,0,.12);
+        rgba(
+            0,
+            0,
+            0,
+            .12
+        );
 
     color:white;
 }
@@ -195,35 +245,50 @@ body{
     margin-top:auto;
 }
 
-.health-card{
+.system-card{
     margin-top:20px;
 
-    padding:18px;
+    padding:17px;
 
     border-radius:18px;
 
     background:
-        rgba(255,255,255,.10);
+        rgba(
+            255,
+            255,
+            255,
+            .10
+        );
 
     border:
-        1px solid rgba(255,255,255,.12);
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .12
+        );
 
     text-align:center;
 }
 
-.health-card i{
-    font-size:28px;
+.system-card i{
+    font-size:27px;
+
     margin-bottom:10px;
 }
 
-.health-card strong{
+.system-card strong{
     display:block;
-    font-size:14px;
+
+    font-size:13px;
 }
 
-.health-card small{
+.system-card small{
     display:block;
+
     opacity:.75;
+
     margin-top:5px;
 }
 
@@ -233,10 +298,18 @@ body{
     padding:14px 10px 4px;
 
     border-top:
-        1px solid rgba(255,255,255,.16);
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .16
+        );
 
     display:flex;
+
     align-items:center;
+
     gap:11px;
 }
 
@@ -249,6 +322,7 @@ body{
     background:white;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
@@ -259,12 +333,15 @@ body{
 
 .profile-name{
     font-size:13px;
+
     font-weight:700;
 }
 
 .profile-role{
     font-size:11px;
+
     opacity:.74;
+
     margin-top:2px;
 }
 
@@ -275,22 +352,22 @@ body{
     height:36px;
 
     border:0;
+
     border-radius:10px;
 
     background:
-        rgba(255,255,255,.14);
+        rgba(
+            255,
+            255,
+            255,
+            .14
+        );
 
     color:white;
 
     cursor:pointer;
-
-    transition:.2s;
 }
 
-.sidebar-logout:hover{
-    background:
-        rgba(255,255,255,.24);
-}
 
 /* =========================================================
    MAIN
@@ -298,8 +375,10 @@ body{
 
 .main{
     margin-left:260px;
+
     min-height:100vh;
 }
+
 
 /* =========================================================
    TOPBAR
@@ -311,14 +390,17 @@ body{
     background:white;
 
     display:flex;
+
     align-items:center;
 
     padding:0 28px;
 
     border-bottom:
-        1px solid var(--border);
+        1px solid
+        var(--border);
 
     position:sticky;
+
     top:0;
 
     z-index:500;
@@ -331,9 +413,11 @@ body{
     height:40px;
 
     border:0;
+
     border-radius:10px;
 
     background:#eef5ff;
+
     color:var(--blue);
 
     font-size:18px;
@@ -353,13 +437,16 @@ body{
     width:100%;
 
     border:
-        1px solid var(--border);
+        1px solid
+        var(--border);
 
     border-radius:14px;
 
     padding:
-        13px 42px
-        13px 17px;
+        13px
+        42px
+        13px
+        17px;
 
     font-size:13px;
 
@@ -368,9 +455,24 @@ body{
     background:#fafcff;
 }
 
+.search-box input:focus{
+    border-color:var(--blue);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            11,
+            117,
+            229,
+            .08
+        );
+}
+
 .search-box i{
     position:absolute;
+
     right:16px;
+
     top:50%;
 
     transform:
@@ -383,7 +485,9 @@ body{
     margin-left:auto;
 
     display:flex;
+
     align-items:center;
+
     gap:11px;
 }
 
@@ -406,13 +510,17 @@ body{
 
 .notification-dot{
     position:absolute;
+
     right:-1px;
+
     top:-4px;
 
     background:#ff4058;
+
     color:white;
 
     min-width:17px;
+
     height:17px;
 
     border-radius:20px;
@@ -420,15 +528,21 @@ body{
     font-size:9px;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
-    border:2px solid white;
+    border:
+        2px solid
+        white;
 }
 
 .top-profile{
     display:flex;
+
     align-items:center;
+
     gap:10px;
 
     margin-left:5px;
@@ -436,7 +550,8 @@ body{
     padding-left:14px;
 
     border-left:
-        1px solid var(--border);
+        1px solid
+        var(--border);
 }
 
 .top-avatar{
@@ -446,7 +561,9 @@ body{
     border-radius:50%;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     background:
@@ -463,29 +580,37 @@ body{
 
 .top-name{
     font-size:13px;
+
     font-weight:800;
 }
 
 .top-role{
     font-size:11px;
+
     color:var(--green);
+
     font-weight:700;
 }
 
 .time-area{
     text-align:right;
+
     padding-left:15px;
 }
 
 .clock{
     color:var(--blue);
+
     font-size:14px;
+
     font-weight:800;
 }
 
 .date{
     font-size:10px;
+
     color:var(--muted);
+
     margin-top:2px;
 }
 
@@ -512,20 +637,21 @@ body{
     cursor:pointer;
 
     display:flex;
+
     align-items:center;
+
     gap:8px;
 
     box-shadow:
         0 6px 16px
-        rgba(233,70,94,.18);
-
-    transition:.2s;
+        rgba(
+            233,
+            70,
+            94,
+            .18
+        );
 }
 
-.top-logout:hover{
-    transform:
-        translateY(-1px);
-}
 
 /* =========================================================
    CONTENT
@@ -537,7 +663,10 @@ body{
 
 .welcome{
     display:flex;
-    justify-content:space-between;
+
+    justify-content:
+        space-between;
+
     align-items:center;
 
     margin-bottom:22px;
@@ -549,7 +678,9 @@ body{
 
 .welcome p{
     color:var(--muted);
+
     margin-top:5px;
+
     font-size:14px;
 }
 
@@ -559,7 +690,8 @@ body{
     padding:11px 15px;
 
     border:
-        1px solid var(--border);
+        1px solid
+        var(--border);
 
     border-radius:13px;
 
@@ -567,6 +699,7 @@ body{
 
     box-shadow:var(--shadow);
 }
+
 
 /* =========================================================
    STATS
@@ -576,7 +709,10 @@ body{
     display:grid;
 
     grid-template-columns:
-        repeat(4,1fr);
+        repeat(
+            4,
+            1fr
+        );
 
     gap:16px;
 
@@ -595,7 +731,13 @@ body{
     overflow:hidden;
 
     border:
-        1px solid rgba(0,0,0,.04);
+        1px solid
+        rgba(
+            0,
+            0,
+            0,
+            .04
+        );
 }
 
 .stat.blue{
@@ -636,28 +778,29 @@ body{
 
 .stat-title{
     font-size:12px;
+
     margin-bottom:8px;
 }
 
 .stat-value{
     font-size:29px;
+
     font-weight:800;
 }
 
 .stat-sub{
     margin-top:10px;
-    font-size:11px;
-    color:#5f718d;
-}
 
-.stat-sub.up{
-    color:#14a46c;
+    font-size:11px;
+
+    color:#5f718d;
 }
 
 .stat-icon{
     position:absolute;
 
     right:18px;
+
     top:19px;
 
     width:53px;
@@ -666,7 +809,9 @@ body{
     border-radius:50%;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     font-size:23px;
@@ -674,57 +819,61 @@ body{
 
 .blue .stat-icon{
     color:#1684f5;
+
     background:#cfe7ff;
 }
 
 .green .stat-icon{
     color:#12a56c;
+
     background:#c9f2e0;
 }
 
 .purple .stat-icon{
     color:#7147f5;
+
     background:#ded5ff;
 }
 
 .orange .stat-icon{
     color:#ef8a21;
+
     background:#ffe1bd;
 }
 
+
 /* =========================================================
-   GRID
+   MAIN GRID
 ========================================================= */
 
 .grid-main{
     display:grid;
 
     grid-template-columns:
-        1.45fr
-        1fr
-        .82fr;
+        1.2fr
+        .9fr;
 
-    gap:17px;
+    gap:18px;
 
-    margin-bottom:17px;
+    margin-bottom:18px;
 }
 
 .grid-bottom{
     display:grid;
 
     grid-template-columns:
-        .95fr
-        1.4fr
+        1fr
         1fr;
 
-    gap:17px;
+    gap:18px;
 }
 
 .card{
     background:white;
 
     border:
-        1px solid var(--border);
+        1px solid
+        var(--border);
 
     border-radius:18px;
 
@@ -735,7 +884,10 @@ body{
 
 .card-head{
     display:flex;
-    justify-content:space-between;
+
+    justify-content:
+        space-between;
+
     align-items:center;
 
     margin-bottom:18px;
@@ -743,132 +895,139 @@ body{
 
 .card-title{
     font-size:16px;
+
     font-weight:800;
+}
+
+.card-subtitle{
+    margin-top:4px;
+
+    font-size:10px;
+
+    color:var(--muted);
 }
 
 .view-link{
     border:0;
+
     background:none;
+
     color:var(--blue);
 
     font-size:11px;
+
     font-weight:700;
 
     cursor:pointer;
 }
 
+
 /* =========================================================
-   APPOINTMENT GRAPH
+   QUICK ACTIONS
 ========================================================= */
 
-.legend{
-    display:flex;
-    gap:18px;
+.quick-grid{
+    display:grid;
 
-    margin-bottom:15px;
+    grid-template-columns:
+        repeat(
+            3,
+            1fr
+        );
 
-    font-size:10px;
-    color:#52627a;
+    gap:12px;
 }
 
-.dot{
-    width:9px;
-    height:9px;
+.quick{
+    min-height:105px;
 
-    border-radius:50%;
+    border:0;
 
-    display:inline-block;
+    border-radius:16px;
 
-    margin-right:5px;
+    cursor:pointer;
+
+    padding:15px 10px;
+
+    background:#f7f9fd;
+
+    transition:.2s;
+
+    color:#34435c;
 }
 
-.chart{
-    height:215px;
+.quick:hover{
+    transform:
+        translateY(-3px);
 
-    position:relative;
-
-    display:flex;
-    align-items:flex-end;
-
-    gap:16px;
-
-    padding:
-        15px 10px
-        27px;
-
-    border-bottom:
-        1px solid #dfe6f0;
+    box-shadow:
+        0 8px 18px
+        rgba(
+            26,
+            55,
+            90,
+            .10
+        );
 }
 
-.chart::before,
-.chart::after{
-    content:"";
+.quick i{
+    font-size:25px;
 
-    position:absolute;
-    left:0;
-    right:0;
+    display:block;
 
-    height:1px;
-
-    background:#edf1f6;
+    margin-bottom:10px;
 }
 
-.chart::before{
-    top:33%;
+.quick span{
+    font-size:11px;
+
+    font-weight:800;
 }
 
-.chart::after{
-    top:66%;
-}
+.quick small{
+    display:block;
 
-.day-column{
-    flex:1;
-
-    height:100%;
-
-    display:flex;
-    flex-direction:column;
-
-    justify-content:flex-end;
-    align-items:center;
-
-    position:relative;
-
-    z-index:2;
-}
-
-.bars{
-    height:155px;
-
-    display:flex;
-    align-items:flex-end;
-    gap:3px;
-}
-
-.bar{
-    width:7px;
-    border-radius:5px 5px 2px 2px;
-}
-
-.bar.blue{
-    background:#2e88f5;
-}
-
-.bar.green{
-    background:#39c48a;
-}
-
-.bar.red{
-    background:#ff6678;
-}
-
-.day{
-    position:absolute;
-    bottom:-24px;
+    margin-top:4px;
 
     font-size:9px;
-    color:#75839a;
+
+    color:#8391a5;
+
+    font-weight:500;
 }
+
+.quick.appointment i{
+    color:#1287f3;
+}
+
+.quick.patient i{
+    color:#16a56f;
+}
+
+.quick.medical i{
+    color:#7650eb;
+}
+
+.quick.memo i{
+    color:#ff676c;
+}
+
+.quick.doctor i{
+    color:#13a9bb;
+}
+
+.quick.report i{
+    color:#ed972a;
+}
+
+.quick.master i{
+    color:#7c4dff;
+}
+
+.quick.users i{
+    color:#136dc3;
+}
+
 
 /* =========================================================
    APPOINTMENTS
@@ -876,13 +1035,16 @@ body{
 
 .appointment{
     display:flex;
+
     align-items:center;
+
     gap:11px;
 
     padding:12px 0;
 
     border-bottom:
-        1px solid #edf1f6;
+        1px solid
+        #edf1f6;
 }
 
 .appointment:last-child{
@@ -890,13 +1052,15 @@ body{
 }
 
 .patient-avatar{
-    width:38px;
-    height:38px;
+    width:40px;
+    height:40px;
 
     border-radius:50%;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     flex:none;
@@ -919,104 +1083,36 @@ body{
 
 .appointment-name{
     font-size:12px;
+
     font-weight:800;
 }
 
 .appointment-type{
     font-size:10px;
+
     color:var(--muted);
+
     margin-top:3px;
 }
 
 .appointment-time{
     text-align:right;
+
     font-size:10px;
+
     color:var(--blue);
+
     font-weight:700;
 }
 
-.doctor{
+.appointment-status{
     display:block;
-    color:#63728a;
+
     margin-top:4px;
+
+    color:#13a56f;
 }
 
-/* =========================================================
-   QUICK ACTIONS
-========================================================= */
-
-.quick-grid{
-    display:grid;
-    grid-template-columns:
-        repeat(2,1fr);
-
-    gap:10px;
-}
-
-.quick{
-    min-height:84px;
-
-    border:0;
-    border-radius:14px;
-
-    cursor:pointer;
-
-    padding:12px 8px;
-
-    background:#f7f9fd;
-
-    transition:.2s;
-
-    color:#34435c;
-}
-
-.quick:hover{
-    transform:
-        translateY(-2px);
-
-    box-shadow:
-        0 7px 15px
-        rgba(26,55,90,.08);
-}
-
-.quick i{
-    font-size:22px;
-    display:block;
-    margin-bottom:8px;
-}
-
-.quick span{
-    font-size:10px;
-    font-weight:700;
-}
-
-.quick.patient i{
-    color:#1287f3;
-}
-
-.quick.appointment-btn i{
-    color:#16a56f;
-}
-
-.quick.memo i{
-    color:#ff6b68;
-}
-
-.quick.doctor-btn i{
-    color:#7649f3;
-}
-
-.quick.report i{
-    color:#ef9525;
-}
-
-.quick.users i{
-    color:#12a9bb;
-}
-
-.quick.master i{
-    color:#7c4dff;
-}
 
 /* =========================================================
    RECENT PATIENTS
@@ -1024,12 +1120,14 @@ body{
 
 .recent-patient{
     display:flex;
+
     align-items:center;
 
-    padding:10px 0;
+    padding:11px 0;
 
     border-bottom:
-        1px solid #edf1f6;
+        1px solid
+        #edf1f6;
 }
 
 .recent-patient:last-child{
@@ -1038,189 +1136,146 @@ body{
 
 .recent-info{
     margin-left:10px;
+
     flex:1;
 }
 
 .recent-name{
     font-size:12px;
+
     font-weight:700;
 }
 
 .recent-details{
     font-size:10px;
+
     color:var(--muted);
+
     margin-top:3px;
 }
 
-.recent-time{
-    font-size:9px;
-    color:#16a16a;
-}
 
 /* =========================================================
-   REVENUE
+   CLINIC LINKS
 ========================================================= */
 
-.revenue-wrap{
+.link-list{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:10px;
+}
+
+.system-link{
     display:flex;
+
     align-items:center;
 
-    gap:25px;
-}
-
-.donut{
-    width:155px;
-    height:155px;
-
-    border-radius:50%;
-
-    background:
-        conic-gradient(
-            #348cf5 0 49%,
-            #38c486 49% 71%,
-            #ffad38 71% 87%,
-            #8d61e8 87% 100%
-        );
-
-    position:relative;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.donut::after{
-    content:"";
-
-    position:absolute;
-
-    width:98px;
-    height:98px;
-
-    background:white;
-
-    border-radius:50%;
-}
-
-.donut-center{
-    position:relative;
-    z-index:2;
-
-    text-align:center;
-}
-
-.donut-value{
-    font-size:20px;
-    font-weight:800;
-}
-
-.donut-label{
-    font-size:10px;
-    color:var(--muted);
-    margin-top:3px;
-}
-
-.revenue-list{
-    flex:1;
-}
-
-.revenue-row{
-    display:flex;
-    align-items:center;
-
-    padding:8px 0;
-
-    font-size:10px;
-
-    border-bottom:
-        1px solid #edf1f6;
-}
-
-.revenue-row:last-child{
-    border-bottom:0;
-}
-
-.revenue-name{
-    flex:1;
-}
-
-.revenue-value{
-    font-weight:700;
-}
-
-/* =========================================================
-   NOTICE
-========================================================= */
-
-.notice{
-    display:flex;
-    align-items:center;
     gap:12px;
 
-    padding:12px;
+    padding:14px;
 
-    border-radius:12px;
+    border-radius:13px;
 
     background:#f8faff;
 
-    margin-bottom:9px;
+    text-decoration:none;
+
+    color:var(--text);
+
+    border:
+        1px solid
+        #edf1f7;
+
+    transition:.2s;
 }
 
-.notice-icon{
-    width:38px;
-    height:38px;
+.system-link:hover{
+    transform:
+        translateY(-2px);
+
+    border-color:#d8e6f4;
+}
+
+.system-link-icon{
+    width:42px;
+    height:42px;
+
+    flex:none;
 
     border-radius:11px;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
+    font-size:18px;
 }
 
-.notice-text{
-    flex:1;
-}
-
-.notice-title{
+.link-title{
     font-size:11px;
+
     font-weight:800;
 }
 
-.notice-sub{
+.link-sub{
     margin-top:3px;
+
     font-size:9px;
+
     color:var(--muted);
 }
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty{
+    text-align:center;
+
+    padding:30px 15px;
+
+    color:#8794a7;
+
+    font-size:11px;
+}
+
+.empty i{
+    display:block;
+
+    margin-bottom:9px;
+
+    color:#bbc8d6;
+
+    font-size:28px;
+}
+
 
 /* =========================================================
    RESPONSIVE
 ========================================================= */
 
-@media(max-width:1250px){
+@media(max-width:1150px){
 
     .stats{
         grid-template-columns:
-            repeat(2,1fr);
+            repeat(
+                2,
+                1fr
+            );
     }
 
-    .grid-main{
+    .quick-grid{
         grid-template-columns:
-            1.3fr 1fr;
-    }
-
-    .quick-actions-card{
-        grid-column:
-            span 2;
-    }
-
-    .grid-bottom{
-        grid-template-columns:
-            repeat(2,1fr);
-    }
-
-    .notices-card{
-        grid-column:
-            span 2;
+            repeat(
+                2,
+                1fr
+            );
     }
 }
 
@@ -1244,12 +1299,14 @@ body{
 
     .mobile-menu{
         display:block;
+
         margin-right:12px;
     }
 
     .search-box{
-        width:auto;
         flex:1;
+
+        width:auto;
     }
 
     .top-profile,
@@ -1261,11 +1318,6 @@ body{
     .grid-bottom{
         grid-template-columns:1fr;
     }
-
-    .quick-actions-card,
-    .notices-card{
-        grid-column:auto;
-    }
 }
 
 @media(max-width:620px){
@@ -1276,8 +1328,14 @@ body{
 
     .top-logout{
         width:42px;
+
         padding:0;
+
         justify-content:center;
+    }
+
+    .link-list{
+        grid-template-columns:1fr;
     }
 }
 
@@ -1295,6 +1353,14 @@ body{
         grid-template-columns:1fr;
     }
 
+    .quick-grid{
+        grid-template-columns:
+            repeat(
+                2,
+                1fr
+            );
+    }
+
     .welcome{
         align-items:flex-start;
     }
@@ -1306,16 +1372,13 @@ body{
     .welcome h1{
         font-size:23px;
     }
-
-    .revenue-wrap{
-        flex-direction:column;
-    }
 }
 
 </style>
 </head>
 
 <body>
+
 
 <!-- =====================================================
      SIDEBAR
@@ -1357,6 +1420,7 @@ body{
             Dashboard
         </a>
 
+
         <a
             href="appointments.html"
             class="nav-item"
@@ -1365,21 +1429,15 @@ body{
             Appointments
         </a>
 
+
         <a
             href="patients.html"
             class="nav-item"
         >
-            <i class="fa-solid fa-users"></i>
-            Patients
+            <i class="fa-solid fa-hospital-user"></i>
+            Patient Registry
         </a>
 
-        <a
-            href="doctors.html"
-            class="nav-item"
-        >
-            <i class="fa-solid fa-user-doctor"></i>
-            Doctors
-        </a>
 
         <a
             href="medical.html"
@@ -1389,13 +1447,24 @@ body{
             Medical History
         </a>
 
+
         <a
             href="memo.html"
             class="nav-item"
         >
-            <i class="fa-solid fa-file-invoice-dollar"></i>
+            <i class="fa-solid fa-file-invoice"></i>
             Memo / Billing
         </a>
+
+
+        <a
+            href="doctors.html"
+            class="nav-item"
+        >
+            <i class="fa-solid fa-user-doctor"></i>
+            Doctors
+        </a>
+
 
         <a
             href="insurance.html"
@@ -1405,6 +1474,7 @@ body{
             Insurance
         </a>
 
+
         <a
             href="reports.html"
             class="nav-item"
@@ -1412,6 +1482,7 @@ body{
             <i class="fa-solid fa-chart-column"></i>
             Reports
         </a>
+
 
         <a
             href="admin-master.html"
@@ -1422,6 +1493,7 @@ body{
             <i class="fa-solid fa-sliders"></i>
             Master Data
         </a>
+
 
         <a
             href="admin-users.html"
@@ -1438,16 +1510,16 @@ body{
 
     <div class="sidebar-bottom">
 
-        <div class="health-card">
+        <div class="system-card">
 
             <i class="fa-solid fa-heart-pulse"></i>
 
             <strong>
-                Healthy day ahead!
+                Clinic system ready
             </strong>
 
-            <small id="sidebarAppointments">
-                Clinic operations ready
+            <small>
+                Manage patients and appointments
             </small>
 
         </div>
@@ -1461,6 +1533,7 @@ body{
             >
                 U
             </div>
+
 
             <div>
 
@@ -1502,6 +1575,9 @@ body{
 
 <div class="main">
 
+
+    <!-- TOPBAR -->
+
     <header class="topbar">
 
         <button
@@ -1516,7 +1592,7 @@ body{
 
             <input
                 type="text"
-                placeholder="Search patient, appointment..."
+                placeholder="Search patient by ID, name or contact..."
                 id="globalSearch"
             >
 
@@ -1527,11 +1603,17 @@ body{
 
         <div class="top-actions">
 
-            <button class="icon-button">
+            <button
+                class="icon-button"
+                title="Notifications"
+            >
 
                 <i class="fa-regular fa-bell"></i>
 
-                <span class="notification-dot">
+                <span
+                    class="notification-dot"
+                    id="notificationCount"
+                >
                     0
                 </span>
 
@@ -1586,7 +1668,6 @@ body{
             <button
                 class="top-logout"
                 onclick="logout()"
-                title="Logout"
             >
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span>Logout</span>
@@ -1597,14 +1678,19 @@ body{
     </header>
 
 
+    <!-- CONTENT -->
+
     <main class="content">
+
+
+        <!-- WELCOME -->
 
         <div class="welcome">
 
             <div>
 
                 <h1>
-                    Welcome back,
+                    Welcome,
                     <span id="welcomeName">
                         User
                     </span>
@@ -1612,10 +1698,11 @@ body{
                 </h1>
 
                 <p>
-                    Here's what's happening in your clinic today.
+                    Manage today's clinic activities from one place.
                 </p>
 
             </div>
+
 
             <div
                 class="today"
@@ -1625,7 +1712,12 @@ body{
         </div>
 
 
+        <!-- =================================================
+             STATUS CARDS
+        ================================================== -->
+
         <section class="stats">
+
 
             <div class="stat blue">
 
@@ -1664,8 +1756,8 @@ body{
                     0
                 </div>
 
-                <div class="stat-sub up">
-                    Today's schedule
+                <div class="stat-sub">
+                    Scheduled today
                 </div>
 
                 <div class="stat-icon">
@@ -1678,7 +1770,7 @@ body{
             <div class="stat purple">
 
                 <div class="stat-title">
-                    Total Doctors
+                    Active Doctors
                 </div>
 
                 <div
@@ -1689,7 +1781,7 @@ body{
                 </div>
 
                 <div class="stat-sub">
-                    Active doctors
+                    Available clinic doctors
                 </div>
 
                 <div class="stat-icon">
@@ -1702,22 +1794,22 @@ body{
             <div class="stat orange">
 
                 <div class="stat-title">
-                    Today's Revenue
+                    Unregistered Appointments
                 </div>
 
                 <div
                     class="stat-value"
-                    id="todayRevenue"
+                    id="unregisteredPatients"
                 >
-                    0.00
+                    0
                 </div>
 
                 <div class="stat-sub">
-                    MVR
+                    Patients awaiting registration
                 </div>
 
                 <div class="stat-icon">
-                    <i class="fa-solid fa-wallet"></i>
+                    <i class="fa-solid fa-user-clock"></i>
                 </div>
 
             </div>
@@ -1725,129 +1817,223 @@ body{
         </section>
 
 
+        <!-- =================================================
+             QUICK ACTIONS + APPOINTMENTS
+        ================================================== -->
+
         <section class="grid-main">
+
+
+            <!-- QUICK ACTIONS -->
 
             <div class="card">
 
                 <div class="card-head">
 
-                    <div class="card-title">
-                        Appointments Overview
+                    <div>
+
+                        <div class="card-title">
+                            Quick Actions
+                        </div>
+
+                        <div class="card-subtitle">
+                            Common clinic tasks
+                        </div>
+
                     </div>
 
-                    <button class="view-link">
-                        This Week
+                </div>
+
+
+                <div class="quick-grid">
+
+
+                    <button
+                        class="quick appointment"
+                        onclick="
+                            location.href='appointments.html'
+                        "
+                    >
+
+                        <i class="fa-solid fa-calendar-plus"></i>
+
+                        <span>
+                            New Appointment
+                        </span>
+
+                        <small>
+                            Book patient visit
+                        </small>
+
                     </button>
 
-                </div>
+
+                    <button
+                        class="quick patient"
+                        onclick="
+                            location.href='patients.html'
+                        "
+                    >
+
+                        <i class="fa-solid fa-user-plus"></i>
+
+                        <span>
+                            Patient Registry
+                        </span>
+
+                        <small>
+                            Register or search patient
+                        </small>
+
+                    </button>
 
 
-                <div class="legend">
+                    <button
+                        class="quick medical"
+                        onclick="
+                            location.href='medical.html'
+                        "
+                    >
 
-                    <span>
-                        <span
-                            class="dot"
-                            style="background:#2e88f5"
-                        ></span>
-                        Appointments
-                    </span>
+                        <i class="fa-solid fa-notes-medical"></i>
 
-                    <span>
-                        <span
-                            class="dot"
-                            style="background:#39c48a"
-                        ></span>
-                        Completed
-                    </span>
+                        <span>
+                            Medical History
+                        </span>
 
-                    <span>
-                        <span
-                            class="dot"
-                            style="background:#ff6678"
-                        ></span>
-                        Cancelled
-                    </span>
+                        <small>
+                            Patient clinical records
+                        </small>
 
-                </div>
+                    </button>
 
 
-                <div class="chart">
+                    <button
+                        class="quick memo"
+                        onclick="
+                            location.href='memo.html'
+                        "
+                    >
 
-                    <div class="day-column">
-                        <div class="bars">
-                            <div class="bar blue" style="height:55%"></div>
-                            <div class="bar green" style="height:35%"></div>
-                            <div class="bar red" style="height:10%"></div>
-                        </div>
-                        <div class="day">Sun</div>
-                    </div>
+                        <i class="fa-solid fa-file-invoice"></i>
 
-                    <div class="day-column">
-                        <div class="bars">
-                            <div class="bar blue" style="height:70%"></div>
-                            <div class="bar green" style="height:48%"></div>
-                            <div class="bar red" style="height:8%"></div>
-                        </div>
-                        <div class="day">Mon</div>
-                    </div>
+                        <span>
+                            Memo / Billing
+                        </span>
 
-                    <div class="day-column">
-                        <div class="bars">
-                            <div class="bar blue" style="height:82%"></div>
-                            <div class="bar green" style="height:60%"></div>
-                            <div class="bar red" style="height:13%"></div>
-                        </div>
-                        <div class="day">Tue</div>
-                    </div>
+                        <small>
+                            Create patient memo
+                        </small>
 
-                    <div class="day-column">
-                        <div class="bars">
-                            <div class="bar blue" style="height:72%"></div>
-                            <div class="bar green" style="height:52%"></div>
-                            <div class="bar red" style="height:7%"></div>
-                        </div>
-                        <div class="day">Wed</div>
-                    </div>
+                    </button>
 
-                    <div class="day-column">
-                        <div class="bars">
-                            <div class="bar blue" style="height:92%"></div>
-                            <div class="bar green" style="height:70%"></div>
-                            <div class="bar red" style="height:12%"></div>
-                        </div>
-                        <div class="day">Thu</div>
-                    </div>
 
-                    <div class="day-column">
-                        <div class="bars">
-                            <div class="bar blue" style="height:66%"></div>
-                            <div class="bar green" style="height:45%"></div>
-                            <div class="bar red" style="height:6%"></div>
-                        </div>
-                        <div class="day">Fri</div>
-                    </div>
+                    <button
+                        class="quick doctor"
+                        onclick="
+                            location.href='doctors.html'
+                        "
+                    >
 
-                    <div class="day-column">
-                        <div class="bars">
-                            <div class="bar blue" style="height:78%"></div>
-                            <div class="bar green" style="height:58%"></div>
-                            <div class="bar red" style="height:9%"></div>
-                        </div>
-                        <div class="day">Sat</div>
-                    </div>
+                        <i class="fa-solid fa-user-doctor"></i>
+
+                        <span>
+                            Doctors
+                        </span>
+
+                        <small>
+                            Doctor information
+                        </small>
+
+                    </button>
+
+
+                    <button
+                        class="quick report"
+                        onclick="
+                            location.href='reports.html'
+                        "
+                    >
+
+                        <i class="fa-solid fa-chart-column"></i>
+
+                        <span>
+                            Reports
+                        </span>
+
+                        <small>
+                            Clinic reports
+                        </small>
+
+                    </button>
+
+
+                    <button
+                        class="quick master"
+                        id="quickMaster"
+                        style="display:none;"
+                        onclick="
+                            location.href='admin-master.html'
+                        "
+                    >
+
+                        <i class="fa-solid fa-sliders"></i>
+
+                        <span>
+                            Master Data
+                        </span>
+
+                        <small>
+                            Services and setup
+                        </small>
+
+                    </button>
+
+
+                    <button
+                        class="quick users"
+                        id="quickUsers"
+                        style="display:none;"
+                        onclick="
+                            location.href='admin-users.html'
+                        "
+                    >
+
+                        <i class="fa-solid fa-user-gear"></i>
+
+                        <span>
+                            Users & Access
+                        </span>
+
+                        <small>
+                            Approve and manage users
+                        </small>
+
+                    </button>
 
                 </div>
 
             </div>
 
 
+            <!-- TODAY APPOINTMENTS -->
+
             <div class="card">
 
                 <div class="card-head">
 
-                    <div class="card-title">
-                        Upcoming Appointments
+                    <div>
+
+                        <div class="card-title">
+                            Today's Appointments
+                        </div>
+
+                        <div class="card-subtitle">
+                            Upcoming patients
+                        </div>
+
                     </div>
+
 
                     <button
                         class="view-link"
@@ -1860,115 +2046,16 @@ body{
 
                 </div>
 
+
                 <div id="appointmentList">
 
-                    <div
-                        style="
-                            text-align:center;
-                            padding:30px;
-                            color:#8793a7;
-                        "
-                    >
-                        No appointments loaded yet.
+                    <div class="empty">
+
+                        <i class="fa-regular fa-calendar"></i>
+
+                        No appointments loaded.
+
                     </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="card quick-actions-card">
-
-                <div class="card-head">
-
-                    <div class="card-title">
-                        Quick Actions
-                    </div>
-
-                </div>
-
-
-                <div class="quick-grid">
-
-                    <button
-                        class="quick patient"
-                        onclick="
-                            location.href='patients.html'
-                        "
-                    >
-                        <i class="fa-solid fa-user-plus"></i>
-                        <span>New Patient</span>
-                    </button>
-
-
-                    <button
-                        class="quick appointment-btn"
-                        onclick="
-                            location.href='appointments.html'
-                        "
-                    >
-                        <i class="fa-solid fa-calendar-plus"></i>
-                        <span>Appointment</span>
-                    </button>
-
-
-                    <button
-                        class="quick memo"
-                        onclick="
-                            location.href='memo.html'
-                        "
-                    >
-                        <i class="fa-solid fa-file-invoice-dollar"></i>
-                        <span>New Memo</span>
-                    </button>
-
-
-                    <button
-                        class="quick doctor-btn"
-                        onclick="
-                            location.href='doctors.html'
-                        "
-                    >
-                        <i class="fa-solid fa-user-doctor"></i>
-                        <span>Doctors</span>
-                    </button>
-
-
-                    <button
-                        class="quick report"
-                        onclick="
-                            location.href='reports.html'
-                        "
-                    >
-                        <i class="fa-solid fa-chart-line"></i>
-                        <span>Reports</span>
-                    </button>
-
-
-                    <button
-                        class="quick master"
-                        id="quickMaster"
-                        style="display:none;"
-                        onclick="
-                            location.href='admin-master.html'
-                        "
-                    >
-                        <i class="fa-solid fa-sliders"></i>
-                        <span>Master Data</span>
-                    </button>
-
-
-                    <button
-                        class="quick users"
-                        id="quickUsers"
-                        style="display:none;"
-                        onclick="
-                            location.href='admin-users.html'
-                        "
-                    >
-                        <i class="fa-solid fa-user-gear"></i>
-                        <span>Users</span>
-                    </button>
 
                 </div>
 
@@ -1977,15 +2064,31 @@ body{
         </section>
 
 
+        <!-- =================================================
+             BOTTOM
+        ================================================== -->
+
         <section class="grid-bottom">
+
+
+            <!-- RECENT PATIENTS -->
 
             <div class="card">
 
                 <div class="card-head">
 
-                    <div class="card-title">
-                        Recent Patients
+                    <div>
+
+                        <div class="card-title">
+                            Recent Patients
+                        </div>
+
+                        <div class="card-subtitle">
+                            Recently registered patients
+                        </div>
+
                     </div>
+
 
                     <button
                         class="view-link"
@@ -2001,209 +2104,221 @@ body{
 
                 <div id="recentPatients">
 
-                    <div
-                        style="
-                            text-align:center;
-                            padding:25px;
-                            color:#8793a7;
-                            font-size:12px;
-                        "
-                    >
-                        Patient information will appear here.
+                    <div class="empty">
+
+                        <i class="fa-solid fa-user-group"></i>
+
+                        No patient information loaded.
+
                     </div>
 
                 </div>
 
             </div>
 
+
+            <!-- SYSTEM LINKS -->
 
             <div class="card">
 
                 <div class="card-head">
 
-                    <div class="card-title">
-                        Revenue Overview
-                    </div>
+                    <div>
 
-                    <button class="view-link">
-                        This Month
-                    </button>
+                        <div class="card-title">
+                            Clinic Modules
+                        </div>
+
+                        <div class="card-subtitle">
+                            Open clinic management sections
+                        </div>
+
+                    </div>
 
                 </div>
 
 
-                <div class="revenue-wrap">
+                <div class="link-list">
 
-                    <div class="donut">
 
-                        <div class="donut-center">
+                    <a
+                        href="appointments.html"
+                        class="system-link"
+                    >
 
-                            <div
-                                class="donut-value"
-                                id="monthRevenue"
-                            >
-                                0
+                        <div
+                            class="system-link-icon"
+                            style="
+                                background:#e8f4ff;
+                                color:#1685e8;
+                            "
+                        >
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+
+                        <div>
+
+                            <div class="link-title">
+                                Appointments
                             </div>
 
-                            <div class="donut-label">
-                                MVR Total
+                            <div class="link-sub">
+                                Book and view appointments
                             </div>
 
                         </div>
 
-                    </div>
+                    </a>
 
 
-                    <div class="revenue-list">
-
-                        <div class="revenue-row">
-
-                            <span
-                                class="dot"
-                                style="background:#348cf5"
-                            ></span>
-
-                            <span class="revenue-name">
-                                Consultation
-                            </span>
-
-                            <span class="revenue-value">
-                                -
-                            </span>
-
-                        </div>
-
-
-                        <div class="revenue-row">
-
-                            <span
-                                class="dot"
-                                style="background:#38c486"
-                            ></span>
-
-                            <span class="revenue-name">
-                                Procedures
-                            </span>
-
-                            <span class="revenue-value">
-                                -
-                            </span>
-
-                        </div>
-
-
-                        <div class="revenue-row">
-
-                            <span
-                                class="dot"
-                                style="background:#ffad38"
-                            ></span>
-
-                            <span class="revenue-name">
-                                Other
-                            </span>
-
-                            <span class="revenue-value">
-                                -
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="card notices-card">
-
-                <div class="card-head">
-
-                    <div class="card-title">
-                        System Information
-                    </div>
-
-                </div>
-
-
-                <div class="notice">
-
-                    <div
-                        class="notice-icon"
-                        style="
-                            background:#e0efff;
-                            color:#2486ef;
-                        "
+                    <a
+                        href="patients.html"
+                        class="system-link"
                     >
-                        <i class="fa-solid fa-database"></i>
-                    </div>
 
-                    <div class="notice-text">
-
-                        <div class="notice-title">
-                            Neon Database
+                        <div
+                            class="system-link-icon"
+                            style="
+                                background:#e8faf3;
+                                color:#12aa78;
+                            "
+                        >
+                            <i class="fa-solid fa-hospital-user"></i>
                         </div>
 
-                        <div class="notice-sub">
-                            Connected clinic database
+                        <div>
+
+                            <div class="link-title">
+                                Patient Registry
+                            </div>
+
+                            <div class="link-sub">
+                                Register and update patients
+                            </div>
+
                         </div>
 
-                    </div>
-
-                </div>
+                    </a>
 
 
-                <div class="notice">
-
-                    <div
-                        class="notice-icon"
-                        style="
-                            background:#e5faed;
-                            color:#26ac65;
-                        "
+                    <a
+                        href="medical.html"
+                        class="system-link"
                     >
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
 
-                    <div class="notice-text">
-
-                        <div class="notice-title">
-                            Secure Access
+                        <div
+                            class="system-link-icon"
+                            style="
+                                background:#f0edff;
+                                color:#7655e8;
+                            "
+                        >
+                            <i class="fa-solid fa-notes-medical"></i>
                         </div>
 
-                        <div class="notice-sub">
-                            User approval system enabled
+                        <div>
+
+                            <div class="link-title">
+                                Medical History
+                            </div>
+
+                            <div class="link-sub">
+                                Patient treatment records
+                            </div>
+
                         </div>
 
-                    </div>
-
-                </div>
+                    </a>
 
 
-                <div class="notice">
-
-                    <div
-                        class="notice-icon"
-                        style="
-                            background:#fff0e2;
-                            color:#f08b28;
-                        "
+                    <a
+                        href="memo.html"
+                        class="system-link"
                     >
-                        <i class="fa-solid fa-heart-pulse"></i>
-                    </div>
 
-                    <div class="notice-text">
-
-                        <div class="notice-title">
-                            Clinic System
+                        <div
+                            class="system-link-icon"
+                            style="
+                                background:#fff0f2;
+                                color:#e95067;
+                            "
+                        >
+                            <i class="fa-solid fa-file-invoice"></i>
                         </div>
 
-                        <div class="notice-sub">
-                            System operational
+                        <div>
+
+                            <div class="link-title">
+                                Memo / Billing
+                            </div>
+
+                            <div class="link-sub">
+                                Prepare patient memos
+                            </div>
+
                         </div>
 
-                    </div>
+                    </a>
+
+
+                    <a
+                        href="doctors.html"
+                        class="system-link"
+                    >
+
+                        <div
+                            class="system-link-icon"
+                            style="
+                                background:#e7fafd;
+                                color:#13a8ba;
+                            "
+                        >
+                            <i class="fa-solid fa-user-doctor"></i>
+                        </div>
+
+                        <div>
+
+                            <div class="link-title">
+                                Doctors
+                            </div>
+
+                            <div class="link-sub">
+                                Doctor information
+                            </div>
+
+                        </div>
+
+                    </a>
+
+
+                    <a
+                        href="insurance.html"
+                        class="system-link"
+                    >
+
+                        <div
+                            class="system-link-icon"
+                            style="
+                                background:#fff4e6;
+                                color:#ed9427;
+                            "
+                        >
+                            <i class="fa-solid fa-shield-heart"></i>
+                        </div>
+
+                        <div>
+
+                            <div class="link-title">
+                                Insurance
+                            </div>
+
+                            <div class="link-sub">
+                                Insurance information
+                            </div>
+
+                        </div>
+
+                    </a>
 
                 </div>
 
@@ -2219,7 +2334,7 @@ body{
 <script>
 
 /* =========================================================
-   LOGIN CHECK
+   LOGIN
 ========================================================= */
 
 const user =
@@ -2230,18 +2345,18 @@ const user =
     );
 
 
-if (!user) {
+if (!user){
 
-    window.location.href =
+    location.href =
         'login.html';
 }
 
 
 /* =========================================================
-   USER DISPLAY
+   USER
 ========================================================= */
 
-if (user) {
+if (user){
 
     const displayName =
         user.fullName ||
@@ -2260,128 +2375,76 @@ if (user) {
             .toUpperCase();
 
 
-    document
-        .getElementById(
-            'welcomeName'
-        )
-        .textContent =
-            firstName;
+    welcomeName.textContent =
+        firstName;
 
 
-    document
-        .getElementById(
-            'sideName'
-        )
-        .textContent =
-            displayName;
+    sideName.textContent =
+        displayName;
 
 
-    document
-        .getElementById(
-            'topName'
-        )
-        .textContent =
-            displayName;
+    topName.textContent =
+        displayName;
 
 
-    document
-        .getElementById(
-            'sideRole'
-        )
-        .textContent =
-            formatRole(
-                user.role
-            );
+    sideRole.textContent =
+        formatRole(
+            user.role
+        );
 
 
-    document
-        .getElementById(
-            'topRole'
-        )
-        .textContent =
-            formatRole(
-                user.role
-            );
+    topRole.textContent =
+        formatRole(
+            user.role
+        );
 
 
-    document
-        .getElementById(
-            'sideAvatar'
-        )
-        .textContent =
-            firstLetter;
+    sideAvatar.textContent =
+        firstLetter;
 
 
-    document
-        .getElementById(
-            'topAvatar'
-        )
-        .textContent =
-            firstLetter;
+    topAvatar.textContent =
+        firstLetter;
 
 
-    /* =============================================
-       ADMIN
-    ============================================= */
+    /* ADMIN */
 
     if (
         user.role === 'admin'
-    ) {
+    ){
 
-        document
-            .getElementById(
-                'adminUsersMenu'
-            )
-            .style
-            .display =
-                'flex';
+        adminUsersMenu.style.display =
+            'flex';
 
 
-        document
-            .getElementById(
-                'quickUsers'
-            )
-            .style
-            .display =
-                'block';
+        quickUsers.style.display =
+            'block';
     }
 
 
-    /* =============================================
-       ADMIN + SUPERVISOR
-    ============================================= */
+    /* ADMIN / SUPERVISOR */
 
     if (
         user.role === 'admin' ||
         user.role === 'supervisor'
-    ) {
+    ){
 
-        document
-            .getElementById(
-                'masterDataMenu'
-            )
-            .style
-            .display =
-                'flex';
+        masterDataMenu.style.display =
+            'flex';
 
 
-        document
-            .getElementById(
-                'quickMaster'
-            )
-            .style
-            .display =
-                'block';
+        quickMaster.style.display =
+            'block';
     }
 }
 
 
+function formatRole(role){
 
-function formatRole(role) {
-
-    if (!role) {
+    if (!role){
         return 'Staff';
     }
+
 
     return role
         .charAt(0)
@@ -2395,59 +2458,63 @@ function formatRole(role) {
    CLOCK
 ========================================================= */
 
-function updateClock() {
+function updateClock(){
 
     const now =
         new Date();
 
 
-    document
-        .getElementById(
-            'clock'
-        )
-        .textContent =
-            now.toLocaleTimeString(
-                [],
-                {
-                    hour:'2-digit',
-                    minute:'2-digit'
-                }
-            );
+    clock.textContent =
+        now.toLocaleTimeString(
+            [],
+            {
+                hour:
+                    '2-digit',
+
+                minute:
+                    '2-digit'
+            }
+        );
 
 
-    document
-        .getElementById(
-            'date'
-        )
-        .textContent =
-            now.toLocaleDateString(
-                [],
-                {
-                    day:'numeric',
-                    month:'short',
-                    year:'numeric'
-                }
-            );
+    date.textContent =
+        now.toLocaleDateString(
+            [],
+            {
+                day:
+                    'numeric',
+
+                month:
+                    'short',
+
+                year:
+                    'numeric'
+            }
+        );
 
 
-    document
-        .getElementById(
-            'todayBox'
-        )
-        .textContent =
-            now.toLocaleDateString(
-                [],
-                {
-                    weekday:'long',
-                    day:'numeric',
-                    month:'long',
-                    year:'numeric'
-                }
-            );
+    todayBox.textContent =
+        now.toLocaleDateString(
+            [],
+            {
+                weekday:
+                    'long',
+
+                day:
+                    'numeric',
+
+                month:
+                    'long',
+
+                year:
+                    'numeric'
+            }
+        );
 }
 
 
 updateClock();
+
 
 setInterval(
     updateClock,
@@ -2456,50 +2523,48 @@ setInterval(
 
 
 /* =========================================================
-   MOBILE SIDEBAR
+   MOBILE
 ========================================================= */
 
-function toggleSidebar() {
+function toggleSidebar(){
 
-    document
-        .getElementById(
-            'sidebar'
-        )
-        .classList
-        .toggle(
-            'open'
-        );
+    sidebar.classList.toggle(
+        'open'
+    );
 }
 
 
 document.addEventListener(
     'click',
-    function(event) {
+    function(event){
 
-        const sidebar =
-            document.getElementById(
-                'sidebar'
-            );
+        if (
+            window.innerWidth >
+            850
+        ){
+            return;
+        }
 
 
-        const menuButton =
+        const menu =
             document.querySelector(
                 '.mobile-menu'
             );
 
 
         if (
-            window.innerWidth <= 850 &&
             sidebar.classList.contains(
                 'open'
-            ) &&
+            )
+            &&
             !sidebar.contains(
                 event.target
-            ) &&
-            !menuButton.contains(
+            )
+            &&
+            !menu.contains(
                 event.target
             )
-        ) {
+        ){
 
             sidebar.classList.remove(
                 'open'
@@ -2510,10 +2575,364 @@ document.addEventListener(
 
 
 /* =========================================================
+   SEARCH
+========================================================= */
+
+globalSearch.addEventListener(
+    'keydown',
+    function(event){
+
+        if (
+            event.key !==
+            'Enter'
+        ){
+            return;
+        }
+
+
+        const query =
+            this.value.trim();
+
+
+        if (!query){
+            return;
+        }
+
+
+        location.href =
+            'patients.html?search='
+            +
+            encodeURIComponent(
+                query
+            );
+    }
+);
+
+
+/* =========================================================
+   OPTIONAL DASHBOARD DATA
+========================================================= */
+
+async function loadDashboard(){
+
+    try{
+
+        const response =
+            await fetch(
+                '/api/dashboard'
+            );
+
+
+        if (!response.ok){
+            return;
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success){
+            return;
+        }
+
+
+        const stats =
+            data.stats ||
+            {};
+
+
+        totalPatients.textContent =
+            stats.totalPatients ||
+            0;
+
+
+        todayAppointments.textContent =
+            stats.todayAppointments ||
+            0;
+
+
+        totalDoctors.textContent =
+            stats.totalDoctors ||
+            0;
+
+
+        unregisteredPatients.textContent =
+            stats.unregisteredPatients ||
+            0;
+
+
+        renderAppointments(
+            data.upcomingAppointments ||
+            []
+        );
+
+
+        renderRecentPatients(
+            data.recentPatients ||
+            []
+        );
+
+
+    }catch(error){
+
+        console.warn(
+            'Dashboard data unavailable:',
+            error
+        );
+    }
+}
+
+
+/* =========================================================
+   APPOINTMENTS
+========================================================= */
+
+function renderAppointments(rows){
+
+    if (!rows.length){
+
+        appointmentList.innerHTML = `
+
+            <div class="empty">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                No upcoming appointments.
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    appointmentList.innerHTML =
+        rows.map(
+            item => {
+
+                const name =
+                    item.patient_name ||
+                    'Patient';
+
+
+                const initial =
+                    name
+                        .charAt(0)
+                        .toUpperCase();
+
+
+                return `
+
+                    <div class="appointment">
+
+                        <div class="patient-avatar">
+
+                            ${escapeHtml(
+                                initial
+                            )}
+
+                        </div>
+
+
+                        <div class="appointment-info">
+
+                            <div class="appointment-name">
+
+                                ${escapeHtml(
+                                    name
+                                )}
+
+                            </div>
+
+
+                            <div class="appointment-type">
+
+                                ${escapeHtml(
+                                    item.doctor_name ||
+                                    ''
+                                )}
+
+                                ${
+                                    item.service_name
+                                    ?
+                                    ' • ' +
+                                    escapeHtml(
+                                        item.service_name
+                                    )
+                                    :
+                                    ''
+                                }
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="appointment-time">
+
+                            ${formatTime(
+                                item.appointment_time
+                            )}
+
+                            <span class="appointment-status">
+
+                                ${escapeHtml(
+                                    item.status ||
+                                    'BOOKED'
+                                )}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                `;
+            }
+        )
+        .join('');
+}
+
+
+/* =========================================================
+   RECENT PATIENTS
+========================================================= */
+
+function renderRecentPatients(rows){
+
+    if (!rows.length){
+
+        recentPatients.innerHTML = `
+
+            <div class="empty">
+
+                <i class="fa-solid fa-user-group"></i>
+
+                No recently registered patients.
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    recentPatients.innerHTML =
+        rows.map(
+            patient => `
+
+                <div class="recent-patient">
+
+                    <div class="patient-avatar">
+
+                        ${escapeHtml(
+                            String(
+                                patient.full_name ||
+                                'P'
+                            )
+                            .charAt(0)
+                            .toUpperCase()
+                        )}
+
+                    </div>
+
+
+                    <div class="recent-info">
+
+                        <div class="recent-name">
+
+                            ${escapeHtml(
+                                patient.full_name ||
+                                ''
+                            )}
+
+                        </div>
+
+
+                        <div class="recent-details">
+
+                            ${
+                                escapeHtml(
+                                    patient.patient_no ||
+                                    ''
+                                )
+                            }
+
+                            ${
+                                patient.phone
+                                ?
+                                ' • ' +
+                                escapeHtml(
+                                    patient.phone
+                                )
+                                :
+                                ''
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `
+        )
+        .join('');
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function formatTime(value){
+
+    return String(
+        value ||
+        ''
+    ).substring(
+        0,
+        5
+    );
+}
+
+
+function escapeHtml(value){
+
+    return String(
+        value ?? ''
+    )
+    .replaceAll(
+        '&',
+        '&amp;'
+    )
+    .replaceAll(
+        '<',
+        '&lt;'
+    )
+    .replaceAll(
+        '>',
+        '&gt;'
+    )
+    .replaceAll(
+        '"',
+        '&quot;'
+    )
+    .replaceAll(
+        "'",
+        '&#039;'
+    );
+}
+
+
+/* =========================================================
    LOGOUT
 ========================================================= */
 
-function logout() {
+function logout(){
 
     const confirmed =
         confirm(
@@ -2521,7 +2940,7 @@ function logout() {
         );
 
 
-    if (!confirmed) {
+    if (!confirmed){
         return;
     }
 
@@ -2531,48 +2950,16 @@ function logout() {
     );
 
 
-    window.location.href =
+    location.href =
         'login.html';
 }
 
 
 /* =========================================================
-   GLOBAL SEARCH
+   START
 ========================================================= */
 
-document
-    .getElementById(
-        'globalSearch'
-    )
-    .addEventListener(
-        'keydown',
-        function(event) {
-
-            if (
-                event.key !==
-                'Enter'
-            ) {
-                return;
-            }
-
-
-            const query =
-                this.value.trim();
-
-
-            if (!query) {
-                return;
-            }
-
-
-            window.location.href =
-                'patients.html?search='
-                +
-                encodeURIComponent(
-                    query
-                );
-        }
-    );
+loadDashboard();
 
 </script>
 
