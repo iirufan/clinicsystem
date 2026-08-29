@@ -1,16 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>Create Memo | Clinic</title>
+<title>Create Patient Memo | Clinic</title>
 
 <link
     rel="stylesheet"
@@ -18,7 +12,6 @@
 />
 
 <style>
-
 *{
     box-sizing:border-box;
     margin:0;
@@ -28,15 +21,23 @@
 :root{
     --blue:#0b7ee8;
     --blue-dark:#0864bd;
-    --green:#12aa78;
-    --purple:#7654e8;
-    --orange:#f3a13d;
-    --red:#e95067;
+    --blue-soft:#eaf5ff;
 
-    --text:#14223d;
+    --green:#12aa78;
+    --green-soft:#e9faf3;
+
+    --purple:#7654e8;
+    --purple-soft:#f0edff;
+
+    --orange:#f3a13d;
+    --orange-soft:#fff4e5;
+
+    --red:#e95067;
+    --red-soft:#fff0f2;
+
+    --text:#13213c;
     --muted:#718099;
     --border:#dfe8f2;
-
     --bg:#f4f8fc;
     --white:#fff;
 
@@ -46,6 +47,8 @@
 }
 
 body{
+    min-height:100vh;
+
     font-family:
         Inter,
         "Segoe UI",
@@ -56,13 +59,11 @@ body{
         linear-gradient(
             135deg,
             #eef8ff,
-            #f8fbff,
+            #fafcff,
             #eefcf8
         );
 
     color:var(--text);
-
-    min-height:100vh;
 }
 
 
@@ -85,8 +86,7 @@ body{
 
     position:sticky;
     top:0;
-
-    z-index:100;
+    z-index:500;
 
     box-shadow:
         0 4px 15px
@@ -128,6 +128,7 @@ body{
     margin-left:auto;
 
     display:flex;
+    align-items:center;
     gap:8px;
 }
 
@@ -138,9 +139,9 @@ body{
 
     padding:10px 14px;
 
-    cursor:pointer;
-
     font-weight:700;
+
+    cursor:pointer;
 }
 
 .dashboard-btn{
@@ -159,17 +160,22 @@ body{
 ========================================================= */
 
 .container{
-    max-width:1380px;
+    max-width:1450px;
 
     margin:25px auto;
 
-    padding:0 18px 50px;
+    padding:
+        0
+        18px
+        50px;
 }
 
 .page-head{
     display:flex;
 
-    justify-content:space-between;
+    justify-content:
+        space-between;
+
     align-items:flex-start;
 
     gap:15px;
@@ -190,20 +196,20 @@ body{
 }
 
 .receipt-note{
-    background:#fff;
+    padding:10px 14px;
 
     border:
         1px solid var(--border);
 
     border-radius:12px;
 
-    padding:10px 14px;
+    background:#fff;
 
-    font-size:10px;
+    box-shadow:var(--shadow);
 
     color:#64748b;
 
-    box-shadow:var(--shadow);
+    font-size:10px;
 }
 
 
@@ -212,14 +218,14 @@ body{
 ========================================================= */
 
 .card{
-    background:#fff;
+    background:white;
 
     border:
         1px solid var(--border);
 
     border-radius:18px;
 
-    padding:21px;
+    padding:20px;
 
     margin-bottom:18px;
 
@@ -228,17 +234,18 @@ body{
 
 .card-head{
     display:flex;
-
     align-items:center;
 
     gap:11px;
 
-    margin-bottom:19px;
+    margin-bottom:18px;
 }
 
 .card-icon{
     width:43px;
     height:43px;
+
+    flex:none;
 
     border-radius:12px;
 
@@ -246,9 +253,7 @@ body{
     align-items:center;
     justify-content:center;
 
-    flex:none;
-
-    background:#e9f5ff;
+    background:var(--blue-soft);
 
     color:var(--blue);
 
@@ -269,7 +274,31 @@ body{
 
 
 /* =========================================================
-   SOURCE
+   TOP GRID
+========================================================= */
+
+.memo-top-grid{
+    display:grid;
+
+    grid-template-columns:
+        1.15fr
+        .72fr
+        1fr;
+
+    gap:16px;
+
+    align-items:stretch;
+
+    margin-bottom:18px;
+}
+
+.memo-top-grid .card{
+    margin-bottom:0;
+}
+
+
+/* =========================================================
+   SOURCE MODE
 ========================================================= */
 
 .source-mode{
@@ -278,28 +307,27 @@ body{
     grid-template-columns:
         1fr 1fr;
 
-    gap:11px;
+    gap:8px;
 
-    margin-bottom:17px;
+    margin-bottom:14px;
 }
 
 .source-button{
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    padding:14px;
-
     border:
         1px solid var(--border);
 
-    border-radius:14px;
-
     background:#fff;
 
+    border-radius:12px;
+
+    padding:11px;
+
     cursor:pointer;
+
+    display:flex;
+    align-items:center;
+
+    gap:9px;
 
     text-align:left;
 }
@@ -311,25 +339,25 @@ body{
 
     box-shadow:
         0 0 0 3px
-        rgba(11,126,232,.07);
+        rgba(11,126,232,.06);
 }
 
 .source-button i{
-    font-size:19px;
-
     color:var(--blue);
+
+    font-size:16px;
 }
 
 .source-title{
-    font-size:13px;
+    font-size:11px;
 
     font-weight:800;
 }
 
 .source-text{
-    margin-top:3px;
+    margin-top:2px;
 
-    font-size:9px;
+    font-size:8px;
 
     color:var(--muted);
 }
@@ -340,7 +368,7 @@ body{
 ========================================================= */
 
 .field{
-    margin-bottom:14px;
+    margin-bottom:13px;
 }
 
 label{
@@ -348,11 +376,11 @@ label{
 
     margin-bottom:7px;
 
-    font-size:11px;
-
-    color:#394962;
+    font-size:10px;
 
     font-weight:800;
+
+    color:#394962;
 }
 
 .required{
@@ -371,13 +399,13 @@ textarea{
 
     background:#fbfdff;
 
-    padding:11px 12px;
+    padding:10px 11px;
+
+    outline:none;
 
     font-family:inherit;
 
-    font-size:12px;
-
-    outline:none;
+    font-size:11px;
 }
 
 textarea{
@@ -402,7 +430,7 @@ textarea:focus{
     grid-template-columns:
         1fr 1fr;
 
-    gap:11px;
+    gap:10px;
 }
 
 .row3{
@@ -411,12 +439,12 @@ textarea:focus{
     grid-template-columns:
         1fr 1fr 1fr;
 
-    gap:11px;
+    gap:10px;
 }
 
 
 /* =========================================================
-   PATIENT
+   SEARCH
 ========================================================= */
 
 .search-row{
@@ -430,7 +458,7 @@ textarea:focus{
 }
 
 .search-btn{
-    width:47px;
+    width:45px;
 
     flex:none;
 
@@ -438,9 +466,9 @@ textarea:focus{
 
     border-radius:10px;
 
-    color:#fff;
-
     background:var(--blue);
+
+    color:#fff;
 
     cursor:pointer;
 }
@@ -448,7 +476,7 @@ textarea:focus{
 .search-status{
     margin-top:7px;
 
-    font-size:10px;
+    font-size:9px;
 }
 
 .search-status.success{
@@ -459,17 +487,22 @@ textarea:focus{
     color:var(--red);
 }
 
+
+/* =========================================================
+   PATIENT
+========================================================= */
+
 .patient-box{
     display:none;
 
     margin-top:12px;
 
-    padding:15px;
+    padding:14px;
 
     border:
         1px solid #d0e8ea;
 
-    border-radius:14px;
+    border-radius:13px;
 
     background:
         linear-gradient(
@@ -483,44 +516,36 @@ textarea:focus{
     display:block;
 }
 
-.patient-name{
-    font-size:15px;
+.patient-main-name{
+    font-size:18px;
 
     font-weight:800;
 }
 
-.patient-details{
-    display:grid;
+.patient-main-no{
+    margin-top:4px;
 
-    grid-template-columns:
-        repeat(4,1fr);
-
-    gap:9px;
-
-    margin-top:11px;
-}
-
-.detail{
-    background:
-        rgba(255,255,255,.65);
-
-    border-radius:9px;
-
-    padding:8px;
-}
-
-.detail-label{
-    color:var(--muted);
-
-    font-size:8px;
-}
-
-.detail-value{
-    margin-top:3px;
+    color:var(--blue);
 
     font-size:10px;
 
-    font-weight:800;
+    font-weight:700;
+}
+
+.patient-mini-info{
+    margin-top:11px;
+
+    display:grid;
+
+    gap:6px;
+
+    font-size:9px;
+
+    color:#718099;
+}
+
+.patient-mini-info strong{
+    color:#253650;
 }
 
 .aasandha-badge{
@@ -542,7 +567,7 @@ textarea:focus{
 
     color:#0b9567;
 
-    font-size:9px;
+    font-size:8px;
 
     font-weight:800;
 }
@@ -561,15 +586,15 @@ textarea:focus{
 
     border-radius:9px;
 
-    padding:9px 12px;
+    padding:8px 11px;
 
-    color:#0b9567;
+    background:var(--green-soft);
 
-    background:#e7faf2;
+    color:#0c9569;
+
+    font-size:9px;
 
     font-weight:800;
-
-    font-size:10px;
 
     cursor:pointer;
 }
@@ -579,12 +604,12 @@ textarea:focus{
 
     margin-top:14px;
 
+    padding:15px;
+
     border:
         1px solid #dce8ef;
 
     border-radius:13px;
-
-    padding:15px;
 
     background:#f9fcff;
 }
@@ -594,7 +619,7 @@ textarea:focus{
 }
 
 .register-title{
-    margin-bottom:13px;
+    margin-bottom:12px;
 
     font-size:12px;
 
@@ -602,12 +627,12 @@ textarea:focus{
 }
 
 .age-box{
-    height:39px;
+    height:38px;
 
     display:flex;
     align-items:center;
 
-    padding:0 11px;
+    padding:0 10px;
 
     border:
         1px solid #e0d9ff;
@@ -618,7 +643,7 @@ textarea:focus{
 
     color:var(--purple);
 
-    font-size:11px;
+    font-size:10px;
 
     font-weight:800;
 }
@@ -639,7 +664,7 @@ textarea:focus{
             #0c9569
         );
 
-    color:white;
+    color:#fff;
 
     font-weight:800;
 
@@ -648,45 +673,20 @@ textarea:focus{
 
 
 /* =========================================================
-   TOP DETAILS
+   GOVERNMENT INSURANCE
 ========================================================= */
-
-.top-info-grid{
-    display:grid;
-
-    grid-template-columns:
-        .8fr 1.2fr;
-
-    gap:18px;
-}
-
-
-/* =========================================================
-   INSURANCE
-========================================================= */
-
-.insurance-grid{
-    display:grid;
-
-    grid-template-columns:
-        1.2fr .7fr .7fr;
-
-    gap:11px;
-
-    align-items:end;
-}
 
 .govt-box{
     display:none;
 
-    margin-top:12px;
+    margin-top:10px;
 
-    padding:13px;
+    padding:11px;
 
     border:
         1px solid #cde9dc;
 
-    border-radius:12px;
+    border-radius:11px;
 
     background:#effbf5;
 }
@@ -696,19 +696,19 @@ textarea:focus{
 }
 
 .govt-title{
-    font-size:11px;
+    color:#0b865d;
+
+    font-size:10px;
 
     font-weight:800;
-
-    color:#0b865d;
 }
 
 .govt-text{
-    margin-top:5px;
+    margin-top:4px;
 
     color:#63786f;
 
-    font-size:9px;
+    font-size:8px;
 
     line-height:1.5;
 }
@@ -722,7 +722,9 @@ textarea:focus{
     display:grid;
 
     grid-template-columns:
-        1fr 100px 130px;
+        1fr
+        90px
+        130px;
 
     gap:9px;
 
@@ -732,7 +734,7 @@ textarea:focus{
 }
 
 .add-button{
-    height:39px;
+    height:38px;
 
     border:0;
 
@@ -773,7 +775,7 @@ th{
 
     color:#64738b;
 
-    font-size:9px;
+    font-size:8px;
 }
 
 td{
@@ -782,7 +784,7 @@ td{
     border-bottom:
         1px solid #edf1f5;
 
-    font-size:10px;
+    font-size:9px;
 
     vertical-align:middle;
 }
@@ -803,7 +805,7 @@ td{
 
     border-radius:8px;
 
-    font-size:10px;
+    font-size:9px;
 }
 
 .delete-button{
@@ -814,11 +816,29 @@ td{
 
     border-radius:8px;
 
-    background:#fff0f2;
+    background:var(--red-soft);
 
     color:var(--red);
 
     cursor:pointer;
+}
+
+
+/* =========================================================
+   BILL DISCOUNT
+========================================================= */
+
+.discount-grid{
+    display:grid;
+
+    grid-template-columns:
+        .75fr
+        .75fr
+        1.5fr;
+
+    gap:12px;
+
+    align-items:end;
 }
 
 
@@ -841,7 +861,7 @@ td{
 ========================================================= */
 
 .calculation{
-    padding:16px;
+    padding:15px;
 
     border:
         1px solid #dce9ef;
@@ -859,7 +879,8 @@ td{
 .calc-row{
     display:flex;
 
-    justify-content:space-between;
+    justify-content:
+        space-between;
 
     gap:12px;
 
@@ -868,7 +889,7 @@ td{
     border-bottom:
         1px dashed #d7e2e8;
 
-    font-size:11px;
+    font-size:10px;
 }
 
 .calc-row:last-child{
@@ -884,7 +905,7 @@ td{
 }
 
 .calc-discount{
-    color:#a46d19;
+    color:#9a671a;
 }
 
 .calc-insurance{
@@ -896,9 +917,9 @@ td{
 }
 
 .calc-total{
-    padding-top:12px;
+    padding-top:11px;
 
-    font-size:16px;
+    font-size:15px;
 
     color:#172641;
 }
@@ -911,16 +932,16 @@ td{
 .payment-summary{
     margin-top:10px;
 
-    padding:13px;
+    padding:12px;
 
     border:
         1px solid #eedcaf;
 
-    border-radius:12px;
+    border-radius:11px;
 
     background:#fff8e9;
 
-    font-size:11px;
+    font-size:10px;
 
     line-height:1.8;
 }
@@ -937,15 +958,11 @@ td{
 .save-memo{
     width:100%;
 
-    margin-top:14px;
-
     padding:14px;
 
     border:0;
 
     border-radius:12px;
-
-    color:white;
 
     background:
         linear-gradient(
@@ -954,67 +971,17 @@ td{
             #10a980
         );
 
-    cursor:pointer;
+    color:white;
 
-    font-size:13px;
+    font-size:12px;
 
     font-weight:800;
+
+    cursor:pointer;
 }
 
 .save-memo:disabled{
     opacity:.55;
-}
-
-
-/* =========================================================
-   RECEIPT ADMIN
-========================================================= */
-
-.admin-receipt{
-    display:none;
-
-    margin-bottom:17px;
-
-    padding:12px;
-
-    border:
-        1px dashed #d9dff0;
-
-    border-radius:13px;
-
-    background:#faf9ff;
-}
-
-.admin-receipt.show{
-    display:block;
-}
-
-.admin-line{
-    display:flex;
-
-    gap:8px;
-
-    margin-top:8px;
-}
-
-.admin-line input{
-    flex:1;
-}
-
-.admin-line button{
-    border:0;
-
-    border-radius:9px;
-
-    padding:0 14px;
-
-    background:var(--purple);
-
-    color:white;
-
-    font-weight:800;
-
-    cursor:pointer;
 }
 
 
@@ -1045,9 +1012,12 @@ td{
 }
 
 .receipt{
-    width:min(720px,100%);
+    width:min(
+        760px,
+        100%
+    );
 
-    max-height:94vh;
+    max-height:95vh;
 
     overflow:auto;
 
@@ -1058,35 +1028,107 @@ td{
     padding:28px;
 }
 
-.receipt-head{
+.receipt-company{
     text-align:center;
 
-    margin-bottom:18px;
+    padding-bottom:16px;
+
+    border-bottom:
+        2px solid #12213f;
 }
 
-.receipt-head h2{
-    font-size:21px;
+.receipt-company h1{
+    font-size:23px;
+
+    margin-bottom:5px;
 }
 
-.receipt-number{
-    margin-top:5px;
+.receipt-company div{
+    font-size:9px;
 
-    color:var(--blue);
-
-    font-weight:800;
+    line-height:1.5;
 }
 
-.receipt-info{
+.receipt-title-row{
+    padding:13px 0;
+
+    text-align:center;
+}
+
+.receipt-title-row h2{
+    font-size:13px;
+
+    letter-spacing:.5px;
+}
+
+.receipt-two-column{
     display:grid;
 
     grid-template-columns:
         1fr 1fr;
 
+    gap:28px;
+
+    margin-bottom:20px;
+}
+
+.receipt-section-title{
+    padding-bottom:5px;
+
+    margin-bottom:8px;
+
+    border-bottom:
+        1px solid #e1e6ec;
+
+    color:#68778d;
+
+    font-size:9px;
+
+    font-weight:800;
+
+    text-transform:uppercase;
+}
+
+.receipt-patient-name{
+    margin-bottom:9px;
+
+    font-size:15px;
+
+    font-weight:800;
+}
+
+.receipt-info-line{
+    display:grid;
+
+    grid-template-columns:
+        105px 1fr;
+
     gap:8px;
 
-    margin-bottom:16px;
+    padding:3px 0;
 
-    font-size:10px;
+    font-size:9px;
+}
+
+.receipt-info-line span{
+    color:#6e7b8f;
+}
+
+.receipt-info-line strong{
+    text-align:left;
+}
+
+.receipt-table{
+    width:100%;
+
+    min-width:0;
+
+    margin-bottom:15px;
+}
+
+.receipt-table th,
+.receipt-table td{
+    font-size:9px;
 }
 
 .receipt-actions{
@@ -1112,14 +1154,12 @@ td{
 }
 
 .print-button{
-    color:white;
-
     background:var(--blue);
+    color:#fff;
 }
 
 .close-button{
     background:#edf1f5;
-
     color:#5a687b;
 }
 
@@ -1134,15 +1174,15 @@ td{
     right:20px;
     bottom:20px;
 
-    padding:14px 18px;
-
     max-width:400px;
+
+    padding:14px 18px;
 
     border-radius:12px;
 
-    color:white;
+    color:#fff;
 
-    font-size:11px;
+    font-size:10px;
 
     font-weight:700;
 
@@ -1176,24 +1216,22 @@ td{
    RESPONSIVE
 ========================================================= */
 
-@media(max-width:950px){
+@media(max-width:1050px){
 
-    .top-info-grid,
-    .bottom-grid{
+    .memo-top-grid{
         grid-template-columns:1fr;
     }
 
-    .patient-details{
-        grid-template-columns:
-            1fr 1fr;
+    .bottom-grid{
+        grid-template-columns:1fr;
     }
 }
 
 @media(max-width:700px){
 
     .source-mode,
-    .insurance-grid,
     .service-add,
+    .discount-grid,
     .row2,
     .row3{
         grid-template-columns:1fr;
@@ -1206,7 +1244,16 @@ td{
     .brand span{
         display:none;
     }
+
+    .receipt-two-column{
+        grid-template-columns:1fr;
+    }
 }
+
+
+/* =========================================================
+   PRINT
+========================================================= */
 
 @media print{
 
@@ -1224,6 +1271,8 @@ td{
 
         inset:0;
 
+        display:block;
+
         background:white;
 
         padding:0;
@@ -1234,7 +1283,13 @@ td{
 
         max-height:none;
 
+        overflow:visible;
+
         border-radius:0;
+
+        box-shadow:none;
+
+        padding:15px;
     }
 
     .receipt-actions{
@@ -1243,9 +1298,7 @@ td{
 }
 
 </style>
-
 </head>
-
 
 <body>
 
@@ -1258,7 +1311,9 @@ td{
             <i class="fa-solid fa-file-invoice-dollar"></i>
         </div>
 
-        <span>Create Patient Memo</span>
+        <span>
+            Create Patient Memo
+        </span>
 
     </div>
 
@@ -1294,10 +1349,13 @@ td{
 
         <div>
 
-            <h1>Create Patient Memo</h1>
+            <h1>
+                Create Patient Memo
+            </h1>
 
             <p>
-                Select patient, doctor and insurance before adding services.
+                Select patient, doctor and insurance,
+                then add services.
             </p>
 
         </div>
@@ -1307,37 +1365,8 @@ td{
 
             <i class="fa-solid fa-receipt"></i>
 
-            Receipt number will be generated when the memo is saved.
-
-        </div>
-
-    </div>
-
-
-    <!-- ADMIN RECEIPT -->
-
-    <div
-        class="admin-receipt"
-        id="receiptAdminBox"
-    >
-
-        <strong>
-            <i class="fa-solid fa-hashtag"></i>
-            Receipt Number Setup
-        </strong>
-
-        <div class="admin-line">
-
-            <input
-                id="nextReceiptNumber"
-                type="number"
-                min="1"
-                placeholder="Next receipt number"
-            >
-
-            <button onclick="setReceiptNumber()">
-                Set Next Number
-            </button>
+            Receipt number and clinic information
+            are controlled from Master Data.
 
         </div>
 
@@ -1345,130 +1374,131 @@ td{
 
 
     <!-- =====================================================
-         PATIENT
+         TOP: PATIENT / DOCTOR / INSURANCE
     ====================================================== -->
 
-    <section class="card">
-
-        <div class="card-head">
-
-            <div class="card-icon">
-                <i class="fa-solid fa-hospital-user"></i>
-            </div>
-
-            <div>
-
-                <h2>1. Patient</h2>
-
-                <p>
-                    Load from appointment or search registered patient
-                </p>
-
-            </div>
-
-        </div>
+    <div class="memo-top-grid">
 
 
-        <div class="source-mode">
+        <!-- =================================================
+             PATIENT
+        ================================================== -->
 
-            <button
-                class="source-button active"
-                id="appointmentModeButton"
-                onclick="setSourceMode('appointment')"
-            >
+        <section class="card">
 
-                <i class="fa-solid fa-calendar-check"></i>
+            <div class="card-head">
+
+                <div class="card-icon">
+                    <i class="fa-solid fa-hospital-user"></i>
+                </div>
 
                 <div>
 
-                    <div class="source-title">
-                        From Appointment
-                    </div>
+                    <h2>
+                        Patient
+                    </h2>
 
-                    <div class="source-text">
-                        Select an existing appointment
-                    </div>
-
-                </div>
-
-            </button>
-
-
-            <button
-                class="source-button"
-                id="patientModeButton"
-                onclick="setSourceMode('patient')"
-            >
-
-                <i class="fa-solid fa-user-magnifying-glass"></i>
-
-                <div>
-
-                    <div class="source-title">
-                        Without Appointment
-                    </div>
-
-                    <div class="source-text">
-                        Search or register a patient
-                    </div>
+                    <p>
+                        Appointment or registered patient
+                    </p>
 
                 </div>
 
-            </button>
-
-        </div>
+            </div>
 
 
-        <!-- APPOINTMENT -->
+            <div class="source-mode">
 
-        <div id="appointmentArea">
 
-            <div class="field">
-
-                <label>
-                    Appointment
-                </label>
-
-                <select
-                    id="appointmentSelect"
-                    onchange="selectAppointment()"
+                <button
+                    class="source-button active"
+                    id="appointmentModeButton"
+                    onclick="setSourceMode('appointment')"
                 >
 
-                    <option value="">
-                        Loading appointments...
-                    </option>
+                    <i class="fa-solid fa-calendar-check"></i>
 
-                </select>
+                    <div>
+
+                        <div class="source-title">
+                            Appointment
+                        </div>
+
+                        <div class="source-text">
+                            Load appointment
+                        </div>
+
+                    </div>
+
+                </button>
+
+
+                <button
+                    class="source-button"
+                    id="patientModeButton"
+                    onclick="setSourceMode('patient')"
+                >
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <div>
+
+                        <div class="source-title">
+                            Patient Search
+                        </div>
+
+                        <div class="source-text">
+                            No appointment
+                        </div>
+
+                    </div>
+
+                </button>
 
             </div>
 
-        </div>
+
+            <!-- APPOINTMENT -->
+
+            <div id="appointmentArea">
+
+                <div class="field">
+
+                    <label>
+                        Appointment
+                    </label>
+
+                    <select
+                        id="appointmentSelect"
+                    >
+                        <option value="">
+                            Loading appointments...
+                        </option>
+                    </select>
+
+                </div>
+
+            </div>
 
 
-        <!-- SEARCH -->
+            <!-- PATIENT SEARCH -->
 
-        <div
-            id="patientSearchArea"
-            style="display:none;"
-        >
-
-            <div class="field">
-
-                <label>
-                    Search Patient
-                </label>
+            <div
+                id="patientSearchArea"
+                style="display:none;"
+            >
 
                 <div class="search-row">
 
                     <input
                         id="patientSearch"
-                        placeholder="ID / Passport, patient no, name or contact"
+                        placeholder="ID, Passport, name, phone or patient no."
                         autocomplete="off"
                     >
 
                     <button
                         class="search-btn"
-                        onclick="searchPatients()"
+                        id="patientSearchButton"
                     >
                         <i class="fa-solid fa-search"></i>
                     </button>
@@ -1477,112 +1507,20 @@ td{
 
 
                 <div
-                    class="search-status"
-                    id="patientSearchStatus"
-                ></div>
-
-            </div>
-
-
-            <div
-                class="field"
-                id="patientResultArea"
-                style="display:none;"
-            >
-
-                <label>
-                    Search Result
-                </label>
-
-                <select
-                    id="patientResults"
-                    onchange="choosePatient()"
+                    id="patientResultArea"
+                    style="
+                        display:none;
+                        margin-top:10px;
+                    "
                 >
-                </select>
 
-            </div>
+                    <select id="patientResults">
 
-        </div>
+                        <option value="">
+                            Select patient
+                        </option>
 
-
-        <!-- PATIENT DISPLAY -->
-
-        <div
-            class="patient-box"
-            id="patientBox"
-        >
-
-            <div
-                class="patient-name"
-                id="displayPatientName"
-            >
-                -
-            </div>
-
-
-            <div class="patient-details">
-
-
-                <div class="detail">
-
-                    <div class="detail-label">
-                        Patient No.
-                    </div>
-
-                    <div
-                        class="detail-value"
-                        id="displayPatientNo"
-                    >
-                        -
-                    </div>
-
-                </div>
-
-
-                <div class="detail">
-
-                    <div class="detail-label">
-                        ID / Passport
-                    </div>
-
-                    <div
-                        class="detail-value"
-                        id="displayPatientId"
-                    >
-                        -
-                    </div>
-
-                </div>
-
-
-                <div class="detail">
-
-                    <div class="detail-label">
-                        Contact
-                    </div>
-
-                    <div
-                        class="detail-value"
-                        id="displayPatientPhone"
-                    >
-                        -
-                    </div>
-
-                </div>
-
-
-                <div class="detail">
-
-                    <div class="detail-label">
-                        Nationality
-                    </div>
-
-                    <div
-                        class="detail-value"
-                        id="displayNationality"
-                    >
-                        -
-                    </div>
+                    </select>
 
                 </div>
 
@@ -1590,45 +1528,101 @@ td{
 
 
             <div
-                class="aasandha-badge"
-                id="maldivianBadge"
+                class="search-status"
+                id="patientSearchStatus"
+            ></div>
+
+
+            <!-- PATIENT INFO -->
+
+            <div
+                class="patient-box"
+                id="patientBox"
             >
-                <i class="fa-solid fa-shield-heart"></i>
-                Government Insurance Eligible
+
+                <div
+                    class="patient-main-name"
+                    id="displayPatientName"
+                >
+                    -
+                </div>
+
+
+                <div
+                    class="patient-main-no"
+                    id="displayPatientNo"
+                >
+                    -
+                </div>
+
+
+                <div class="patient-mini-info">
+
+                    <div>
+                        ID / Passport:
+                        <strong id="displayPatientId">
+                            -
+                        </strong>
+                    </div>
+
+                    <div>
+                        Contact:
+                        <strong id="displayPatientPhone">
+                            -
+                        </strong>
+                    </div>
+
+                    <div>
+                        Nationality:
+                        <strong id="displayNationality">
+                            -
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="aasandha-badge"
+                    id="maldivianBadge"
+                >
+
+                    <i class="fa-solid fa-shield-heart"></i>
+
+                    Government Insurance Eligible
+
+                </div>
+
             </div>
 
-        </div>
+
+            <div
+                class="search-status"
+                id="patientMessage"
+            ></div>
 
 
-        <div
-            class="search-status"
-            id="patientMessage"
-        ></div>
-
-
-        <button
-            class="register-new"
-            id="registerNewButton"
-            onclick="showRegisterForm()"
-        >
-            <i class="fa-solid fa-user-plus"></i>
-            Register New Patient
-        </button>
-
-
-        <!-- REGISTER -->
-
-        <div
-            class="register-panel"
-            id="registerPanel"
-        >
-
-            <div class="register-title">
+            <button
+                class="register-new"
+                id="registerNewButton"
+                onclick="showRegisterForm()"
+            >
+                <i class="fa-solid fa-user-plus"></i>
                 Register Patient
-            </div>
+            </button>
 
 
-            <div class="row3">
+            <!-- REGISTER PATIENT -->
+
+            <div
+                class="register-panel"
+                id="registerPanel"
+            >
+
+                <div class="register-title">
+                    Register New Patient
+                </div>
+
 
                 <div class="field">
 
@@ -1665,33 +1659,36 @@ td{
 
                 </div>
 
-            </div>
+
+                <div class="row2">
+
+                    <div class="field">
+
+                        <label>
+                            Date of Birth
+                        </label>
+
+                        <input
+                            id="regDob"
+                            type="date"
+                        >
+
+                    </div>
 
 
-            <div class="row3">
+                    <div class="field">
 
-                <div class="field">
+                        <label>
+                            Age
+                        </label>
 
-                    <label>Date of Birth</label>
+                        <div
+                            class="age-box"
+                            id="regAge"
+                        >
+                            -
+                        </div>
 
-                    <input
-                        id="regDob"
-                        type="date"
-                        onchange="updateRegisterAge()"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>Age</label>
-
-                    <div
-                        class="age-box"
-                        id="regAge"
-                    >
-                        -
                     </div>
 
                 </div>
@@ -1699,14 +1696,16 @@ td{
 
                 <div class="field">
 
-                    <label>Nationality</label>
+                    <label>
+                        Nationality
+                    </label>
 
                     <input
                         id="regNationality"
-                        list="nationalities"
+                        list="nationalityList"
                     >
 
-                    <datalist id="nationalities">
+                    <datalist id="nationalityList">
 
                         <option value="Maldivian">
                         <option value="Indian">
@@ -1719,39 +1718,34 @@ td{
 
                 </div>
 
+
+                <div class="field">
+
+                    <label>
+                        Address
+                    </label>
+
+                    <textarea id="regAddress"></textarea>
+
+                </div>
+
+
+                <button
+                    class="register-save"
+                    id="registerPatientButton"
+                >
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Register & Select
+                </button>
+
             </div>
 
-
-            <div class="field">
-
-                <label>Address</label>
-
-                <textarea id="regAddress"></textarea>
-
-            </div>
+        </section>
 
 
-            <button
-                class="register-save"
-                onclick="registerPatient()"
-            >
-                <i class="fa-solid fa-floppy-disk"></i>
-                Register & Select Patient
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         DOCTOR + INSURANCE
-    ====================================================== -->
-
-    <div class="top-info-grid">
-
-
-        <!-- DOCTOR -->
+        <!-- =================================================
+             DOCTOR
+        ================================================== -->
 
         <section class="card">
 
@@ -1769,10 +1763,12 @@ td{
 
                 <div>
 
-                    <h2>2. Doctor</h2>
+                    <h2>
+                        Doctor
+                    </h2>
 
                     <p>
-                        Approved users with Doctor role
+                        Approved Doctor users
                     </p>
 
                 </div>
@@ -1797,10 +1793,30 @@ td{
 
             </div>
 
+
+            <div
+                style="
+                    padding:10px;
+                    border-radius:10px;
+                    background:#f6f3ff;
+                    color:#7055c8;
+                    font-size:9px;
+                    line-height:1.5;
+                "
+            >
+                <i class="fa-solid fa-circle-info"></i>
+
+                Doctor list is loaded from approved,
+                active users with role
+                <strong>doctor</strong>.
+            </div>
+
         </section>
 
 
-        <!-- INSURANCE -->
+        <!-- =================================================
+             INSURANCE
+        ================================================== -->
 
         <section class="card">
 
@@ -1810,7 +1826,7 @@ td{
                     class="card-icon"
                     style="
                         background:#fff3e2;
-                        color:#ed941e;
+                        color:#e9911c;
                     "
                 >
                     <i class="fa-solid fa-shield-heart"></i>
@@ -1818,10 +1834,12 @@ td{
 
                 <div>
 
-                    <h2>3. Insurance</h2>
+                    <h2>
+                        Insurance
+                    </h2>
 
                     <p>
-                        Primary insurance and government insurance
+                        Primary and government insurance
                     </p>
 
                 </div>
@@ -1829,28 +1847,24 @@ td{
             </div>
 
 
-            <div class="insurance-grid">
+            <div class="field">
+
+                <label>
+                    Insurance Company
+                </label>
+
+                <select
+                    id="primaryInsurance"
+                >
+                    <option value="">
+                        No private / company insurance
+                    </option>
+                </select>
+
+            </div>
 
 
-                <div class="field">
-
-                    <label>
-                        Insurance Company
-                    </label>
-
-                    <select
-                        id="primaryInsurance"
-                        onchange="insuranceChanged()"
-                    >
-
-                        <option value="">
-                            No private / company insurance
-                        </option>
-
-                    </select>
-
-                </div>
-
+            <div class="row2">
 
                 <div class="field">
 
@@ -1860,7 +1874,6 @@ td{
 
                     <select
                         id="insuranceMethod"
-                        onchange="recalculate()"
                         disabled
                     >
 
@@ -1889,7 +1902,6 @@ td{
                         min="0"
                         step="0.01"
                         value="0"
-                        oninput="recalculate()"
                         disabled
                     >
 
@@ -1906,16 +1918,16 @@ td{
                 <div class="govt-title">
 
                     <i class="fa-solid fa-shield-heart"></i>
-                    Government Insurance / Aasandha
+                    Aasandha / Government Insurance
 
                 </div>
 
 
                 <div class="govt-text">
 
-                    This patient is Maldivian. Government insurance
-                    will automatically cover the eligible remaining
-                    amount after any primary insurance is applied.
+                    For a Maldivian patient,
+                    government insurance is calculated
+                    after any primary insurance.
 
                 </div>
 
@@ -1934,22 +1946,18 @@ td{
 
         <div class="card-head">
 
-            <div
-                class="card-icon"
-                style="
-                    background:#e9f5ff;
-                    color:#1685e8;
-                "
-            >
+            <div class="card-icon">
                 <i class="fa-solid fa-stethoscope"></i>
             </div>
 
             <div>
 
-                <h2>4. Services</h2>
+                <h2>
+                    Services
+                </h2>
 
                 <p>
-                    Add one or more services to the memo
+                    Add one or more services
                 </p>
 
             </div>
@@ -1962,7 +1970,9 @@ td{
 
             <div class="field">
 
-                <label>Service</label>
+                <label>
+                    Service
+                </label>
 
                 <select id="serviceSelect">
 
@@ -1977,7 +1987,9 @@ td{
 
             <div class="field">
 
-                <label>Qty</label>
+                <label>
+                    Qty
+                </label>
 
                 <input
                     id="serviceQty"
@@ -1991,7 +2003,7 @@ td{
 
             <button
                 class="add-button"
-                onclick="addService()"
+                id="addServiceButton"
             >
                 <i class="fa-solid fa-plus"></i>
                 Add Service
@@ -2008,13 +2020,34 @@ td{
 
                     <tr>
 
-                        <th>Service</th>
-                        <th>Qty</th>
-                        <th>Normal Price</th>
-                        <th>Discount Type</th>
-                        <th>Discount</th>
-                        <th>Govt. Rate</th>
-                        <th>Line Total</th>
+                        <th>
+                            Service
+                        </th>
+
+                        <th>
+                            Qty
+                        </th>
+
+                        <th>
+                            Normal Price
+                        </th>
+
+                        <th>
+                            Discount Type
+                        </th>
+
+                        <th>
+                            Discount
+                        </th>
+
+                        <th>
+                            Govt. Rate
+                        </th>
+
+                        <th>
+                            Total
+                        </th>
+
                         <th></th>
 
                     </tr>
@@ -2049,7 +2082,7 @@ td{
 
 
     <!-- =====================================================
-         DISCOUNT
+         BILL DISCOUNT
     ====================================================== -->
 
     <section class="card">
@@ -2068,10 +2101,12 @@ td{
 
             <div>
 
-                <h2>5. Whole Bill Discount</h2>
+                <h2>
+                    Whole Bill Discount
+                </h2>
 
                 <p>
-                    Optional additional clinic discount
+                    Optional clinic discount
                 </p>
 
             </div>
@@ -2079,8 +2114,7 @@ td{
         </div>
 
 
-        <div class="row2">
-
+        <div class="discount-grid">
 
             <div class="field">
 
@@ -2088,10 +2122,7 @@ td{
                     Discount Type
                 </label>
 
-                <select
-                    id="billDiscountMethod"
-                    onchange="recalculate()"
-                >
+                <select id="billDiscountMethod">
 
                     <option value="none">
                         No Discount
@@ -2122,9 +2153,24 @@ td{
                     min="0"
                     step="0.01"
                     value="0"
-                    oninput="recalculate()"
                 >
 
+            </div>
+
+
+            <div
+                style="
+                    align-self:center;
+                    padding:10px 12px;
+                    border-radius:10px;
+                    background:#fff8ed;
+                    color:#8b651d;
+                    font-size:9px;
+                    line-height:1.5;
+                "
+            >
+                You can use individual service discounts
+                and/or a full bill discount.
             </div>
 
         </div>
@@ -2133,13 +2179,13 @@ td{
 
 
     <!-- =====================================================
-         CALCULATION + PAYMENT
+         SUMMARY / PAYMENT
     ====================================================== -->
 
     <div class="bottom-grid">
 
 
-        <!-- CALCULATION -->
+        <!-- SUMMARY -->
 
         <section class="card">
 
@@ -2157,7 +2203,9 @@ td{
 
                 <div>
 
-                    <h2>6. Calculation</h2>
+                    <h2>
+                        Bill Summary
+                    </h2>
 
                     <p>
                         Insurance and patient share
@@ -2169,7 +2217,6 @@ td{
 
 
             <div class="calculation">
-
 
                 <div class="calc-row">
 
@@ -2187,7 +2234,11 @@ td{
                 </div>
 
 
-                <div class="calc-row calc-discount">
+                <div
+                    class="calc-row calc-discount"
+                    id="serviceDiscountRow"
+                    style="display:none;"
+                >
 
                     <span>
                         Service Discounts
@@ -2203,10 +2254,14 @@ td{
                 </div>
 
 
-                <div class="calc-row calc-discount">
+                <div
+                    class="calc-row calc-discount"
+                    id="billDiscountRow"
+                    style="display:none;"
+                >
 
                     <span>
-                        Whole Bill Discount
+                        Bill Discount
                     </span>
 
                     <span
@@ -2235,9 +2290,13 @@ td{
                 </div>
 
 
-                <div class="calc-row calc-insurance">
+                <div
+                    class="calc-row calc-insurance"
+                    id="primaryInsuranceRow"
+                    style="display:none;"
+                >
 
-                    <span>
+                    <span id="primaryInsuranceLabel">
                         Primary Insurance
                     </span>
 
@@ -2251,10 +2310,14 @@ td{
                 </div>
 
 
-                <div class="calc-row calc-govt">
+                <div
+                    class="calc-row calc-govt"
+                    id="governmentInsuranceRow"
+                    style="display:none;"
+                >
 
                     <span>
-                        Government Insurance
+                        Aasandha
                     </span>
 
                     <span
@@ -2305,10 +2368,12 @@ td{
 
                 <div>
 
-                    <h2>7. Patient Payment</h2>
+                    <h2>
+                        Patient Payment
+                    </h2>
 
                     <p>
-                        Payment method and outstanding balance
+                        Payment method and balance
                     </p>
 
                 </div>
@@ -2322,10 +2387,7 @@ td{
                     Payment Method
                 </label>
 
-                <select
-                    id="paymentMethod"
-                    onchange="paymentMethodChanged()"
-                >
+                <select id="paymentMethod">
 
                     <option value="">
                         Select payment method
@@ -2353,7 +2415,6 @@ td{
                         min="0"
                         step="0.01"
                         value="0"
-                        oninput="updatePaymentBalance()"
                     >
 
                 </div>
@@ -2364,12 +2425,12 @@ td{
             <div class="field">
 
                 <label>
-                    Payment Reference
+                    Reference / Transaction No.
                 </label>
 
                 <input
                     id="paymentReference"
-                    placeholder="Transaction / transfer reference"
+                    placeholder="Optional"
                 >
 
             </div>
@@ -2406,13 +2467,17 @@ td{
     </div>
 
 
-    <!-- SAVE -->
+    <!-- =====================================================
+         REMARKS / SAVE
+    ====================================================== -->
 
     <section class="card">
 
         <div class="field">
 
-            <label>Remarks</label>
+            <label>
+                Remarks
+            </label>
 
             <textarea
                 id="memoRemarks"
@@ -2425,7 +2490,6 @@ td{
         <button
             class="save-memo"
             id="saveMemoButton"
-            onclick="saveMemo()"
         >
             <i class="fa-solid fa-file-circle-check"></i>
             Create Memo & Receipt
@@ -2436,7 +2500,9 @@ td{
 </main>
 
 
-<!-- RECEIPT -->
+<!-- =========================================================
+     RECEIPT
+========================================================= -->
 
 <div
     class="receipt-overlay"
@@ -2445,37 +2511,283 @@ td{
 
     <div class="receipt">
 
-        <div class="receipt-head">
 
-            <h2>Patient Memo / Receipt</h2>
+        <!-- COMPANY -->
 
-            <div
-                class="receipt-number"
-                id="receiptNumber"
-            ></div>
+        <div class="receipt-company">
+
+            <h1 id="printCompanyName">
+                Clinic
+            </h1>
+
+            <div id="printCompanyAddress"></div>
+
+            <div id="printCompanyContact"></div>
+
+            <div id="printCompanyRegistration"></div>
 
         </div>
 
 
-        <div
-            class="receipt-info"
-            id="receiptInfo"
-        ></div>
+        <div class="receipt-title-row">
+
+            <h2>
+                PATIENT MEMO / RECEIPT
+            </h2>
+
+        </div>
 
 
-        <table style="min-width:0;">
+        <!-- TWO COLUMN INFO -->
+
+        <div class="receipt-two-column">
+
+
+            <!-- PATIENT INFO -->
+
+            <div>
+
+                <div class="receipt-section-title">
+                    Patient Information
+                </div>
+
+
+                <div
+                    class="receipt-patient-name"
+                    id="printPatientName"
+                >
+                    -
+                </div>
+
+
+                <div class="receipt-info-line">
+
+                    <span>
+                        Patient No.
+                    </span>
+
+                    <strong id="printPatientNo">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="receipt-info-line">
+
+                    <span>
+                        ID / Passport
+                    </span>
+
+                    <strong id="printPatientId">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="receipt-info-line">
+
+                    <span>
+                        Date of Birth
+                    </span>
+
+                    <strong id="printDob">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="receipt-info-line">
+
+                    <span>
+                        Age
+                    </span>
+
+                    <strong id="printAge">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="receipt-info-line">
+
+                    <span>
+                        Nationality
+                    </span>
+
+                    <strong id="printNationality">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="receipt-info-line">
+
+                    <span>
+                        Contact
+                    </span>
+
+                    <strong id="printContact">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="receipt-info-line">
+
+                    <span>
+                        Address
+                    </span>
+
+                    <strong id="printAddress">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- MEMO INFO -->
+
+            <div>
+
+                <div class="receipt-section-title">
+                    Memo Information
+                </div>
+
+
+                <div class="receipt-info-line">
+
+                    <span>
+                        Receipt No.
+                    </span>
+
+                    <strong id="printReceiptNo">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="receipt-info-line">
+
+                    <span>
+                        Date
+                    </span>
+
+                    <strong id="printMemoDate">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="receipt-info-line">
+
+                    <span>
+                        Doctor
+                    </span>
+
+                    <strong id="printDoctor">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div
+                    class="receipt-info-line"
+                    id="printInsuranceLine"
+                    style="display:none;"
+                >
+
+                    <span>
+                        Insurance
+                    </span>
+
+                    <strong id="printInsurance">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div
+                    class="receipt-info-line"
+                    id="printGovernmentInsuranceLine"
+                    style="display:none;"
+                >
+
+                    <span>
+                        Govt. Insurance
+                    </span>
+
+                    <strong>
+                        Aasandha
+                    </strong>
+
+                </div>
+
+
+                <div
+                    class="receipt-info-line"
+                    id="printPaymentMethodLine"
+                    style="display:none;"
+                >
+
+                    <span>
+                        Payment
+                    </span>
+
+                    <strong id="printPaymentMethod">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SERVICES -->
+
+        <table class="receipt-table">
 
             <thead>
 
                 <tr>
-                    <th>Service</th>
-                    <th>Qty</th>
-                    <th>Price</th>
-                    <th>Discount</th>
-                    <th>Total</th>
+
+                    <th>
+                        Service
+                    </th>
+
+                    <th>
+                        Qty
+                    </th>
+
+                    <th>
+                        Rate
+                    </th>
+
+                    <th>
+                        Discount
+                    </th>
+
+                    <th>
+                        Total
+                    </th>
+
                 </tr>
 
             </thead>
+
 
             <tbody id="receiptItems"></tbody>
 
@@ -2485,7 +2797,6 @@ td{
         <div
             class="calculation"
             id="receiptTotals"
-            style="margin-top:15px;"
         ></div>
 
 
@@ -2523,8 +2834,13 @@ td{
 <script>
 
 /* =========================================================
-   USER
+   HELPERS / ELEMENTS
 ========================================================= */
+
+const $ =
+    id =>
+        document.getElementById(id);
+
 
 const currentUser =
     JSON.parse(
@@ -2541,19 +2857,6 @@ if (!currentUser){
 }
 
 
-if (
-    currentUser.role ===
-    'admin'
-){
-
-    receiptAdminBox
-        .classList
-        .add(
-            'show'
-        );
-}
-
-
 /* =========================================================
    STATE
 ========================================================= */
@@ -2564,8 +2867,6 @@ let sourceMode =
 
 let appointments = [];
 
-let patientSearchRows = [];
-
 let doctors = [];
 
 let services = [];
@@ -2574,13 +2875,22 @@ let insuranceCompanies = [];
 
 let paymentMethods = [];
 
+let patientSearchRows = [];
+
+let companyInfo =
+    null;
+
+
 let selectedPatient =
     null;
+
 
 let selectedAppointment =
     null;
 
-let invoiceLines = [];
+
+let invoiceLines =
+    [];
 
 
 let totals = {
@@ -2606,7 +2916,147 @@ let totals = {
 
 
 /* =========================================================
-   LOAD
+   START
+========================================================= */
+
+document.addEventListener(
+    'DOMContentLoaded',
+    () => {
+
+        bindEvents();
+
+        loadPage();
+
+        recalculate();
+    }
+);
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+function bindEvents(){
+
+    $('appointmentSelect')
+        .addEventListener(
+            'change',
+            selectAppointment
+        );
+
+
+    $('patientSearchButton')
+        .addEventListener(
+            'click',
+            searchPatients
+        );
+
+
+    $('patientSearch')
+        .addEventListener(
+            'keydown',
+            event => {
+
+                if (
+                    event.key ===
+                    'Enter'
+                ){
+
+                    event.preventDefault();
+
+                    searchPatients();
+                }
+            }
+        );
+
+
+    $('patientResults')
+        .addEventListener(
+            'change',
+            choosePatient
+        );
+
+
+    $('regDob')
+        .addEventListener(
+            'change',
+            updateRegisterAge
+        );
+
+
+    $('registerPatientButton')
+        .addEventListener(
+            'click',
+            registerPatient
+        );
+
+
+    $('primaryInsurance')
+        .addEventListener(
+            'change',
+            insuranceChanged
+        );
+
+
+    $('insuranceMethod')
+        .addEventListener(
+            'change',
+            recalculate
+        );
+
+
+    $('insuranceValue')
+        .addEventListener(
+            'input',
+            recalculate
+        );
+
+
+    $('addServiceButton')
+        .addEventListener(
+            'click',
+            addService
+        );
+
+
+    $('billDiscountMethod')
+        .addEventListener(
+            'change',
+            recalculate
+        );
+
+
+    $('billDiscountValue')
+        .addEventListener(
+            'input',
+            recalculate
+        );
+
+
+    $('paymentMethod')
+        .addEventListener(
+            'change',
+            paymentMethodChanged
+        );
+
+
+    $('amountPaid')
+        .addEventListener(
+            'input',
+            updatePaymentBalance
+        );
+
+
+    $('saveMemoButton')
+        .addEventListener(
+            'click',
+            saveMemo
+        );
+}
+
+
+/* =========================================================
+   LOAD PAGE
 ========================================================= */
 
 async function loadPage(){
@@ -2627,7 +3077,7 @@ async function loadPage(){
 
             throw new Error(
                 data.message ||
-                'Unable to load page'
+                'Unable to load memo page.'
             );
         }
 
@@ -2657,6 +3107,11 @@ async function loadPage(){
             [];
 
 
+        companyInfo =
+            data.company ||
+            null;
+
+
         renderAppointments();
 
         renderDoctors();
@@ -2682,12 +3137,127 @@ async function loadPage(){
 
 
 /* =========================================================
-   DOCTORS
+   SOURCE MODE
 ========================================================= */
+
+function setSourceMode(mode){
+
+    sourceMode =
+        mode;
+
+
+    selectedPatient =
+        null;
+
+
+    selectedAppointment =
+        null;
+
+
+    $('appointmentModeButton')
+        .classList
+        .toggle(
+            'active',
+            mode === 'appointment'
+        );
+
+
+    $('patientModeButton')
+        .classList
+        .toggle(
+            'active',
+            mode === 'patient'
+        );
+
+
+    $('appointmentArea')
+        .style
+        .display =
+            mode === 'appointment'
+            ?
+            'block'
+            :
+            'none';
+
+
+    $('patientSearchArea')
+        .style
+        .display =
+            mode === 'patient'
+            ?
+            'block'
+            :
+            'none';
+
+
+    $('registerNewButton')
+        .style
+        .display =
+            mode === 'patient'
+            ?
+            'inline-block'
+            :
+            'none';
+
+
+    $('registerPanel')
+        .classList
+        .remove(
+            'show'
+        );
+
+
+    clearPatient();
+}
+
+
+/* =========================================================
+   RENDER SETUP DATA
+========================================================= */
+
+function renderAppointments(){
+
+    $('appointmentSelect')
+        .innerHTML = `
+
+        <option value="">
+            Select appointment
+        </option>
+
+        ${
+            appointments.map(
+                appointment => `
+
+                    <option value="${appointment.id}">
+
+                        ${formatDate(
+                            appointment.appointment_date
+                        )}
+
+                        ${formatTime(
+                            appointment.appointment_time
+                        )}
+
+                        -
+
+                        ${escapeHtml(
+                            appointment.patient_name ||
+                            'Patient'
+                        )}
+
+                    </option>
+
+                `
+            ).join('')
+        }
+    `;
+}
+
 
 function renderDoctors(){
 
-    doctorSelect.innerHTML = `
+    $('doctorSelect')
+        .innerHTML = `
 
         <option value="">
             Select Doctor
@@ -2704,11 +3274,9 @@ function renderDoctors(){
                             ''
                         }"
                     >
-
                         ${escapeHtml(
                             doctor.full_name
                         )}
-
                     </option>
 
                 `
@@ -2719,66 +3287,21 @@ function renderDoctors(){
 
     if (!doctors.length){
 
-        doctorSelect.innerHTML = `
+        $('doctorSelect')
+            .innerHTML = `
 
             <option value="">
                 No approved Doctor users found
             </option>
-
         `;
     }
 }
 
 
-/* =========================================================
-   APPOINTMENTS
-========================================================= */
-
-function renderAppointments(){
-
-    appointmentSelect.innerHTML = `
-
-        <option value="">
-            Select appointment
-        </option>
-
-        ${
-            appointments.map(
-                row => `
-
-                    <option value="${row.id}">
-
-                        ${formatDate(
-                            row.appointment_date
-                        )}
-
-                        ${formatTime(
-                            row.appointment_time
-                        )}
-
-                        -
-
-                        ${escapeHtml(
-                            row.patient_name ||
-                            'Patient'
-                        )}
-
-                    </option>
-
-                `
-            ).join('')
-        }
-    `;
-}
-
-
-/* =========================================================
-   SERVICES
-========================================================= */
-
 function renderServices(){
 
-    serviceSelect.innerHTML = `
+    $('serviceSelect')
+        .innerHTML = `
 
         <option value="">
             Select service
@@ -2809,27 +3332,24 @@ function renderServices(){
 }
 
 
-/* =========================================================
-   INSURANCE
-========================================================= */
-
 function renderInsurance(){
 
-    const privateCompanies =
+    const rows =
         insuranceCompanies.filter(
-            row =>
-                !row.is_government
+            company =>
+                !company.is_government
         );
 
 
-    primaryInsurance.innerHTML = `
+    $('primaryInsurance')
+        .innerHTML = `
 
         <option value="">
             No private / company insurance
         </option>
 
         ${
-            privateCompanies.map(
+            rows.map(
                 company => `
 
                     <option value="${company.id}">
@@ -2847,13 +3367,10 @@ function renderInsurance(){
 }
 
 
-/* =========================================================
-   PAYMENT
-========================================================= */
-
 function renderPaymentMethods(){
 
-    paymentMethod.innerHTML = `
+    $('paymentMethod')
+        .innerHTML = `
 
         <option value="">
             Select payment method
@@ -2884,95 +3401,15 @@ function renderPaymentMethods(){
 
 
 /* =========================================================
-   SOURCE
-========================================================= */
-
-function setSourceMode(mode){
-
-    sourceMode =
-        mode;
-
-
-    selectedPatient =
-        null;
-
-
-    selectedAppointment =
-        null;
-
-
-    appointmentModeButton
-        .classList
-        .toggle(
-            'active',
-            mode === 'appointment'
-        );
-
-
-    patientModeButton
-        .classList
-        .toggle(
-            'active',
-            mode === 'patient'
-        );
-
-
-    appointmentArea.style.display =
-        mode === 'appointment'
-        ?
-        'block'
-        :
-        'none';
-
-
-    patientSearchArea.style.display =
-        mode === 'patient'
-        ?
-        'block'
-        :
-        'none';
-
-
-    registerNewButton.style.display =
-        mode === 'patient'
-        ?
-        'inline-block'
-        :
-        'none';
-
-
-    registerPanel
-        .classList
-        .remove(
-            'show'
-        );
-
-
-    clearPatient();
-
-
-    if (
-        mode === 'appointment'
-    ){
-
-        patientSearchStatus.textContent =
-            '';
-
-        patientResultArea.style.display =
-            'none';
-    }
-}
-
-
-/* =========================================================
-   APPOINTMENT SELECTION
+   APPOINTMENT
 ========================================================= */
 
 function selectAppointment(){
 
     const appointmentId =
         Number(
-            appointmentSelect.value
+            $('appointmentSelect')
+                .value
         );
 
 
@@ -2998,12 +3435,9 @@ function selectAppointment(){
     }
 
 
-    /*
-     Try to select doctor user.
-
-     Appointment may still contain old doctors.id.
-     We match users.doctor_id to appointment.doctor_id.
-    */
+    /* ---------------------------------------------
+       Doctor
+    --------------------------------------------- */
 
     if (
         selectedAppointment.doctor_id
@@ -3024,15 +3458,16 @@ function selectAppointment(){
 
         if (doctorUser){
 
-            doctorSelect.value =
-                doctorUser.id;
+            $('doctorSelect')
+                .value =
+                    doctorUser.id;
         }
     }
 
 
-    /*
-     Registered patient
-    */
+    /* ---------------------------------------------
+       Registered Patient
+    --------------------------------------------- */
 
     if (
         selectedAppointment.patient_id
@@ -3061,11 +3496,17 @@ function selectAppointment(){
             phone:
                 selectedAppointment.contact_no,
 
+            email:
+                selectedAppointment.email,
+
             nationality:
                 selectedAppointment.nationality,
 
             date_of_birth:
-                selectedAppointment.date_of_birth
+                selectedAppointment.date_of_birth,
+
+            address:
+                selectedAppointment.address
         };
 
 
@@ -3074,32 +3515,38 @@ function selectAppointment(){
 
     }else{
 
-        patientMessage.className =
-            'search-status error';
+        $('patientMessage')
+            .className =
+                'search-status error';
 
 
-        patientMessage.textContent =
-            'This appointment patient is not yet registered. Register the patient before creating the memo.';
+        $('patientMessage')
+            .textContent =
+                'This appointment patient is not registered. Register the patient before creating the memo.';
 
 
-        registerNewButton.style.display =
-            'inline-block';
+        $('registerNewButton')
+            .style
+            .display =
+                'inline-block';
 
 
-        regName.value =
-            selectedAppointment.patient_name ||
-            '';
+        $('regName')
+            .value =
+                selectedAppointment.patient_name ||
+                '';
 
 
-        regPhone.value =
-            selectedAppointment.contact_no ||
-            '';
+        $('regPhone')
+            .value =
+                selectedAppointment.contact_no ||
+                '';
     }
 
 
-    /*
-     Appointment service
-    */
+    /* ---------------------------------------------
+       Appointment Service
+    --------------------------------------------- */
 
     if (
         selectedAppointment.service_id
@@ -3132,37 +3579,23 @@ function selectAppointment(){
    PATIENT SEARCH
 ========================================================= */
 
-patientSearch.addEventListener(
-    'keydown',
-    event => {
-
-        if (
-            event.key ===
-            'Enter'
-        ){
-
-            event.preventDefault();
-
-            searchPatients();
-        }
-    }
-);
-
-
 async function searchPatients(){
 
     const query =
-        patientSearch
+        $('patientSearch')
             .value
             .trim();
 
 
-    patientResultArea.style.display =
-        'none';
+    $('patientResultArea')
+        .style
+        .display =
+            'none';
 
 
-    patientSearchStatus.textContent =
-        '';
+    $('patientSearchStatus')
+        .textContent =
+            '';
 
 
     selectedPatient =
@@ -3174,24 +3607,28 @@ async function searchPatients(){
 
     if (!query){
 
-        patientSearchStatus.className =
-            'search-status error';
+        $('patientSearchStatus')
+            .className =
+                'search-status error';
 
 
-        patientSearchStatus.textContent =
-            'Enter ID / Passport, name, patient number or contact.';
+        $('patientSearchStatus')
+            .textContent =
+                'Enter ID, Passport, patient no, name or contact.';
 
 
         return;
     }
 
 
-    patientSearchStatus.className =
-        'search-status';
+    $('patientSearchStatus')
+        .className =
+            'search-status';
 
 
-    patientSearchStatus.textContent =
-        'Searching...';
+    $('patientSearchStatus')
+        .textContent =
+            'Searching...';
 
 
     try{
@@ -3226,39 +3663,46 @@ async function searchPatients(){
 
         if (!patientSearchRows.length){
 
-            patientSearchStatus.className =
-                'search-status error';
+            $('patientSearchStatus')
+                .className =
+                    'search-status error';
 
 
-            patientSearchStatus.textContent =
-                'No patient found. You can register a new patient.';
+            $('patientSearchStatus')
+                .textContent =
+                    'Patient not found. You can register a new patient.';
 
 
-            registerNewButton.style.display =
-                'inline-block';
+            $('registerNewButton')
+                .style
+                .display =
+                    'inline-block';
 
 
             return;
         }
 
 
-        patientSearchStatus.className =
-            'search-status success';
+        $('patientSearchStatus')
+            .className =
+                'search-status success';
 
 
-        patientSearchStatus.textContent =
-            patientSearchRows.length
-            +
-            (
-                patientSearchRows.length === 1
-                ?
-                ' patient found.'
-                :
-                ' patients found.'
-            );
+        $('patientSearchStatus')
+            .textContent =
+                patientSearchRows.length
+                +
+                (
+                    patientSearchRows.length === 1
+                    ?
+                    ' patient found.'
+                    :
+                    ' patients found.'
+                );
 
 
-        patientResults.innerHTML = `
+        $('patientResults')
+            .innerHTML = `
 
             <option value="">
                 Select patient
@@ -3277,7 +3721,8 @@ async function searchPatients(){
                             ${
                                 patient.id_passport_no
                                 ?
-                                ' | ' +
+                                ' | '
+                                +
                                 escapeHtml(
                                     patient.id_passport_no
                                 )
@@ -3288,7 +3733,8 @@ async function searchPatients(){
                             ${
                                 patient.phone
                                 ?
-                                ' | ' +
+                                ' | '
+                                +
                                 escapeHtml(
                                     patient.phone
                                 )
@@ -3304,8 +3750,10 @@ async function searchPatients(){
         `;
 
 
-        patientResultArea.style.display =
-            'block';
+        $('patientResultArea')
+            .style
+            .display =
+                'block';
 
 
         if (
@@ -3313,9 +3761,10 @@ async function searchPatients(){
             1
         ){
 
-            patientResults.value =
-                patientSearchRows[0]
-                    .id;
+            $('patientResults')
+                .value =
+                    patientSearchRows[0]
+                        .id;
 
 
             choosePatient();
@@ -3327,12 +3776,14 @@ async function searchPatients(){
         console.error(error);
 
 
-        patientSearchStatus.className =
-            'search-status error';
+        $('patientSearchStatus')
+            .className =
+                'search-status error';
 
 
-        patientSearchStatus.textContent =
-            error.message;
+        $('patientSearchStatus')
+            .textContent =
+                error.message;
     }
 }
 
@@ -3341,7 +3792,8 @@ function choosePatient(){
 
     const patientId =
         Number(
-            patientResults.value
+            $('patientResults')
+                .value
         );
 
 
@@ -3372,61 +3824,70 @@ function displayPatient(){
     }
 
 
-    patientBox
+    $('patientBox')
         .classList
         .add(
             'show'
         );
 
 
-    displayPatientName.textContent =
-        selectedPatient.full_name ||
-        '-';
+    $('displayPatientName')
+        .textContent =
+            selectedPatient.full_name ||
+            '-';
 
 
-    displayPatientNo.textContent =
-        selectedPatient.patient_no ||
-        '-';
+    $('displayPatientNo')
+        .textContent =
+            selectedPatient.patient_no ||
+            '-';
 
 
-    displayPatientId.textContent =
-        selectedPatient.id_passport_no ||
-        selectedPatient.national_id ||
-        selectedPatient.passport_id ||
-        '-';
+    $('displayPatientId')
+        .textContent =
+            selectedPatient.id_passport_no ||
+            selectedPatient.national_id ||
+            selectedPatient.passport_id ||
+            '-';
 
 
-    displayPatientPhone.textContent =
-        selectedPatient.phone ||
-        '-';
+    $('displayPatientPhone')
+        .textContent =
+            selectedPatient.phone ||
+            '-';
 
 
-    displayNationality.textContent =
-        selectedPatient.nationality ||
-        '-';
+    $('displayNationality')
+        .textContent =
+            selectedPatient.nationality ||
+            '-';
 
 
-    patientMessage.className =
-        'search-status success';
+    $('patientMessage')
+        .className =
+            'search-status success';
 
 
-    patientMessage.textContent =
-        'Patient selected.';
+    $('patientMessage')
+        .textContent =
+            'Patient selected.';
 
 
     const maldivian =
         isMaldivian();
 
 
-    maldivianBadge.style.display =
-        maldivian
-        ?
-        'inline-flex'
-        :
-        'none';
+    $('maldivianBadge')
+        .style
+        .display =
+            maldivian
+            ?
+            'inline-flex'
+            :
+            'none';
 
 
-    governmentInsuranceCard
+    $('governmentInsuranceCard')
         .classList
         .toggle(
             'show',
@@ -3440,26 +3901,29 @@ function displayPatient(){
 
 function clearPatient(){
 
-    patientBox
+    $('patientBox')
         .classList
         .remove(
             'show'
         );
 
 
-    maldivianBadge.style.display =
-        'none';
+    $('maldivianBadge')
+        .style
+        .display =
+            'none';
 
 
-    governmentInsuranceCard
+    $('governmentInsuranceCard')
         .classList
         .remove(
             'show'
         );
 
 
-    patientMessage.textContent =
-        '';
+    $('patientMessage')
+        .textContent =
+            '';
 
 
     recalculate();
@@ -3481,12 +3945,12 @@ function isMaldivian(){
 
 
 /* =========================================================
-   REGISTER
+   REGISTER PATIENT
 ========================================================= */
 
 function showRegisterForm(){
 
-    registerPanel
+    $('registerPanel')
         .classList
         .add(
             'show'
@@ -3496,29 +3960,31 @@ function showRegisterForm(){
 
 function updateRegisterAge(){
 
-    regAge.textContent =
-        calculateAge(
-            regDob.value
-        );
+    $('regAge')
+        .textContent =
+            calculateAge(
+                $('regDob')
+                    .value
+            );
 }
 
 
 async function registerPatient(){
 
     const idPassport =
-        regIdPassport
+        $('regIdPassport')
             .value
             .trim();
 
 
     const fullName =
-        regName
+        $('regName')
             .value
             .trim();
 
 
     const phone =
-        regPhone
+        $('regPhone')
             .value
             .trim();
 
@@ -3530,7 +3996,7 @@ async function registerPatient(){
     ){
 
         return showToast(
-            'ID / Passport, patient name and contact number are required.',
+            'ID / Passport, patient name and contact are required.',
             'error'
         );
     }
@@ -3571,16 +4037,17 @@ async function registerPatient(){
                             phone,
 
                             dateOfBirth:
-                                regDob.value ||
+                                $('regDob')
+                                    .value ||
                                 null,
 
                             nationality:
-                                regNationality
+                                $('regNationality')
                                     .value
                                     .trim(),
 
                             address:
-                                regAddress
+                                $('regAddress')
                                     .value
                                     .trim()
                         })
@@ -3604,7 +4071,7 @@ async function registerPatient(){
             data.patient;
 
 
-        registerPanel
+        $('registerPanel')
             .classList
             .remove(
                 'show'
@@ -3638,7 +4105,8 @@ function insuranceChanged(){
 
     const id =
         Number(
-            primaryInsurance.value
+            $('primaryInsurance')
+                .value
         );
 
 
@@ -3652,16 +4120,19 @@ function insuranceChanged(){
 
     if (!company){
 
-        insuranceMethod.disabled =
-            true;
+        $('insuranceMethod')
+            .disabled =
+                true;
 
 
-        insuranceValue.disabled =
-            true;
+        $('insuranceValue')
+            .disabled =
+                true;
 
 
-        insuranceValue.value =
-            0;
+        $('insuranceValue')
+            .value =
+                0;
 
 
         recalculate();
@@ -3670,24 +4141,28 @@ function insuranceChanged(){
     }
 
 
-    insuranceMethod.disabled =
-        false;
+    $('insuranceMethod')
+        .disabled =
+            false;
 
 
-    insuranceValue.disabled =
-        false;
+    $('insuranceValue')
+        .disabled =
+            false;
 
 
-    insuranceMethod.value =
-        company.charge_method ||
-        'percent';
+    $('insuranceMethod')
+        .value =
+            company.charge_method ||
+            'percent';
 
 
-    insuranceValue.value =
-        Number(
-            company.charge_value ||
-            0
-        );
+    $('insuranceValue')
+        .value =
+            Number(
+                company.charge_value ||
+                0
+            );
 
 
     recalculate();
@@ -3695,7 +4170,7 @@ function insuranceChanged(){
 
 
 /* =========================================================
-   SERVICE
+   SERVICES
 ========================================================= */
 
 function addService(){
@@ -3705,7 +4180,8 @@ function addService(){
             row =>
                 Number(row.id) ===
                 Number(
-                    serviceSelect.value
+                    $('serviceSelect')
+                        .value
                 )
         );
 
@@ -3723,7 +4199,8 @@ function addService(){
         Math.max(
             1,
             Number(
-                serviceQty.value ||
+                $('serviceQty')
+                    .value ||
                 1
             )
         );
@@ -3735,12 +4212,14 @@ function addService(){
     );
 
 
-    serviceSelect.value =
-        '';
+    $('serviceSelect')
+        .value =
+            '';
 
 
-    serviceQty.value =
-        1;
+    $('serviceQty')
+        .value =
+            1;
 }
 
 
@@ -3751,8 +4230,8 @@ function addServiceObject(
 
     const existing =
         invoiceLines.find(
-            row =>
-                Number(row.serviceId) ===
+            line =>
+                Number(line.serviceId) ===
                 Number(service.id)
         );
 
@@ -3760,7 +4239,7 @@ function addServiceObject(
     if (existing){
 
         existing.qty +=
-            qty;
+            Number(qty);
 
     }else{
 
@@ -3774,7 +4253,8 @@ function addServiceObject(
             serviceName:
                 service.service_name,
 
-            qty,
+            qty:
+                Number(qty),
 
             price:
                 Number(
@@ -3804,8 +4284,8 @@ function addServiceObject(
 function calculateLine(line){
 
     const subtotal =
-        line.price *
-        line.qty;
+        Number(line.price) *
+        Number(line.qty);
 
 
     let discount =
@@ -3822,9 +4302,12 @@ function calculateLine(line){
             *
             Math.min(
                 100,
-                Number(
-                    line.discountValue ||
-                    0
+                Math.max(
+                    0,
+                    Number(
+                        line.discountValue ||
+                        0
+                    )
                 )
             )
             /
@@ -3838,9 +4321,12 @@ function calculateLine(line){
         discount =
             Math.min(
                 subtotal,
-                Number(
-                    line.discountValue ||
-                    0
+                Math.max(
+                    0,
+                    Number(
+                        line.discountValue ||
+                        0
+                    )
                 )
             );
     }
@@ -3866,7 +4352,8 @@ function renderServiceLines(){
 
     if (!invoiceLines.length){
 
-        serviceLines.innerHTML = `
+        $('serviceLines')
+            .innerHTML = `
 
             <tr>
 
@@ -3891,207 +4378,216 @@ function renderServiceLines(){
     }
 
 
-    serviceLines.innerHTML =
-        invoiceLines.map(
-            (
-                line,
-                index
-            ) => {
+    $('serviceLines')
+        .innerHTML =
+            invoiceLines.map(
+                (
+                    line,
+                    index
+                ) => {
 
-                const calc =
-                    calculateLine(
-                        line
-                    );
-
-
-                return `
-
-                    <tr>
-
-                        <td class="service-name">
-
-                            ${escapeHtml(
-                                line.serviceName
-                            )}
-
-                        </td>
+                    const calculated =
+                        calculateLine(
+                            line
+                        );
 
 
-                        <td>
+                    return `
 
-                            <input
-                                class="small-input"
-                                type="number"
-                                min="1"
-                                value="${line.qty}"
+                        <tr>
 
-                                onchange="
-                                    updateLine(
-                                        ${index},
-                                        'qty',
-                                        this.value
-                                    )
-                                "
-                            >
+                            <td class="service-name">
 
-                        </td>
+                                ${escapeHtml(
+                                    line.serviceName
+                                )}
+
+                            </td>
 
 
-                        <td class="service-price">
+                            <td>
 
-                            MVR
-                            ${money(
-                                line.price
-                            )}
+                                <input
+                                    class="small-input"
 
-                        </td>
+                                    type="number"
 
+                                    min="1"
 
-                        <td>
+                                    value="${line.qty}"
 
-                            <select
-                                class="small-select"
-
-                                onchange="
-                                    updateLine(
-                                        ${index},
-                                        'discountMethod',
-                                        this.value
-                                    )
-                                "
-                            >
-
-                                <option
-                                    value="none"
-                                    ${
-                                        line.discountMethod ===
-                                        'none'
-                                        ?
-                                        'selected'
-                                        :
-                                        ''
-                                    }
+                                    onchange="
+                                        updateLine(
+                                            ${index},
+                                            'qty',
+                                            this.value
+                                        )
+                                    "
                                 >
-                                    None
-                                </option>
+
+                            </td>
 
 
-                                <option
-                                    value="percent"
-                                    ${
-                                        line.discountMethod ===
-                                        'percent'
-                                        ?
-                                        'selected'
-                                        :
-                                        ''
-                                    }
-                                >
-                                    %
-                                </option>
-
-
-                                <option
-                                    value="fixed"
-                                    ${
-                                        line.discountMethod ===
-                                        'fixed'
-                                        ?
-                                        'selected'
-                                        :
-                                        ''
-                                    }
-                                >
-                                    Fixed
-                                </option>
-
-                            </select>
-
-                        </td>
-
-
-                        <td>
-
-                            <input
-                                class="small-input"
-                                type="number"
-                                min="0"
-                                step="0.01"
-                                value="${line.discountValue}"
-
-                                onchange="
-                                    updateLine(
-                                        ${index},
-                                        'discountValue',
-                                        this.value
-                                    )
-                                "
-                            >
-
-                        </td>
-
-
-                        <td>
-
-                            MVR
-                            ${money(
-                                line.aasandhaPrice *
-                                line.qty
-                            )}
-
-                        </td>
-
-
-                        <td>
-
-                            <strong>
+                            <td class="service-price">
 
                                 MVR
                                 ${money(
-                                    calc.total
+                                    line.price
                                 )}
 
-                            </strong>
-
-                        </td>
+                            </td>
 
 
-                        <td>
+                            <td>
 
-                            <button
-                                class="delete-button"
+                                <select
+                                    class="small-select"
 
-                                onclick="
-                                    removeLine(
-                                        ${index}
-                                    )
-                                "
-                            >
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
+                                    onchange="
+                                        updateLine(
+                                            ${index},
+                                            'discountMethod',
+                                            this.value
+                                        )
+                                    "
+                                >
 
-                        </td>
+                                    <option
+                                        value="none"
+                                        ${
+                                            line.discountMethod ===
+                                            'none'
+                                            ?
+                                            'selected'
+                                            :
+                                            ''
+                                        }
+                                    >
+                                        None
+                                    </option>
 
-                    </tr>
-                `;
-            }
-        )
-        .join('');
+
+                                    <option
+                                        value="percent"
+                                        ${
+                                            line.discountMethod ===
+                                            'percent'
+                                            ?
+                                            'selected'
+                                            :
+                                            ''
+                                        }
+                                    >
+                                        %
+                                    </option>
+
+
+                                    <option
+                                        value="fixed"
+                                        ${
+                                            line.discountMethod ===
+                                            'fixed'
+                                            ?
+                                            'selected'
+                                            :
+                                            ''
+                                        }
+                                    >
+                                        Fixed
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+
+                            <td>
+
+                                <input
+                                    class="small-input"
+
+                                    type="number"
+
+                                    min="0"
+
+                                    step="0.01"
+
+                                    value="${line.discountValue}"
+
+                                    onchange="
+                                        updateLine(
+                                            ${index},
+                                            'discountValue',
+                                            this.value
+                                        )
+                                    "
+                                >
+
+                            </td>
+
+
+                            <td>
+
+                                MVR
+                                ${money(
+                                    line.aasandhaPrice *
+                                    line.qty
+                                )}
+
+                            </td>
+
+
+                            <td>
+
+                                <strong>
+
+                                    MVR
+                                    ${money(
+                                        calculated.total
+                                    )}
+
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+
+                                <button
+                                    class="delete-button"
+
+                                    onclick="
+                                        removeLine(
+                                            ${index}
+                                        )
+                                    "
+                                >
+
+                                    <i class="fa-solid fa-trash"></i>
+
+                                </button>
+
+                            </td>
+
+                        </tr>
+                    `;
+                }
+            ).join('');
 
 
     recalculate();
 }
 
 
-function updateLine(
+window.updateLine =
+function(
     index,
     field,
     value
 ){
 
     if (
-        field ===
-        'qty'
+        field === 'qty'
     ){
 
         invoiceLines[index].qty =
@@ -4108,14 +4604,15 @@ function updateLine(
         'discountValue'
     ){
 
-        invoiceLines[index].discountValue =
-            Math.max(
-                0,
-                Number(
-                    value ||
-                    0
-                )
-            );
+        invoiceLines[index]
+            .discountValue =
+                Math.max(
+                    0,
+                    Number(
+                        value ||
+                        0
+                    )
+                );
 
     }else{
 
@@ -4125,10 +4622,11 @@ function updateLine(
 
 
     renderServiceLines();
-}
+};
 
 
-function removeLine(index){
+window.removeLine =
+function(index){
 
     invoiceLines.splice(
         index,
@@ -4137,7 +4635,7 @@ function removeLine(index){
 
 
     renderServiceLines();
-}
+};
 
 
 /* =========================================================
@@ -4154,7 +4652,7 @@ function recalculate(){
         0;
 
 
-    let net =
+    let serviceNet =
         0;
 
 
@@ -4165,55 +4663,75 @@ function recalculate(){
     invoiceLines.forEach(
         line => {
 
-            const calc =
+            const calculated =
                 calculateLine(
                     line
                 );
 
 
             subtotal +=
-                calc.subtotal;
+                calculated.subtotal;
 
 
             serviceDiscount +=
-                calc.discount;
+                calculated.discount;
 
 
-            net +=
-                calc.total;
+            serviceNet +=
+                calculated.total;
+
+
+            const governmentRate =
+                Number(
+                    line.aasandhaPrice ||
+                    0
+                )
+                *
+                Number(
+                    line.qty
+                );
 
 
             govtEligible +=
                 Math.min(
-                    calc.total,
-                    line.aasandhaPrice *
-                    line.qty
+                    calculated.total,
+                    governmentRate
                 );
         }
     );
 
 
+    /* ---------------------------------------------
+       WHOLE BILL DISCOUNT
+    --------------------------------------------- */
+
     let billDiscount =
         0;
+
+
+    const discountMethod =
+        $('billDiscountMethod')
+            .value;
 
 
     const discountValue =
         Math.max(
             0,
             Number(
-                billDiscountValue.value ||
+                $('billDiscountValue')
+                    .value ||
                 0
             )
         );
 
 
     if (
-        billDiscountMethod.value ===
+        discountMethod ===
         'percent'
     ){
 
         billDiscount =
-            net
+            serviceNet
             *
             Math.min(
                 100,
@@ -4223,13 +4741,13 @@ function recalculate(){
             100;
 
     }else if (
-        billDiscountMethod.value ===
+        discountMethod ===
         'fixed'
     ){
 
         billDiscount =
             Math.min(
-                net,
+                serviceNet,
                 discountValue
             );
     }
@@ -4238,32 +4756,39 @@ function recalculate(){
     const afterDiscount =
         Math.max(
             0,
-            net -
+            serviceNet -
             billDiscount
         );
 
+
+    /* ---------------------------------------------
+       PRIMARY INSURANCE
+    --------------------------------------------- */
 
     let primaryCover =
         0;
 
 
     if (
-        primaryInsurance.value
+        $('primaryInsurance')
+            .value
     ){
 
         const value =
             Math.max(
                 0,
                 Number(
-                    insuranceValue.value ||
+                    $('insuranceValue')
+                        .value ||
                     0
                 )
             );
 
 
         if (
-            insuranceMethod.value ===
-            'percent'
+            $('insuranceMethod')
+                .value ===
+                'percent'
         ){
 
             primaryCover =
@@ -4294,13 +4819,17 @@ function recalculate(){
         );
 
 
-    const remaining =
+    const afterPrimary =
         Math.max(
             0,
             afterDiscount -
             primaryCover
         );
 
+
+    /* ---------------------------------------------
+       GOVERNMENT INSURANCE
+    --------------------------------------------- */
 
     let governmentCover =
         0;
@@ -4312,7 +4841,7 @@ function recalculate(){
 
         governmentCover =
             Math.min(
-                remaining,
+                afterPrimary,
                 govtEligible
             );
     }
@@ -4321,93 +4850,173 @@ function recalculate(){
     const patientPayable =
         Math.max(
             0,
-            remaining -
+            afterPrimary -
             governmentCover
         );
 
 
-    totals.subtotal =
-        subtotal;
+    totals = {
+
+        subtotal,
+
+        serviceDiscount,
+
+        billDiscount,
+
+        afterDiscount,
+
+        primaryCover,
+
+        governmentCover,
+
+        patientPayable,
+
+        paid:
+            totals.paid ||
+            0,
+
+        balance:
+            totals.balance ||
+            0
+    };
 
 
-    totals.serviceDiscount =
-        serviceDiscount;
+    /* ---------------------------------------------
+       DISPLAY
+    --------------------------------------------- */
+
+    $('subtotalDisplay')
+        .textContent =
+            'MVR '
+            +
+            money(
+                subtotal
+            );
 
 
-    totals.billDiscount =
-        billDiscount;
+    $('serviceDiscountRow')
+        .style
+        .display =
+            serviceDiscount > 0
+            ?
+            'flex'
+            :
+            'none';
 
 
-    totals.afterDiscount =
-        afterDiscount;
+    $('serviceDiscountDisplay')
+        .textContent =
+            '- MVR '
+            +
+            money(
+                serviceDiscount
+            );
 
 
-    totals.primaryCover =
-        primaryCover;
+    $('billDiscountRow')
+        .style
+        .display =
+            billDiscount > 0
+            ?
+            'flex'
+            :
+            'none';
 
 
-    totals.governmentCover =
-        governmentCover;
+    $('billDiscountDisplay')
+        .textContent =
+            '- MVR '
+            +
+            money(
+                billDiscount
+            );
 
 
-    totals.patientPayable =
-        patientPayable;
+    $('afterDiscountDisplay')
+        .textContent =
+            'MVR '
+            +
+            money(
+                afterDiscount
+            );
 
 
-    subtotalDisplay.textContent =
-        'MVR ' +
-        money(
-            subtotal
-        );
+    $('primaryInsuranceRow')
+        .style
+        .display =
+            primaryCover > 0
+            ?
+            'flex'
+            :
+            'none';
 
 
-    serviceDiscountDisplay.textContent =
-        '- MVR ' +
-        money(
-            serviceDiscount
-        );
+    if (
+        $('primaryInsurance')
+            .value
+    ){
+
+        const selected =
+            $('primaryInsurance')
+                .options[
+                    $('primaryInsurance')
+                        .selectedIndex
+                ];
 
 
-    billDiscountDisplay.textContent =
-        '- MVR ' +
-        money(
-            billDiscount
-        );
+        $('primaryInsuranceLabel')
+            .textContent =
+                selected
+                    ?.textContent
+                    ?.trim() ||
+                'Primary Insurance';
+    }
 
 
-    afterDiscountDisplay.textContent =
-        'MVR ' +
-        money(
-            afterDiscount
-        );
+    $('primaryCoverDisplay')
+        .textContent =
+            '- MVR '
+            +
+            money(
+                primaryCover
+            );
 
 
-    primaryCoverDisplay.textContent =
-        '- MVR ' +
-        money(
-            primaryCover
-        );
+    $('governmentInsuranceRow')
+        .style
+        .display =
+            governmentCover > 0
+            ?
+            'flex'
+            :
+            'none';
 
 
-    governmentCoverDisplay.textContent =
-        '- MVR ' +
-        money(
-            governmentCover
-        );
+    $('governmentCoverDisplay')
+        .textContent =
+            '- MVR '
+            +
+            money(
+                governmentCover
+            );
 
 
-    patientPayableDisplay.textContent =
-        'MVR ' +
-        money(
-            patientPayable
-        );
+    $('patientPayableDisplay')
+        .textContent =
+            'MVR '
+            +
+            money(
+                patientPayable
+            );
 
 
-    paymentTotal.textContent =
-        'MVR ' +
-        money(
-            patientPayable
-        );
+    $('paymentTotal')
+        .textContent =
+            'MVR '
+            +
+            money(
+                patientPayable
+            );
 
 
     paymentMethodChanged();
@@ -4421,9 +5030,11 @@ function recalculate(){
 function paymentMethodChanged(){
 
     const option =
-        paymentMethod.options[
-            paymentMethod.selectedIndex
-        ];
+        $('paymentMethod')
+            .options[
+                $('paymentMethod')
+                    .selectedIndex
+            ];
 
 
     const name =
@@ -4431,6 +5042,8 @@ function paymentMethodChanged(){
             option
                 ?.dataset
                 ?.name ||
+            option
+                ?.textContent ||
             ''
         )
         .trim()
@@ -4447,12 +5060,14 @@ function paymentMethodChanged(){
         );
 
 
-    paidAmountArea.style.display =
-        allowPartial
-        ?
-        'block'
-        :
-        'none';
+    $('paidAmountArea')
+        .style
+        .display =
+            allowPartial
+            ?
+            'block'
+            :
+            'none';
 
 
     if (
@@ -4468,8 +5083,9 @@ function paymentMethodChanged(){
             0;
 
 
-        amountPaid.value =
-            0;
+        $('amountPaid')
+            .value =
+                0;
 
     }else if (
         allowPartial
@@ -4480,7 +5096,8 @@ function paymentMethodChanged(){
         return;
 
     }else if (
-        paymentMethod.value
+        $('paymentMethod')
+            .value
     ){
 
         totals.paid =
@@ -4491,10 +5108,12 @@ function paymentMethodChanged(){
             0;
 
 
-        amountPaid.value =
-            totals.patientPayable.toFixed(
-                2
-            );
+        $('amountPaid')
+            .value =
+                totals.patientPayable
+                    .toFixed(
+                        2
+                    );
 
     }else{
 
@@ -4517,7 +5136,8 @@ function updatePaymentBalance(){
         Math.max(
             0,
             Number(
-                amountPaid.value ||
+                $('amountPaid')
+                    .value ||
                 0
             )
         );
@@ -4548,18 +5168,22 @@ function updatePaymentBalance(){
 
 function updatePaymentDisplay(){
 
-    paidDisplay.textContent =
-        'MVR ' +
-        money(
-            totals.paid
-        );
+    $('paidDisplay')
+        .textContent =
+            'MVR '
+            +
+            money(
+                totals.paid
+            );
 
 
-    balanceDisplay.textContent =
-        'MVR ' +
-        money(
-            totals.balance
-        );
+    $('balanceDisplay')
+        .textContent =
+            'MVR '
+            +
+            money(
+                totals.balance
+            );
 }
 
 
@@ -4578,7 +5202,10 @@ async function saveMemo(){
     }
 
 
-    if (!doctorSelect.value){
+    if (
+        !$('doctorSelect')
+            .value
+    ){
 
         return showToast(
             'Select a doctor.',
@@ -4600,7 +5227,8 @@ async function saveMemo(){
         totals.patientPayable >
         0
         &&
-        !paymentMethod.value
+        !$('paymentMethod')
+            .value
     ){
 
         return showToast(
@@ -4610,11 +5238,15 @@ async function saveMemo(){
     }
 
 
-    saveMemoButton.disabled =
+    const button =
+        $('saveMemoButton');
+
+
+    button.disabled =
         true;
 
 
-    saveMemoButton.innerHTML = `
+    button.innerHTML = `
 
         <i class="fa-solid fa-spinner fa-spin"></i>
         Creating Memo...
@@ -4624,10 +5256,12 @@ async function saveMemo(){
 
     try{
 
-        const selectedDoctorOption =
-            doctorSelect.options[
-                doctorSelect.selectedIndex
-            ];
+        const doctorOption =
+            $('doctorSelect')
+                .options[
+                    $('doctorSelect')
+                        .selectedIndex
+                ];
 
 
         const response =
@@ -4661,16 +5295,17 @@ async function saveMemo(){
 
                             doctorUserId:
                                 Number(
-                                    doctorSelect.value
+                                    $('doctorSelect')
+                                        .value
                                 ),
 
                             doctorTableId:
-                                selectedDoctorOption
+                                doctorOption
                                     ?.dataset
                                     ?.doctorTableId
                                 ?
                                 Number(
-                                    selectedDoctorOption
+                                    doctorOption
                                         .dataset
                                         .doctorTableId
                                 )
@@ -4678,41 +5313,50 @@ async function saveMemo(){
                                 null,
 
                             primaryInsuranceId:
-                                primaryInsurance.value
+                                $('primaryInsurance')
+                                    .value
                                 ?
                                 Number(
-                                    primaryInsurance.value
+                                    $('primaryInsurance')
+                                        .value
                                 )
                                 :
                                 null,
 
                             insuranceMethod:
-                                primaryInsurance.value
+                                $('primaryInsurance')
+                                    .value
                                 ?
-                                insuranceMethod.value
+                                $('insuranceMethod')
+                                    .value
                                 :
                                 null,
 
                             insuranceValue:
                                 Number(
-                                    insuranceValue.value ||
+                                    $('insuranceValue')
+                                        .value ||
                                     0
                                 ),
 
                             billDiscountMethod:
-                                billDiscountMethod.value,
+                                $('billDiscountMethod')
+                                    .value,
 
                             billDiscountValue:
                                 Number(
-                                    billDiscountValue.value ||
+                                    $('billDiscountValue')
+                                        .value ||
                                     0
                                 ),
 
                             paymentMethodId:
-                                paymentMethod.value
+                                $('paymentMethod')
+                                    .value
                                 ?
                                 Number(
-                                    paymentMethod.value
+                                    $('paymentMethod')
+                                        .value
                                 )
                                 :
                                 null,
@@ -4721,12 +5365,12 @@ async function saveMemo(){
                                 totals.paid,
 
                             paymentReference:
-                                paymentReference
+                                $('paymentReference')
                                     .value
                                     .trim(),
 
                             remarks:
-                                memoRemarks
+                                $('memoRemarks')
                                     .value
                                     .trim(),
 
@@ -4765,14 +5409,14 @@ async function saveMemo(){
         }
 
 
-        showReceipt(
-            data.memo
-        );
-
-
         showToast(
             'Memo created successfully.',
             'success'
+        );
+
+
+        showReceipt(
+            data.memo
         );
 
 
@@ -4789,11 +5433,11 @@ async function saveMemo(){
 
     }finally{
 
-        saveMemoButton.disabled =
+        button.disabled =
             false;
 
 
-        saveMemoButton.innerHTML = `
+        button.innerHTML = `
 
             <i class="fa-solid fa-file-circle-check"></i>
             Create Memo & Receipt
@@ -4804,279 +5448,468 @@ async function saveMemo(){
 
 
 /* =========================================================
-   RECEIPT NUMBER ADMIN
-========================================================= */
-
-async function setReceiptNumber(){
-
-    const nextNumber =
-        Number(
-            nextReceiptNumber.value
-        );
-
-
-    if (
-        !Number.isInteger(
-            nextNumber
-        )
-        ||
-        nextNumber <
-        1
-    ){
-
-        return showToast(
-            'Enter a valid receipt number.',
-            'error'
-        );
-    }
-
-
-    if (
-        !confirm(
-            'Set next receipt number to '
-            +
-            nextNumber
-            +
-            '?'
-        )
-    ){
-
-        return;
-    }
-
-
-    try{
-
-        const response =
-            await fetch(
-                '/api/memocreate',
-                {
-
-                    method:'POST',
-
-                    headers:{
-                        'Content-Type':
-                            'application/json'
-                    },
-
-                    body:
-                        JSON.stringify({
-
-                            action:
-                                'set-receipt-next',
-
-                            userId:
-                                currentUser.id,
-
-                            nextNumber
-                        })
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if (!response.ok){
-
-            throw new Error(
-                data.message
-            );
-        }
-
-
-        nextReceiptNumber.value =
-            '';
-
-
-        showToast(
-            'Receipt number updated.',
-            'success'
-        );
-
-
-    }catch(error){
-
-        showToast(
-            error.message,
-            'error'
-        );
-    }
-}
-
-
-/* =========================================================
    RECEIPT
 ========================================================= */
 
 function showReceipt(memo){
 
-    receiptNumber.textContent =
-        'Receipt No: ' +
-        memo.receiptNo;
+    const company =
+        memo.company ||
+        companyInfo ||
+        {};
 
 
-    receiptInfo.innerHTML = `
+    const patient =
+        memo.patient ||
+        selectedPatient ||
+        {};
 
-        <div>
-            <strong>Patient:</strong>
-            ${escapeHtml(
-                memo.patientName
-            )}
-        </div>
 
-        <div>
-            <strong>Patient No:</strong>
-            ${escapeHtml(
-                memo.patientNo ||
-                '-'
-            )}
-        </div>
+    /* COMPANY */
 
-        <div>
-            <strong>Doctor:</strong>
-            ${escapeHtml(
-                memo.doctorName
-            )}
-        </div>
+    $('printCompanyName')
+        .textContent =
+            company.name ||
+            company.company_name ||
+            'Clinic';
 
-        <div>
-            <strong>Date:</strong>
-            ${escapeHtml(
+
+    $('printCompanyAddress')
+        .textContent =
+            company.address ||
+            company.company_address ||
+            '';
+
+
+    const contact = [];
+
+
+    const companyPhone =
+        company.phone ||
+        company.company_phone;
+
+
+    const companyEmail =
+        company.email ||
+        company.company_email;
+
+
+    if (companyPhone){
+
+        contact.push(
+            'Tel: '
+            +
+            companyPhone
+        );
+    }
+
+
+    if (companyEmail){
+
+        contact.push(
+            companyEmail
+        );
+    }
+
+
+    $('printCompanyContact')
+        .textContent =
+            contact.join(
+                ' • '
+            );
+
+
+    const registration =
+        company.registrationNo ||
+        company.company_registration_no;
+
+
+    $('printCompanyRegistration')
+        .textContent =
+            registration
+            ?
+            'Registration No: '
+            +
+            registration
+            :
+            '';
+
+
+    /* PATIENT */
+
+    $('printPatientName')
+        .textContent =
+            patient.name ||
+            patient.full_name ||
+            '-';
+
+
+    $('printPatientNo')
+        .textContent =
+            patient.patientNo ||
+            patient.patient_no ||
+            '-';
+
+
+    $('printPatientId')
+        .textContent =
+            patient.idPassport ||
+            patient.id_passport_no ||
+            patient.national_id ||
+            patient.passport_id ||
+            '-';
+
+
+    const dob =
+        patient.dateOfBirth ||
+        patient.date_of_birth;
+
+
+    $('printDob')
+        .textContent =
+            dob
+            ?
+            formatDate(
+                dob
+            )
+            :
+            '-';
+
+
+    $('printAge')
+        .textContent =
+            dob
+            ?
+            calculateAge(
+                String(dob)
+                    .substring(
+                        0,
+                        10
+                    )
+            )
+            :
+            '-';
+
+
+    $('printNationality')
+        .textContent =
+            patient.nationality ||
+            '-';
+
+
+    $('printContact')
+        .textContent =
+            patient.contact ||
+            patient.phone ||
+            '-';
+
+
+    $('printAddress')
+        .textContent =
+            patient.address ||
+            '-';
+
+
+    /* MEMO */
+
+    $('printReceiptNo')
+        .textContent =
+            memo.receiptNo ||
+            '-';
+
+
+    $('printMemoDate')
+        .textContent =
+            memo.memoDate
+            ?
+            formatDate(
                 memo.memoDate
-            )}
-        </div>
+            )
+            :
+            '-';
 
-        <div>
-            <strong>Insurance:</strong>
-            ${escapeHtml(
-                memo.primaryInsuranceName ||
-                'None'
-            )}
-        </div>
 
-        <div>
-            <strong>Government Insurance:</strong>
-            ${
-                Number(
-                    memo.governmentInsuranceCover ||
-                    0
-                ) >
+    $('printDoctor')
+        .textContent =
+            memo.doctorName ||
+            '-';
+
+
+    if (
+        memo.primaryInsuranceName
+    ){
+
+        $('printInsuranceLine')
+            .style
+            .display =
+                'grid';
+
+
+        $('printInsurance')
+            .textContent =
+                memo.primaryInsuranceName;
+
+    }else{
+
+        $('printInsuranceLine')
+            .style
+            .display =
+                'none';
+    }
+
+
+    $('printGovernmentInsuranceLine')
+        .style
+        .display =
+            Number(
+                memo.governmentInsuranceCover ||
                 0
-                ?
-                'Aasandha'
-                :
-                'None'
-            }
-        </div>
-    `;
+            ) >
+            0
+            ?
+            'grid'
+            :
+            'none';
 
 
-    receiptItems.innerHTML =
-        memo.items.map(
-            item => `
+    if (
+        memo.paymentMethodName
+    ){
 
-                <tr>
-
-                    <td>
-                        ${escapeHtml(
-                            item.serviceName
-                        )}
-                    </td>
-
-                    <td>
-                        ${item.qty}
-                    </td>
-
-                    <td>
-                        MVR
-                        ${money(
-                            item.price
-                        )}
-                    </td>
-
-                    <td>
-                        MVR
-                        ${money(
-                            item.discountAmount
-                        )}
-                    </td>
-
-                    <td>
-                        MVR
-                        ${money(
-                            item.lineTotal
-                        )}
-                    </td>
-
-                </tr>
-
-            `
-        )
-        .join('');
+        $('printPaymentMethodLine')
+            .style
+            .display =
+                'grid';
 
 
-    receiptTotals.innerHTML = `
+        $('printPaymentMethod')
+            .textContent =
+                memo.paymentMethodName;
+
+    }else{
+
+        $('printPaymentMethodLine')
+            .style
+            .display =
+                'none';
+    }
+
+
+    /* ITEMS */
+
+    $('receiptItems')
+        .innerHTML =
+            (
+                memo.items ||
+                []
+            ).map(
+                item => `
+
+                    <tr>
+
+                        <td>
+                            ${escapeHtml(
+                                item.serviceName ||
+                                item.service_name ||
+                                ''
+                            )}
+                        </td>
+
+                        <td>
+                            ${
+                                item.qty ||
+                                item.quantity ||
+                                1
+                            }
+                        </td>
+
+                        <td>
+                            ${money(
+                                item.price ||
+                                item.unit_price ||
+                                0
+                            )}
+                        </td>
+
+                        <td>
+
+                            ${
+                                Number(
+                                    item.discountAmount ||
+                                    item.discount_amount ||
+                                    0
+                                ) >
+                                0
+                                ?
+                                money(
+                                    item.discountAmount ||
+                                    item.discount_amount
+                                )
+                                :
+                                '-'
+                            }
+
+                        </td>
+
+                        <td>
+                            ${money(
+                                item.lineTotal ||
+                                item.line_total ||
+                                0
+                            )}
+                        </td>
+
+                    </tr>
+
+                `
+            ).join('');
+
+
+    /* CONDITIONAL SUMMARY */
+
+    let summary = `
 
         <div class="calc-row">
 
-            <span>Subtotal</span>
+            <span>
+                Subtotal
+            </span>
 
             <strong>
-                MVR ${money(
+                MVR
+                ${money(
                     memo.subtotal
                 )}
             </strong>
 
         </div>
+    `;
 
 
-        <div class="calc-row calc-discount">
+    if (
+        Number(
+            memo.serviceDiscount ||
+            0
+        ) >
+        0
+    ){
 
-            <span>Discount</span>
+        summary += `
 
-            <strong>
-                - MVR
-                ${money(
-                    memo.totalDiscount
-                )}
-            </strong>
+            <div class="calc-row calc-discount">
 
-        </div>
+                <span>
+                    Service Discount
+                </span>
 
+                <strong>
+                    - MVR
+                    ${money(
+                        memo.serviceDiscount
+                    )}
+                </strong>
 
-        <div class="calc-row calc-insurance">
-
-            <span>Primary Insurance</span>
-
-            <strong>
-                - MVR
-                ${money(
-                    memo.primaryInsuranceCover
-                )}
-            </strong>
-
-        </div>
+            </div>
+        `;
+    }
 
 
-        <div class="calc-row calc-govt">
+    if (
+        Number(
+            memo.billDiscountAmount ||
+            0
+        ) >
+        0
+    ){
 
-            <span>Government Insurance</span>
+        summary += `
 
-            <strong>
-                - MVR
-                ${money(
-                    memo.governmentInsuranceCover
-                )}
-            </strong>
+            <div class="calc-row calc-discount">
 
-        </div>
+                <span>
+                    Bill Discount
+                </span>
 
+                <strong>
+                    - MVR
+                    ${money(
+                        memo.billDiscountAmount
+                    )}
+                </strong>
+
+            </div>
+        `;
+    }
+
+
+    if (
+        Number(
+            memo.primaryInsuranceCover ||
+            0
+        ) >
+        0
+    ){
+
+        summary += `
+
+            <div class="calc-row calc-insurance">
+
+                <span>
+                    ${
+                        escapeHtml(
+                            memo.primaryInsuranceName ||
+                            'Insurance'
+                        )
+                    }
+                </span>
+
+                <strong>
+                    - MVR
+                    ${money(
+                        memo.primaryInsuranceCover
+                    )}
+                </strong>
+
+            </div>
+        `;
+    }
+
+
+    if (
+        Number(
+            memo.governmentInsuranceCover ||
+            0
+        ) >
+        0
+    ){
+
+        summary += `
+
+            <div class="calc-row calc-govt">
+
+                <span>
+                    Aasandha
+                </span>
+
+                <strong>
+                    - MVR
+                    ${money(
+                        memo.governmentInsuranceCover
+                    )}
+                </strong>
+
+            </div>
+        `;
+    }
+
+
+    summary += `
 
         <div class="calc-row calc-total">
 
-            <span>Patient Payable</span>
+            <span>
+                Patient Payable
+            </span>
 
             <strong>
                 MVR
@@ -5086,39 +5919,71 @@ function showReceipt(memo){
             </strong>
 
         </div>
-
-
-        <div class="calc-row">
-
-            <span>Paid</span>
-
-            <strong>
-                MVR
-                ${money(
-                    memo.paidAmount
-                )}
-            </strong>
-
-        </div>
-
-
-        <div class="calc-row">
-
-            <span>Balance</span>
-
-            <strong>
-                MVR
-                ${money(
-                    memo.balanceAmount
-                )}
-            </strong>
-
-        </div>
-
     `;
 
 
-    receiptOverlay
+    if (
+        Number(
+            memo.paidAmount ||
+            0
+        ) >
+        0
+    ){
+
+        summary += `
+
+            <div class="calc-row">
+
+                <span>
+                    Paid
+                </span>
+
+                <strong>
+                    MVR
+                    ${money(
+                        memo.paidAmount
+                    )}
+                </strong>
+
+            </div>
+        `;
+    }
+
+
+    if (
+        Number(
+            memo.balanceAmount ||
+            0
+        ) >
+        0
+    ){
+
+        summary += `
+
+            <div class="calc-row">
+
+                <span>
+                    Balance
+                </span>
+
+                <strong>
+                    MVR
+                    ${money(
+                        memo.balanceAmount
+                    )}
+                </strong>
+
+            </div>
+        `;
+    }
+
+
+    $('receiptTotals')
+        .innerHTML =
+            summary;
+
+
+    $('receiptOverlay')
         .classList
         .add(
             'show'
@@ -5128,7 +5993,7 @@ function showReceipt(memo){
 
 function closeReceipt(){
 
-    receiptOverlay
+    $('receiptOverlay')
         .classList
         .remove(
             'show'
@@ -5140,7 +6005,7 @@ function closeReceipt(){
 
 
 /* =========================================================
-   HELPERS
+   GENERAL HELPERS
 ========================================================= */
 
 function calculateAge(value){
@@ -5153,7 +6018,12 @@ function calculateAge(value){
 
     const dob =
         new Date(
-            value +
+            String(value)
+                .substring(
+                    0,
+                    10
+                )
+            +
             'T00:00:00'
         );
 
@@ -5168,17 +6038,17 @@ function calculateAge(value){
         dob.getFullYear();
 
 
-    const month =
+    const monthDifference =
         today.getMonth()
         -
         dob.getMonth();
 
 
     if (
-        month < 0
+        monthDifference < 0
         ||
         (
-            month === 0
+            monthDifference === 0
             &&
             today.getDate() <
             dob.getDate()
@@ -5283,6 +6153,10 @@ function showToast(
     type='success'
 ){
 
+    const toast =
+        $('toast');
+
+
     toast.textContent =
         text;
 
@@ -5334,11 +6208,6 @@ function logout(){
     location.href =
         'login.html';
 }
-
-
-loadPage();
-
-recalculate();
 
 </script>
 
