@@ -1,0 +1,2492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Appointments | Clinic</title>
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --primary:#1685e8;
+    --primary-dark:#0966bf;
+
+    --green:#12aa78;
+    --purple:#7655e8;
+    --orange:#f3a13b;
+    --red:#e95067;
+
+    --bg:#f4f8fc;
+    --white:#ffffff;
+
+    --text:#14223d;
+    --muted:#74829a;
+    --border:#e0e9f2;
+
+    --shadow:
+        0 10px 30px
+        rgba(30,65,105,.08);
+}
+
+body{
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef8ff,
+            #f8fbff,
+            #edfcf7
+        );
+
+    color:var(--text);
+
+    min-height:100vh;
+}
+
+/* HEADER */
+
+.header{
+    min-height:72px;
+
+    background:white;
+
+    border-bottom:
+        1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+
+    padding:0 25px;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+    box-shadow:
+        0 4px 15px
+        rgba(30,60,100,.04);
+}
+
+.brand{
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-size:18px;
+
+    font-weight:800;
+}
+
+.brand-icon{
+    width:44px;
+    height:44px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:13px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1685e8,
+            #12af91
+        );
+
+    font-size:20px;
+}
+
+.header-actions{
+    margin-left:auto;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+}
+
+.user-details{
+    text-align:right;
+
+    margin-right:8px;
+}
+
+.user-name{
+    font-size:12px;
+
+    font-weight:800;
+}
+
+.user-role{
+    font-size:10px;
+
+    color:var(--green);
+
+    margin-top:2px;
+}
+
+.head-btn{
+    border:0;
+
+    border-radius:10px;
+
+    padding:10px 14px;
+
+    cursor:pointer;
+
+    font-weight:700;
+}
+
+.dashboard-btn{
+    background:#e9f4ff;
+
+    color:var(--primary);
+}
+
+.logout-btn{
+    background:#fff0f2;
+
+    color:var(--red);
+}
+
+/* CONTENT */
+
+.container{
+    max-width:1250px;
+
+    margin:28px auto;
+
+    padding:0 18px 40px;
+}
+
+.page-head{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:15px;
+
+    margin-bottom:22px;
+}
+
+.page-head h1{
+    font-size:27px;
+}
+
+.page-head p{
+    margin-top:6px;
+
+    color:var(--muted);
+
+    font-size:13px;
+}
+
+.register-btn{
+    border:0;
+
+    border-radius:11px;
+
+    padding:11px 16px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #12aa78,
+            #0d956a
+        );
+
+    cursor:pointer;
+
+    font-weight:800;
+}
+
+/* PATIENT TYPE */
+
+.patient-mode{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:12px;
+
+    margin-bottom:20px;
+}
+
+.mode{
+    background:white;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:16px;
+
+    padding:15px;
+
+    cursor:pointer;
+
+    text-align:left;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:13px;
+
+    box-shadow:var(--shadow);
+
+    transition:.2s;
+}
+
+.mode.active{
+    border-color:var(--primary);
+
+    background:#f0f8ff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(22,133,232,.08);
+}
+
+.mode-icon{
+    width:46px;
+    height:46px;
+
+    flex:none;
+
+    border-radius:13px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:#e9f5ff;
+
+    color:var(--primary);
+
+    font-size:19px;
+}
+
+.mode.temp .mode-icon{
+    background:#e6faf2;
+
+    color:var(--green);
+}
+
+.mode-title{
+    font-size:14px;
+
+    font-weight:800;
+}
+
+.mode-text{
+    font-size:10px;
+
+    margin-top:3px;
+
+    color:var(--muted);
+}
+
+/* GRID */
+
+.main-grid{
+    display:grid;
+
+    grid-template-columns:
+        1.08fr .92fr;
+
+    gap:20px;
+}
+
+.card{
+    background:white;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:18px;
+
+    padding:21px;
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:18px;
+}
+
+.card-head{
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    margin-bottom:20px;
+}
+
+.card-icon{
+    width:42px;
+    height:42px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:#eaf5ff;
+
+    color:var(--primary);
+}
+
+.card-head h2{
+    font-size:16px;
+}
+
+.card-head p{
+    font-size:10px;
+
+    color:var(--muted);
+
+    margin-top:3px;
+}
+
+/* FIELDS */
+
+.field{
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    color:#394963;
+
+    margin-bottom:7px;
+}
+
+.required{
+    color:var(--red);
+}
+
+input,
+select,
+textarea{
+    width:100%;
+
+    border:
+        1px solid #d6e2ee;
+
+    border-radius:11px;
+
+    background:#fbfdff;
+
+    padding:12px 13px;
+
+    outline:none;
+
+    font-family:inherit;
+
+    font-size:13px;
+}
+
+textarea{
+    resize:vertical;
+
+    min-height:80px;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:var(--primary);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(22,133,232,.08);
+}
+
+.row2{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:12px;
+}
+
+/* PATIENT SEARCH */
+
+.search-row{
+    display:flex;
+
+    gap:8px;
+}
+
+.search-row input{
+    flex:1;
+}
+
+.search-btn{
+    width:49px;
+
+    border:0;
+
+    border-radius:11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1685e8,
+            #0871ce
+        );
+
+    color:white;
+
+    cursor:pointer;
+}
+
+.search-message{
+    margin-top:8px;
+
+    font-size:11px;
+}
+
+.search-message.success{
+    color:var(--green);
+}
+
+.search-message.error{
+    color:var(--red);
+}
+
+/* FOUND */
+
+.found-patient{
+    display:none;
+
+    margin-top:14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef8ff,
+            #effcf8
+        );
+
+    border:
+        1px solid #d1e8ea;
+
+    border-radius:14px;
+
+    padding:15px;
+}
+
+.found-patient.show{
+    display:block;
+}
+
+.found-name{
+    font-size:15px;
+
+    font-weight:800;
+}
+
+.found-grid{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:8px;
+
+    margin-top:10px;
+
+    color:#617088;
+
+    font-size:10px;
+}
+
+/* INFO */
+
+.info{
+    padding:12px 13px;
+
+    border-radius:11px;
+
+    background:#fff7e7;
+
+    color:#826518;
+
+    font-size:11px;
+
+    line-height:1.6;
+}
+
+/* SUMMARY */
+
+.summary{
+    background:
+        linear-gradient(
+            135deg,
+            #edf7ff,
+            #f0fcf8
+        );
+
+    border:
+        1px solid #d7e9ee;
+
+    border-radius:15px;
+
+    padding:16px;
+
+    margin-top:4px;
+}
+
+.summary-title{
+    font-size:12px;
+
+    font-weight:800;
+
+    margin-bottom:10px;
+}
+
+.summary-row{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    padding:7px 0;
+
+    border-bottom:
+        1px dashed #d3e0e8;
+
+    font-size:11px;
+}
+
+.summary-row:last-child{
+    border-bottom:0;
+}
+
+.summary-label{
+    color:var(--muted);
+}
+
+.summary-value{
+    text-align:right;
+
+    font-weight:700;
+}
+
+/* SAVE */
+
+.save-btn{
+    width:100%;
+
+    margin-top:16px;
+
+    border:0;
+
+    border-radius:13px;
+
+    padding:14px;
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1685e8,
+            #11a981
+        );
+}
+
+.save-btn:disabled{
+    opacity:.6;
+
+    cursor:not-allowed;
+}
+
+/* APPOINTMENTS */
+
+.appointment{
+    display:grid;
+
+    grid-template-columns:
+        55px 1fr auto;
+
+    gap:11px;
+
+    align-items:center;
+
+    padding:12px 0;
+
+    border-bottom:
+        1px solid #edf1f6;
+}
+
+.appointment:last-child{
+    border-bottom:0;
+}
+
+.app-time{
+    width:52px;
+    height:52px;
+
+    border-radius:14px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    background:#e8f4ff;
+
+    color:var(--primary);
+
+    font-size:10px;
+
+    font-weight:800;
+}
+
+.app-name{
+    font-size:12px;
+
+    font-weight:800;
+}
+
+.app-detail{
+    font-size:10px;
+
+    color:var(--muted);
+
+    margin-top:4px;
+}
+
+.temp-label{
+    display:inline-block;
+
+    margin-top:5px;
+
+    background:#fff4df;
+
+    color:#d48117;
+
+    padding:3px 6px;
+
+    border-radius:20px;
+
+    font-size:8px;
+
+    font-weight:800;
+}
+
+.status{
+    padding:5px 8px;
+
+    border-radius:20px;
+
+    background:#e8f9f2;
+
+    color:#0e9468;
+
+    font-size:9px;
+
+    font-weight:800;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+
+    right:20px;
+
+    bottom:20px;
+
+    max-width:380px;
+
+    padding:14px 18px;
+
+    border-radius:12px;
+
+    color:white;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    opacity:0;
+
+    transform:
+        translateY(100px);
+
+    transition:.25s;
+
+    z-index:9999;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:
+        translateY(0);
+}
+
+.toast.success{
+    background:#10a978;
+}
+
+.toast.error{
+    background:#df4b60;
+}
+
+@media(max-width:900px){
+
+    .main-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:620px){
+
+    .header{
+        padding:0 12px;
+    }
+
+    .brand span,
+    .user-details{
+        display:none;
+    }
+
+    .patient-mode,
+    .row2{
+        grid-template-columns:1fr;
+    }
+
+    .page-head{
+        flex-direction:column;
+    }
+
+    .register-btn{
+        width:100%;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            <i class="fa-solid fa-calendar-check"></i>
+        </div>
+
+        <span>
+            Clinic Appointments
+        </span>
+
+    </div>
+
+
+    <div class="header-actions">
+
+        <div class="user-details">
+
+            <div
+                class="user-name"
+                id="headerUserName"
+            ></div>
+
+            <div
+                class="user-role"
+                id="headerUserRole"
+            ></div>
+
+        </div>
+
+
+        <button
+            class="head-btn dashboard-btn"
+            onclick="
+                location.href='dashboard.html'
+            "
+        >
+            <i class="fa-solid fa-house"></i>
+            Dashboard
+        </button>
+
+
+        <button
+            class="head-btn logout-btn"
+            onclick="logout()"
+        >
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <div class="page-head">
+
+        <div>
+
+            <h1>
+                New Appointment
+            </h1>
+
+            <p>
+                Book a registered patient or create a quick
+                appointment for an unregistered patient.
+            </p>
+
+        </div>
+
+
+        <button
+            class="register-btn"
+            onclick="
+                location.href='patients.html'
+            "
+        >
+            <i class="fa-solid fa-user-plus"></i>
+            Patient Registry
+        </button>
+
+    </div>
+
+
+    <div class="patient-mode">
+
+        <button
+            class="mode active"
+            id="existingMode"
+            onclick="
+                selectMode('existing')
+            "
+        >
+
+            <div class="mode-icon">
+                <i class="fa-solid fa-user-check"></i>
+            </div>
+
+            <div>
+
+                <div class="mode-title">
+                    Existing Patient
+                </div>
+
+                <div class="mode-text">
+                    Search by ID Card / Passport number
+                </div>
+
+            </div>
+
+        </button>
+
+
+        <button
+            class="mode temp"
+            id="temporaryMode"
+            onclick="
+                selectMode('temporary')
+            "
+        >
+
+            <div class="mode-icon">
+                <i class="fa-solid fa-user-clock"></i>
+            </div>
+
+            <div>
+
+                <div class="mode-title">
+                    Unregistered Patient
+                </div>
+
+                <div class="mode-text">
+                    Patient name and contact number only
+                </div>
+
+            </div>
+
+        </button>
+
+    </div>
+
+
+    <div class="main-grid">
+
+        <!-- LEFT -->
+
+        <div>
+
+            <section
+                class="card"
+                id="existingSection"
+            >
+
+                <div class="card-head">
+
+                    <div class="card-icon">
+                        <i class="fa-solid fa-search"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Search Existing Patient
+                        </h2>
+
+                        <p>
+                            Enter ID Card / Passport number
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        ID Card / Passport No.
+                        <span class="required">*</span>
+                    </label>
+
+
+                    <div class="search-row">
+
+                        <input
+                            id="patientSearch"
+                            placeholder="Enter ID Card / Passport"
+                            autocomplete="off"
+                        >
+
+                        <button
+                            class="search-btn"
+                            onclick="searchPatient()"
+                        >
+                            <i class="fa-solid fa-search"></i>
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="search-message"
+                        id="searchMessage"
+                    ></div>
+
+                </div>
+
+
+                <div
+                    class="found-patient"
+                    id="foundPatient"
+                >
+
+                    <div
+                        class="found-name"
+                        id="foundName"
+                    ></div>
+
+
+                    <div class="found-grid">
+
+                        <div>
+                            ID / Passport:
+                            <strong id="foundId"></strong>
+                        </div>
+
+                        <div>
+                            Contact:
+                            <strong id="foundContact"></strong>
+                        </div>
+
+                        <div>
+                            Age:
+                            <strong id="foundAge"></strong>
+                        </div>
+
+                        <div>
+                            Nationality:
+                            <strong id="foundNationality"></strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <section
+                class="card"
+                id="temporarySection"
+                style="display:none;"
+            >
+
+                <div class="card-head">
+
+                    <div
+                        class="card-icon"
+                        style="
+                            background:#e6faf2;
+                            color:#12aa78;
+                        "
+                    >
+                        <i class="fa-solid fa-user-clock"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Unregistered Patient
+                        </h2>
+
+                        <p>
+                            Appointment details only
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Patient Name
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        id="temporaryName"
+                        placeholder="Patient full name"
+                        oninput="updateSummary()"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Contact No.
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        id="temporaryContact"
+                        placeholder="Contact number"
+                    >
+
+                </div>
+
+
+                <div class="info">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    Full patient registration is not required now.
+                    Registration can be completed when the patient
+                    arrives for treatment.
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- RIGHT -->
+
+        <div>
+
+            <section class="card">
+
+                <div class="card-head">
+
+                    <div
+                        class="card-icon"
+                        style="
+                            background:#f0edff;
+                            color:#7655e8;
+                        "
+                    >
+                        <i class="fa-solid fa-calendar-plus"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Appointment Details
+                        </h2>
+
+                        <p>
+                            Doctor, date, time and service
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Doctor
+                        <span class="required">*</span>
+                    </label>
+
+                    <select
+                        id="doctorSelect"
+                        onchange="updateSummary()"
+                    >
+
+                        <option value="">
+                            Loading doctors...
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="row2">
+
+                    <div class="field">
+
+                        <label>
+                            Date
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="appointmentDate"
+                            type="date"
+                            onchange="updateSummary()"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Time
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="appointmentTime"
+                            type="time"
+                            onchange="updateSummary()"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Service
+                    </label>
+
+                    <select
+                        id="serviceSelect"
+                        onchange="updateSummary()"
+                    >
+
+                        <option value="">
+                            Service not known / Select later
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Reason / Notes
+                    </label>
+
+                    <textarea
+                        id="appointmentNotes"
+                        placeholder="Optional appointment notes..."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="summary">
+
+                    <div class="summary-title">
+                        Appointment Summary
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span class="summary-label">
+                            Patient
+                        </span>
+
+                        <span
+                            class="summary-value"
+                            id="summaryPatient"
+                        >
+                            -
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span class="summary-label">
+                            Doctor
+                        </span>
+
+                        <span
+                            class="summary-value"
+                            id="summaryDoctor"
+                        >
+                            -
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span class="summary-label">
+                            Date
+                        </span>
+
+                        <span
+                            class="summary-value"
+                            id="summaryDate"
+                        >
+                            -
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span class="summary-label">
+                            Time
+                        </span>
+
+                        <span
+                            class="summary-value"
+                            id="summaryTime"
+                        >
+                            -
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span class="summary-label">
+                            Service
+                        </span>
+
+                        <span
+                            class="summary-value"
+                            id="summaryService"
+                        >
+                            Not specified
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="save-btn"
+                    id="saveAppointmentButton"
+                    onclick="saveAppointment()"
+                >
+
+                    <i class="fa-solid fa-calendar-check"></i>
+                    Save Appointment
+
+                </button>
+
+            </section>
+
+
+            <section class="card">
+
+                <div class="card-head">
+
+                    <div
+                        class="card-icon"
+                        style="
+                            background:#fff3e2;
+                            color:#e99126;
+                        "
+                    >
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Today's Appointments
+                        </h2>
+
+                        <p id="appointmentCount">
+                            Loading...
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div id="appointmentList">
+                </div>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+
+const currentUser =
+    JSON.parse(
+        sessionStorage.getItem(
+            'clinic_user'
+        ) || 'null'
+    );
+
+
+if (!currentUser){
+
+    location.href =
+        'login.html';
+}
+
+
+headerUserName.textContent =
+    currentUser?.fullName ||
+    currentUser?.username ||
+    'User';
+
+
+headerUserRole.textContent =
+    (
+        currentUser?.role ||
+        ''
+    ).toUpperCase();
+
+
+let patientMode =
+    'existing';
+
+
+let selectedPatient =
+    null;
+
+
+let doctors = [];
+
+let services = [];
+
+
+/* DATE */
+
+const now =
+    new Date();
+
+
+const todayString =
+    [
+        now.getFullYear(),
+
+        String(
+            now.getMonth()+1
+        ).padStart(
+            2,
+            '0'
+        ),
+
+        String(
+            now.getDate()
+        ).padStart(
+            2,
+            '0'
+        )
+
+    ].join('-');
+
+
+appointmentDate.value =
+    todayString;
+
+
+appointmentDate.min =
+    todayString;
+
+
+/* MODE */
+
+function selectMode(mode){
+
+    patientMode =
+        mode;
+
+
+    selectedPatient =
+        null;
+
+
+    existingMode.classList.toggle(
+        'active',
+        mode === 'existing'
+    );
+
+
+    temporaryMode.classList.toggle(
+        'active',
+        mode === 'temporary'
+    );
+
+
+    existingSection.style.display =
+        mode === 'existing'
+        ?
+        'block'
+        :
+        'none';
+
+
+    temporarySection.style.display =
+        mode === 'temporary'
+        ?
+        'block'
+        :
+        'none';
+
+
+    foundPatient.classList.remove(
+        'show'
+    );
+
+
+    searchMessage.textContent =
+        '';
+
+
+    updateSummary();
+}
+
+
+/* LOAD */
+
+async function loadPage(){
+
+    try{
+
+        const response =
+            await fetch(
+                '/api/appointments?mode=setup'
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok){
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        doctors =
+            data.doctors || [];
+
+
+        services =
+            data.services || [];
+
+
+        renderDoctors();
+
+        renderServices();
+
+        renderAppointments(
+            data.todayAppointments || []
+        );
+
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            'error'
+        );
+    }
+}
+
+
+function renderDoctors(){
+
+    doctorSelect.innerHTML = `
+
+        <option value="">
+            Select Doctor
+        </option>
+
+        ${
+            doctors.map(
+                doctor => `
+
+                    <option
+                        value="${doctor.id}"
+                    >
+                        ${escapeHtml(
+                            doctor.full_name
+                        )}
+                        ${
+                            doctor.speciality
+                            ?
+                            ' - ' +
+                            escapeHtml(
+                                doctor.speciality
+                            )
+                            :
+                            ''
+                        }
+                    </option>
+
+                `
+            ).join('')
+        }
+    `;
+}
+
+
+function renderServices(){
+
+    serviceSelect.innerHTML = `
+
+        <option value="">
+            Service not known / Select later
+        </option>
+
+        ${
+            services.map(
+                service => `
+
+                    <option
+                        value="${service.id}"
+                    >
+                        ${escapeHtml(
+                            service.service_name
+                        )}
+                        - MVR
+                        ${money(
+                            service.price
+                        )}
+                    </option>
+
+                `
+            ).join('')
+        }
+    `;
+}
+
+
+/* SEARCH */
+
+patientSearch.addEventListener(
+    'keydown',
+    function(event){
+
+        if (
+            event.key ===
+            'Enter'
+        ){
+
+            searchPatient();
+        }
+    }
+);
+
+
+async function searchPatient(){
+
+    const query =
+        patientSearch
+            .value
+            .trim();
+
+
+    selectedPatient =
+        null;
+
+
+    foundPatient.classList.remove(
+        'show'
+    );
+
+
+    updateSummary();
+
+
+    if (!query){
+
+        searchMessage.className =
+            'search-message error';
+
+        searchMessage.textContent =
+            'Enter an ID Card or Passport number.';
+
+        return;
+    }
+
+
+    searchMessage.className =
+        'search-message';
+
+    searchMessage.textContent =
+        'Searching...';
+
+
+    try{
+
+        const response =
+            await fetch(
+                '/api/appointments?mode=patient-search&q='
+                +
+                encodeURIComponent(
+                    query
+                )
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok){
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        if (!data.patient){
+
+            searchMessage.className =
+                'search-message error';
+
+            searchMessage.textContent =
+                'Patient not found. Use Unregistered Patient to book the appointment.';
+
+            return;
+        }
+
+
+        selectedPatient =
+            data.patient;
+
+
+        foundName.textContent =
+            selectedPatient.full_name;
+
+
+        foundId.textContent =
+            selectedPatient.id_passport_no ||
+            selectedPatient.national_id ||
+            selectedPatient.passport_id ||
+            '-';
+
+
+        foundContact.textContent =
+            selectedPatient.phone ||
+            '-';
+
+
+        foundAge.textContent =
+            calculateAge(
+                selectedPatient.date_of_birth
+            );
+
+
+        foundNationality.textContent =
+            selectedPatient.nationality ||
+            '-';
+
+
+        foundPatient.classList.add(
+            'show'
+        );
+
+
+        searchMessage.className =
+            'search-message success';
+
+        searchMessage.textContent =
+            'Patient found.';
+
+
+        updateSummary();
+
+
+    }catch(error){
+
+        searchMessage.className =
+            'search-message error';
+
+        searchMessage.textContent =
+            error.message;
+    }
+}
+
+
+/* SUMMARY */
+
+function updateSummary(){
+
+    let patientName =
+        '-';
+
+
+    if (
+        patientMode ===
+        'existing'
+    ){
+
+        patientName =
+            selectedPatient
+                ?.full_name ||
+            '-';
+
+    }else{
+
+        patientName =
+            temporaryName.value.trim()
+            ||
+            '-';
+    }
+
+
+    summaryPatient.textContent =
+        patientName;
+
+
+    const doctorOption =
+        doctorSelect.options[
+            doctorSelect.selectedIndex
+        ];
+
+
+    summaryDoctor.textContent =
+        doctorSelect.value
+        ?
+        doctorOption.textContent.trim()
+        :
+        '-';
+
+
+    summaryDate.textContent =
+        appointmentDate.value
+        ?
+        formatDate(
+            appointmentDate.value
+        )
+        :
+        '-';
+
+
+    summaryTime.textContent =
+        appointmentTime.value ||
+        '-';
+
+
+    const serviceOption =
+        serviceSelect.options[
+            serviceSelect.selectedIndex
+        ];
+
+
+    summaryService.textContent =
+        serviceSelect.value
+        ?
+        serviceOption.textContent.trim()
+        :
+        'Not specified';
+}
+
+
+/* SAVE */
+
+async function saveAppointment(){
+
+    let patientId =
+        null;
+
+
+    let patientName =
+        null;
+
+
+    let contactNo =
+        null;
+
+
+    if (
+        patientMode ===
+        'existing'
+    ){
+
+        if (!selectedPatient){
+
+            return showToast(
+                'Search and select an existing patient.',
+                'error'
+            );
+        }
+
+
+        patientId =
+            selectedPatient.id;
+
+
+        patientName =
+            selectedPatient.full_name;
+
+
+        contactNo =
+            selectedPatient.phone ||
+            null;
+
+    }else{
+
+        patientName =
+            temporaryName
+                .value
+                .trim();
+
+
+        contactNo =
+            temporaryContact
+                .value
+                .trim();
+
+
+        if (
+            !patientName ||
+            !contactNo
+        ){
+
+            return showToast(
+                'Patient name and contact number are required.',
+                'error'
+            );
+        }
+    }
+
+
+    if (!doctorSelect.value){
+
+        return showToast(
+            'Select a doctor.',
+            'error'
+        );
+    }
+
+
+    if (
+        !appointmentDate.value ||
+        !appointmentTime.value
+    ){
+
+        return showToast(
+            'Appointment date and time are required.',
+            'error'
+        );
+    }
+
+
+    saveAppointmentButton.disabled =
+        true;
+
+
+    saveAppointmentButton.innerHTML = `
+
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        Saving...
+
+    `;
+
+
+    try{
+
+        const response =
+            await fetch(
+                '/api/appointments',
+                {
+
+                    method:'POST',
+
+                    headers:{
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            userId:
+                                currentUser.id,
+
+                            patientMode,
+
+                            patientId,
+
+                            patientName,
+
+                            contactNo,
+
+                            doctorId:
+                                Number(
+                                    doctorSelect.value
+                                ),
+
+                            serviceId:
+                                serviceSelect.value
+                                ?
+                                Number(
+                                    serviceSelect.value
+                                )
+                                :
+                                null,
+
+                            appointmentDate:
+                                appointmentDate.value,
+
+                            appointmentTime:
+                                appointmentTime.value,
+
+                            notes:
+                                appointmentNotes
+                                    .value
+                                    .trim()
+                        })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok){
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        showToast(
+            'Appointment saved successfully.',
+            'success'
+        );
+
+
+        resetAppointment();
+
+
+        await loadPage();
+
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            'error'
+        );
+
+
+    }finally{
+
+        saveAppointmentButton.disabled =
+            false;
+
+
+        saveAppointmentButton.innerHTML = `
+
+            <i class="fa-solid fa-calendar-check"></i>
+            Save Appointment
+
+        `;
+    }
+}
+
+
+/* RESET */
+
+function resetAppointment(){
+
+    selectedPatient =
+        null;
+
+
+    patientSearch.value =
+        '';
+
+
+    searchMessage.textContent =
+        '';
+
+
+    foundPatient.classList.remove(
+        'show'
+    );
+
+
+    temporaryName.value =
+        '';
+
+
+    temporaryContact.value =
+        '';
+
+
+    doctorSelect.value =
+        '';
+
+
+    serviceSelect.value =
+        '';
+
+
+    appointmentDate.value =
+        todayString;
+
+
+    appointmentTime.value =
+        '';
+
+
+    appointmentNotes.value =
+        '';
+
+
+    selectMode(
+        'existing'
+    );
+
+
+    updateSummary();
+}
+
+
+/* TODAY APPOINTMENTS */
+
+function renderAppointments(rows){
+
+    appointmentCount.textContent =
+        rows.length +
+        (
+            rows.length === 1
+            ?
+            ' appointment'
+            :
+            ' appointments'
+        );
+
+
+    if (!rows.length){
+
+        appointmentList.innerHTML = `
+
+            <div
+                style="
+                    text-align:center;
+                    padding:30px;
+                    color:#8795a8;
+                    font-size:11px;
+                "
+            >
+                No appointments today.
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    appointmentList.innerHTML =
+        rows.map(
+            item => `
+
+                <div class="appointment">
+
+                    <div class="app-time">
+
+                        <i class="fa-regular fa-clock"></i>
+
+                        ${formatTime(
+                            item.appointment_time
+                        )}
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="app-name">
+
+                            ${escapeHtml(
+                                item.patient_name ||
+                                'Patient'
+                            )}
+
+                        </div>
+
+
+                        <div class="app-detail">
+
+                            ${escapeHtml(
+                                item.doctor_name ||
+                                ''
+                            )}
+
+                            ${
+                                item.service_name
+                                ?
+                                ' • ' +
+                                escapeHtml(
+                                    item.service_name
+                                )
+                                :
+                                ''
+                            }
+
+                        </div>
+
+
+                        ${
+                            item.temporary_patient
+                            ?
+                            `
+                            <span class="temp-label">
+                                UNREGISTERED PATIENT
+                            </span>
+                            `
+                            :
+                            ''
+                        }
+
+                    </div>
+
+
+                    <span class="status">
+
+                        ${escapeHtml(
+                            item.status ||
+                            'BOOKED'
+                        )}
+
+                    </span>
+
+                </div>
+
+            `
+        ).join('');
+}
+
+
+/* HELPERS */
+
+function calculateAge(value){
+
+    if (!value){
+        return '-';
+    }
+
+
+    const dob =
+        new Date(
+            String(value)
+                .substring(
+                    0,
+                    10
+                )
+            +
+            'T00:00:00'
+        );
+
+
+    const today =
+        new Date();
+
+
+    let age =
+        today.getFullYear()
+        -
+        dob.getFullYear();
+
+
+    const month =
+        today.getMonth()
+        -
+        dob.getMonth();
+
+
+    if (
+        month < 0 ||
+        (
+            month === 0 &&
+            today.getDate() <
+            dob.getDate()
+        )
+    ){
+
+        age--;
+    }
+
+
+    return age >= 0
+        ?
+        age + ' yrs'
+        :
+        '-';
+}
+
+
+function formatDate(value){
+
+    return new Date(
+        value +
+        'T00:00:00'
+    ).toLocaleDateString(
+        undefined,
+        {
+            day:'numeric',
+            month:'short',
+            year:'numeric'
+        }
+    );
+}
+
+
+function formatTime(value){
+
+    return String(
+        value || ''
+    ).substring(
+        0,
+        5
+    );
+}
+
+
+function money(value){
+
+    return Number(
+        value || 0
+    ).toLocaleString(
+        undefined,
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+}
+
+
+function escapeHtml(value){
+
+    return String(
+        value ?? ''
+    )
+    .replaceAll(
+        '&',
+        '&amp;'
+    )
+    .replaceAll(
+        '<',
+        '&lt;'
+    )
+    .replaceAll(
+        '>',
+        '&gt;'
+    )
+    .replaceAll(
+        '"',
+        '&quot;'
+    )
+    .replaceAll(
+        "'",
+        '&#039;'
+    );
+}
+
+
+let toastTimer;
+
+
+function showToast(
+    text,
+    type
+){
+
+    toast.textContent =
+        text;
+
+
+    toast.className =
+        'toast ' +
+        type +
+        ' show';
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    'show'
+                );
+
+            },
+            3000
+        );
+}
+
+
+function logout(){
+
+    if (
+        !confirm(
+            'Do you want to logout?'
+        )
+    ){
+        return;
+    }
+
+
+    sessionStorage.removeItem(
+        'clinic_user'
+    );
+
+
+    location.href =
+        'login.html';
+}
+
+
+temporaryName.addEventListener(
+    'input',
+    updateSummary
+);
+
+
+loadPage();
+
+updateSummary();
+
+</script>
+
+</body>
+</html>
