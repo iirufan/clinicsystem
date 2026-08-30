@@ -1,10 +1,5 @@
 import sql from '../lib/db.js';
 
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
 const text = value =>
     String(value ?? '').trim();
 
@@ -34,14 +29,8 @@ async function verifyUser(userId) {
                 username,
                 full_name,
                 role,
-                COALESCE(
-                    approved,
-                    FALSE
-                ) AS approved,
-                COALESCE(
-                    active,
-                    FALSE
-                ) AS active
+                COALESCE(approved, FALSE) AS approved,
+                COALESCE(active, FALSE) AS active
 
             FROM users
 
@@ -122,7 +111,7 @@ export default async function handler(
 
 
         /* =====================================================
-           ONLY ALLOW GET
+           GET ONLY
         ===================================================== */
 
         if (
@@ -139,8 +128,7 @@ export default async function handler(
                 .status(405)
                 .json({
 
-                    success:
-                        false,
+                    success: false,
 
                     message:
                         'Method not allowed.'
@@ -150,7 +138,7 @@ export default async function handler(
 
 
         /* =====================================================
-           VERIFY LOGGED-IN USER
+           VERIFY USER
         ===================================================== */
 
         const user =
@@ -165,8 +153,7 @@ export default async function handler(
                 .status(403)
                 .json({
 
-                    success:
-                        false,
+                    success: false,
 
                     message:
                         'Your login is not valid, approved, or active.'
@@ -176,7 +163,7 @@ export default async function handler(
 
 
         /* =====================================================
-           REQUEST PARAMETERS
+           PARAMETERS
         ===================================================== */
 
         const mode =
@@ -204,8 +191,7 @@ export default async function handler(
                 .status(400)
                 .json({
 
-                    success:
-                        false,
+                    success: false,
 
                     message:
                         'A valid report date is required.'
@@ -375,8 +361,7 @@ export default async function handler(
                 .status(200)
                 .json({
 
-                    success:
-                        true,
+                    success: true,
 
                     date:
                         reportDate,
@@ -402,32 +387,52 @@ export default async function handler(
 
             /* =================================================
                MAIN SUMMARY
+
+               GROSS TOTAL
+               = Original service total
+
+               DISCOUNT
+               = Total discounts
+
+               REVENUE
+               = Gross - Discount
+
+               INSURANCE
+               = Private Insurance + Aasandha
+
+               PATIENT PAYABLE
+               = Amount payable by patients
             ================================================= */
 
             const summaryRows =
                 await sql`
                     SELECT
 
-                        COUNT(*)::int
-                        AS memo_count,
 
+                        /* ===============================
+                           GROSS TOTAL
+                        =============================== */
 
                         COALESCE(
                             SUM(
                                 COALESCE(
-                                    subtotal,
+                                    m.subtotal,
                                     0
                                 )
                             ),
                             0
                         )
-                        AS gross_charges,
+                        AS gross_total,
 
+
+                        /* ===============================
+                           DISCOUNTS
+                        =============================== */
 
                         COALESCE(
                             SUM(
                                 COALESCE(
-                                    discount_amount,
+                                    m.discount_amount,
                                     0
                                 )
                             ),
@@ -436,35 +441,70 @@ export default async function handler(
                         AS total_discount,
 
 
+                        /* ===============================
+                           REVENUE
+                        =============================== */
+
+                        (
+                            COALESCE(
+                                SUM(
+                                    COALESCE(
+                                        m.subtotal,
+                                        0
+                                    )
+                                ),
+                                0
+                            )
+
+                            -
+
+                            COALESCE(
+                                SUM(
+                                    COALESCE(
+                                        m.discount_amount,
+                                        0
+                                    )
+                                ),
+                                0
+                            )
+                        )
+                        AS revenue,
+
+
+                        /* ===============================
+                           TOTAL INSURANCE
+                        =============================== */
+
                         COALESCE(
                             SUM(
+
                                 COALESCE(
-                                    primary_insurance_cover,
+                                    m.primary_insurance_cover,
                                     0
                                 )
+
+                                +
+
+                                COALESCE(
+                                    m.government_insurance_cover,
+                                    0
+                                )
+
                             ),
                             0
                         )
-                        AS private_insurance,
+                        AS insurance_total,
 
 
-                        COALESCE(
-                            SUM(
-                                COALESCE(
-                                    government_insurance_cover,
-                                    0
-                                )
-                            ),
-                            0
-                        )
-                        AS aasandha,
-
+                        /* ===============================
+                           PATIENT PAYABLE
+                        =============================== */
 
                         COALESCE(
                             SUM(
                                 COALESCE(
-                                    patient_payable,
-                                    patient_amount,
+                                    m.patient_payable,
+                                    m.patient_amount,
                                     0
                                 )
                             ),
@@ -473,72 +513,46 @@ export default async function handler(
                         AS patient_payable,
 
 
-                        COALESCE(
-                            SUM(
-                                COALESCE(
-                                    paid_amount,
-                                    0
-                                )
-                            ),
-                            0
-                        )
-                        AS collected,
+                        /* ===============================
+                           UNIQUE PATIENT COUNT
+                        =============================== */
+
+                        COUNT(
+                            DISTINCT
+
+                            CASE
+
+                                WHEN
+                                    m.patient_id
+                                    IS NOT NULL
+
+                                THEN
+
+                                    'P:' ||
+                                    m.patient_id::text
 
 
-                        COALESCE(
-                            SUM(
-                                COALESCE(
-                                    balance_amount,
-                                    0
-                                )
-                            ),
-                            0
-                        )
-                        AS outstanding,
+                                ELSE
 
-
-                        COUNT(*)
-                        FILTER (
-
-                            WHERE
-
-                                UPPER(
-                                    COALESCE(
-                                        status,
-                                        ''
+                                    'T:' ||
+                                    LOWER(
+                                        COALESCE(
+                                            m.patient_name,
+                                            ''
+                                        )
                                     )
-                                )
-                                =
-                                'PAID'
 
+                            END
                         )::int
-                        AS paid_count,
+                        AS patient_count
 
 
-                        COUNT(*)
-                        FILTER (
-
-                            WHERE
-
-                                UPPER(
-                                    COALESCE(
-                                        status,
-                                        ''
-                                    )
-                                )
-                                =
-                                'PARTIAL'
-
-                        )::int
-                        AS partial_count
-
-
-                    FROM memos
+                    FROM memos m
 
 
                     WHERE
 
-                        memo_date =
+                        m.memo_date =
                             CAST(
                                 ${reportDate}
                                 AS date
@@ -547,7 +561,15 @@ export default async function handler(
 
 
             /* =================================================
-               PAYMENT METHOD SUMMARY
+               PAYMENT METHOD TOTALS
+
+               Example:
+
+               Bank Transfer
+               MVR 1700.00 (6)
+
+               Cash
+               MVR 250.00 (4)
             ================================================= */
 
             const paymentMethods =
@@ -595,6 +617,15 @@ export default async function handler(
                             )
 
 
+                        AND
+
+
+                        COALESCE(
+                            m.paid_amount,
+                            0
+                        ) > 0
+
+
                     GROUP BY
 
                         COALESCE(
@@ -612,220 +643,179 @@ export default async function handler(
 
 
             /* =================================================
-               INSURANCE SUMMARY
+               INSURANCE BY COMPANY
+
+               This combines:
+
+               1. Private insurance companies
+               2. Aasandha
+
+               Example:
+
+               Aasandha
+               MVR 690.00 (6)
+
+               Allied Insurance
+               MVR 400.00 (2)
             ================================================= */
 
             const insurance =
                 await sql`
-                    SELECT
 
-                        COALESCE(
-                            ic.company_name,
-                            'No Private Insurance'
-                        )
-                        AS insurance_name,
+                    WITH insurance_rows AS (
 
 
-                        COUNT(*)::int
-                        AS memo_count,
+                        /* =====================================
+                           PRIVATE INSURANCE
+                        ===================================== */
+
+                        SELECT
+
+                            COALESCE(
+                                ic.company_name,
+                                'Private Insurance'
+                            )
+                            AS insurance_name,
 
 
-                        COALESCE(
-                            SUM(
-                                COALESCE(
-                                    m.primary_insurance_cover,
-                                    0
+                            COUNT(*)::int
+                            AS memo_count,
+
+
+                            COALESCE(
+                                SUM(
+                                    COALESCE(
+                                        m.primary_insurance_cover,
+                                        0
+                                    )
+                                ),
+                                0
+                            )
+                            AS amount
+
+
+                        FROM memos m
+
+
+                        LEFT JOIN insurance_companies ic
+
+                            ON ic.id =
+                                m.primary_insurance_id
+
+
+                        WHERE
+
+                            m.memo_date =
+                                CAST(
+                                    ${reportDate}
+                                    AS date
                                 )
-                            ),
-                            0
-                        )
-                        AS cover_amount
 
 
-                    FROM memos m
+                            AND
 
 
-                    LEFT JOIN insurance_companies ic
+                            COALESCE(
+                                m.primary_insurance_cover,
+                                0
+                            ) > 0
 
-                        ON ic.id =
-                            m.primary_insurance_id
 
+                        GROUP BY
 
-                    WHERE
-
-                        m.memo_date =
-                            CAST(
-                                ${reportDate}
-                                AS date
+                            COALESCE(
+                                ic.company_name,
+                                'Private Insurance'
                             )
 
 
-                    GROUP BY
 
-                        COALESCE(
-                            ic.company_name,
-                            'No Private Insurance'
-                        )
+                        UNION ALL
 
 
-                    ORDER BY
 
-                        cover_amount DESC,
+                        /* =====================================
+                           AASANDHA
+                        ===================================== */
 
-                        insurance_name ASC
-                `;
+                        SELECT
+
+                            'Aasandha'
+                            AS insurance_name,
 
 
-            /* =================================================
-               DOCTOR SUMMARY
-            ================================================= */
+                            COUNT(*)::int
+                            AS memo_count,
 
-            const doctors =
-                await sql`
+
+                            COALESCE(
+                                SUM(
+                                    COALESCE(
+                                        m.government_insurance_cover,
+                                        0
+                                    )
+                                ),
+                                0
+                            )
+                            AS amount
+
+
+                        FROM memos m
+
+
+                        WHERE
+
+                            m.memo_date =
+                                CAST(
+                                    ${reportDate}
+                                    AS date
+                                )
+
+
+                            AND
+
+
+                            COALESCE(
+                                m.government_insurance_cover,
+                                0
+                            ) > 0
+                    )
+
+
+                    /* =========================================
+                       FINAL INSURANCE TOTALS
+                    ========================================= */
+
                     SELECT
 
-                        COALESCE(
-                            du.full_name,
-                            d.full_name,
-                            'Unassigned'
-                        )
-                        AS doctor_name,
+                        insurance_name,
 
 
-                        COUNT(*)::int
+                        SUM(
+                            memo_count
+                        )::int
                         AS memo_count,
 
 
-                        COALESCE(
-                            SUM(
-                                COALESCE(
-                                    m.total_amount,
-
-                                    m.subtotal -
-                                    m.discount_amount,
-
-                                    0
-                                )
-                            ),
-                            0
-                        )
-                        AS net_charges
-
-
-                    FROM memos m
-
-
-                    LEFT JOIN users du
-
-                        ON du.id =
-                            m.doctor_user_id
-
-
-                    LEFT JOIN doctors d
-
-                        ON d.id =
-                            m.doctor_id
-
-
-                    WHERE
-
-                        m.memo_date =
-                            CAST(
-                                ${reportDate}
-                                AS date
-                            )
-
-
-                    GROUP BY
-
-                        COALESCE(
-                            du.full_name,
-                            d.full_name,
-                            'Unassigned'
-                        )
-
-
-                    ORDER BY
-
-                        net_charges DESC,
-
-                        doctor_name ASC
-                `;
-
-
-            /* =================================================
-               SERVICE SUMMARY
-            ================================================= */
-
-            const services =
-                await sql`
-                    SELECT
-
-                        COALESCE(
-                            mi.service_name,
-                            mi.description,
-                            'Service'
-                        )
-                        AS service_name,
-
-
-                        COALESCE(
-                            SUM(
-                                COALESCE(
-                                    mi.quantity,
-                                    0
-                                )
-                            ),
-                            0
-                        )
-                        AS quantity,
-
-
-                        COALESCE(
-                            SUM(
-                                COALESCE(
-                                    mi.line_total,
-                                    mi.amount,
-                                    0
-                                )
-                            ),
-                            0
+                        SUM(
+                            amount
                         )
                         AS amount
 
 
-                    FROM memo_items mi
-
-
-                    INNER JOIN memos m
-
-                        ON m.id =
-                            mi.memo_id
-
-
-                    WHERE
-
-                        m.memo_date =
-                            CAST(
-                                ${reportDate}
-                                AS date
-                            )
+                    FROM insurance_rows
 
 
                     GROUP BY
 
-                        COALESCE(
-                            mi.service_name,
-                            mi.description,
-                            'Service'
-                        )
+                        insurance_name
 
 
                     ORDER BY
 
                         amount DESC,
 
-                        service_name ASC
+                        insurance_name ASC
                 `;
 
 
@@ -837,8 +827,7 @@ export default async function handler(
                 .status(200)
                 .json({
 
-                    success:
-                        true,
+                    success: true,
 
                     date:
                         reportDate,
@@ -849,16 +838,10 @@ export default async function handler(
                         {},
 
 
-                    paymentMethods,
-
-
                     insurance,
 
 
-                    doctors,
-
-
-                    services,
+                    paymentMethods,
 
 
                     company:
@@ -876,8 +859,7 @@ export default async function handler(
             .status(400)
             .json({
 
-                success:
-                    false,
+                success: false,
 
                 message:
                     'Invalid report mode.'
@@ -889,7 +871,7 @@ export default async function handler(
 
 
         /* =====================================================
-           API ERROR
+           ERROR
         ===================================================== */
 
         console.error(
@@ -902,8 +884,7 @@ export default async function handler(
             .status(500)
             .json({
 
-                success:
-                    false,
+                success: false,
 
                 message:
                     error?.message ||
