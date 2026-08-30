@@ -55,46 +55,301 @@ tr:hover td{background:#fbfdff}
 .summary{margin-top:15px;margin-left:auto;width:min(440px,100%);border:1px solid var(--border);border-radius:13px;padding:13px;background:linear-gradient(135deg,#f4f9ff,#f3fcf8)}
 .sum-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #d7e2e8;font-size:10px}.sum-row:last-child{border:0}.sum-total{font-size:14px;font-weight:900}
 .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
-.receipt-overlay{display:none;position:fixed;inset:0;padding:20px;align-items:center;justify-content:center;background:rgba(13,30,52,.55);z-index:5000}
+
+.receipt-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:5000;
+    padding:18px;
+    align-items:flex-start;
+    justify-content:center;
+    overflow:auto;
+    background:rgba(13,30,52,.55)
+}
 .receipt-overlay.show{display:flex}
-.receipt{width:min(820px,100%);max-height:95vh;overflow:auto;background:#fff;border-radius:16px;padding:30px;color:#17233b}
-.receipt-company{text-align:center;padding-bottom:14px;border-bottom:2px solid #17233b}
-.receipt-company h1{font-size:25px;margin-bottom:5px;letter-spacing:.2px}
-.receipt-company .receipt-address{font-size:10px;line-height:1.55;color:#4c5b70}
-.receipt-title{text-align:center;padding:12px 0 16px}
-.receipt-title h2{font-size:13px;letter-spacing:.7px}
-.receipt-top-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:18px}
+
+/* A5 preview on screen */
+.receipt{
+    width:148mm;
+    min-height:210mm;
+    max-width:100%;
+    background:#fff;
+    color:#111827;
+    border-radius:10px;
+    padding:10mm 9mm 8mm;
+    box-shadow:0 18px 50px rgba(0,0,0,.2);
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+/* company at the top centre */
+.receipt-company{
+    text-align:center;
+    padding:0 0 4mm;
+    border-bottom:1.4px solid #1f2937;
+}
+.receipt-company h1{
+    margin:0 0 1.5mm;
+    font-size:17pt;
+    line-height:1.1;
+    font-weight:800;
+    color:#111827;
+}
+.receipt-company .receipt-address{
+    font-size:7.7pt;
+    line-height:1.45;
+    color:#374151;
+}
+
+/* memo title */
+.receipt-title{
+    text-align:center;
+    padding:3mm 0 3.5mm;
+}
+.receipt-title h2{
+    margin:0;
+    font-size:10pt;
+    letter-spacing:1.1px;
+    font-weight:800;
+}
+
+/* patient left / memo details right */
+.receipt-top-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8mm;
+    margin-bottom:4mm;
+}
 .receipt-panel{min-width:0}
-.receipt-section-title{padding-bottom:6px;margin-bottom:8px;border-bottom:1px solid #dfe6ee;color:#59697f;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.4px}
-.receipt-patient-name{margin-bottom:8px;font-size:15px;font-weight:900}
-.receipt-line{display:grid;grid-template-columns:108px 1fr;gap:8px;padding:3px 0;font-size:9px;line-height:1.45}
-.receipt-line span{color:#6e7b8f}
-.receipt-line strong{color:#17233b;word-break:break-word}
-.receipt-services{margin-top:4px}
-.receipt-table{width:100%;min-width:0;margin:0 0 18px;border-collapse:collapse}
-.receipt-table th{background:#f3f7fb;color:#53647a;font-weight:900;border-top:1px solid #dce4ec;border-bottom:1px solid #dce4ec}
-.receipt-table th,.receipt-table td{padding:8px 7px;font-size:9px;text-align:left}
-.receipt-table td{border-bottom:1px solid #edf1f5}
-.receipt-bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;margin-top:5px}
-.receipt-box{border:1px solid #dfe6ee;border-radius:10px;padding:12px;background:#fbfdff}
-.receipt-box .sum-row{font-size:9px;padding:5px 0}
-.receipt-box .sum-total{font-size:12px}
-.receipt-payment-line{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px dashed #d9e1e9;font-size:9px}
+.receipt-section-title{
+    margin:0 0 2mm;
+    padding:0 0 1.2mm;
+    border-bottom:1px solid #cbd5e1;
+    font-size:7.2pt;
+    line-height:1.2;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.45px;
+    color:#475569;
+}
+.receipt-patient-name{
+    margin:0 0 1.5mm;
+    font-size:9.5pt;
+    font-weight:800;
+}
+.receipt-line{
+    display:grid;
+    grid-template-columns:24mm 1fr;
+    gap:2mm;
+    padding:.65mm 0;
+    font-size:7.2pt;
+    line-height:1.3;
+}
+.receipt-line span{color:#64748b}
+.receipt-line strong{
+    color:#111827;
+    font-weight:700;
+    overflow-wrap:anywhere;
+}
+
+/* services */
+.receipt-services{margin-top:1mm}
+.receipt-table{
+    width:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
+    margin:0 0 4mm;
+}
+.receipt-table th,
+.receipt-table td{
+    border-bottom:1px solid #e2e8f0;
+    padding:1.6mm 1.3mm;
+    font-size:7pt;
+    line-height:1.25;
+    vertical-align:top;
+}
+.receipt-table th{
+    background:#f1f5f9;
+    border-top:1px solid #cbd5e1;
+    border-bottom:1px solid #cbd5e1;
+    color:#334155;
+    font-weight:800;
+    text-align:left;
+}
+.receipt-table th:nth-child(1){width:42%}
+.receipt-table th:nth-child(2){width:8%;text-align:center}
+.receipt-table th:nth-child(3){width:17%;text-align:right}
+.receipt-table th:nth-child(4){width:16%;text-align:right}
+.receipt-table th:nth-child(5){width:17%;text-align:right}
+.receipt-table td:nth-child(2){text-align:center}
+.receipt-table td:nth-child(3),
+.receipt-table td:nth-child(4),
+.receipt-table td:nth-child(5){text-align:right}
+
+/* charge summary left / payment details right */
+.receipt-bottom-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8mm;
+    align-items:start;
+    margin-top:1mm;
+}
+.receipt-box{
+    border:1px solid #d7dee7;
+    border-radius:5px;
+    padding:2.5mm 3mm;
+    background:#fff;
+}
+.receipt-box .sum-row{
+    display:flex;
+    justify-content:space-between;
+    gap:3mm;
+    padding:1mm 0;
+    font-size:7.2pt;
+    line-height:1.25;
+}
+.receipt-box .sum-row span{color:#475569}
+.receipt-box .sum-row b{text-align:right}
+.receipt-box .sum-total{
+    margin-top:1.2mm;
+    padding-top:1.8mm;
+    border-top:1.4px solid #334155;
+    font-size:8.3pt;
+}
+.receipt-payment-line{
+    display:flex;
+    justify-content:space-between;
+    gap:3mm;
+    padding:1mm 0;
+    border-bottom:1px dashed #d7dee7;
+    font-size:7.2pt;
+    line-height:1.25;
+}
 .receipt-payment-line:last-child{border-bottom:0}
-.receipt-payment-line span{color:#6e7b8f}
-.receipt-payment-line strong{text-align:right}
-.receipt-nonrefundable{margin-top:22px;padding-top:10px;border-top:1px solid #dfe6ee;text-align:center;font-size:9px;font-weight:900;letter-spacing:.2px;text-transform:uppercase;color:#394962}
-.receipt-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.receipt-payment-line span{color:#64748b}
+.receipt-payment-line strong{
+    max-width:58%;
+    text-align:right;
+    overflow-wrap:anywhere;
+}
+
+/* footer note */
+.receipt-nonrefundable{
+    margin-top:6mm;
+    padding-top:2.5mm;
+    border-top:1px solid #cbd5e1;
+    text-align:center;
+    font-size:7.3pt;
+    font-weight:800;
+    letter-spacing:.25px;
+    text-transform:uppercase;
+    color:#374151;
+}
+.receipt-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-top:14px;
+}
+
+/* Make browser print exactly A5 portrait */
+@page{
+    size:A5 portrait;
+    margin:0;
+}
+
+@media print{
+    html,body{
+        width:148mm !important;
+        height:210mm !important;
+        margin:0 !important;
+        padding:0 !important;
+        background:#fff !important;
+    }
+
+    body *{
+        visibility:hidden !important;
+    }
+
+    #receiptOverlay,
+    #receiptOverlay *{
+        visibility:visible !important;
+    }
+
+    #receiptOverlay{
+        display:block !important;
+        position:absolute !important;
+        left:0 !important;
+        top:0 !important;
+        width:148mm !important;
+        min-height:210mm !important;
+        margin:0 !important;
+        padding:0 !important;
+        background:#fff !important;
+        overflow:visible !important;
+    }
+
+    .receipt{
+        box-sizing:border-box !important;
+        width:148mm !important;
+        min-height:210mm !important;
+        max-height:none !important;
+        margin:0 !important;
+        padding:8mm 8mm 7mm !important;
+        border:0 !important;
+        border-radius:0 !important;
+        box-shadow:none !important;
+        overflow:visible !important;
+        background:#fff !important;
+    }
+
+    .receipt-company h1{font-size:16pt !important}
+    .receipt-company .receipt-address{font-size:7.2pt !important}
+    .receipt-title{padding:2.5mm 0 3mm !important}
+    .receipt-title h2{font-size:9pt !important}
+    .receipt-section-title{font-size:6.8pt !important}
+    .receipt-patient-name{font-size:9pt !important}
+    .receipt-line{font-size:6.8pt !important}
+    .receipt-table th,
+    .receipt-table td{
+        padding:1.35mm 1.1mm !important;
+        font-size:6.7pt !important;
+    }
+    .receipt-box .sum-row,
+    .receipt-payment-line{font-size:6.8pt !important}
+    .receipt-box .sum-total{font-size:8pt !important}
+
+    .receipt-actions{
+        display:none !important;
+    }
+
+    /* keep important blocks together where possible */
+    .receipt-company,
+    .receipt-top-grid,
+    .receipt-services,
+    .receipt-bottom-grid,
+    .receipt-nonrefundable{
+        break-inside:avoid !important;
+        page-break-inside:avoid !important;
+    }
+}
+
+@media(max-width:700px){
+    .receipt{
+        width:100%;
+        min-height:0;
+        padding:20px 16px;
+    }
+    .receipt-top-grid,
+    .receipt-bottom-grid{
+        grid-template-columns:1fr;
+        gap:16px;
+    }
+}
 .toast{position:fixed;right:20px;bottom:20px;max-width:400px;padding:14px 18px;border-radius:12px;color:#fff;font-size:10px;font-weight:700;opacity:0;transform:translateY(100px);transition:.25s;z-index:9999}.toast.show{opacity:1;transform:translateY(0)}.toast.success{background:#10a978}.toast.error{background:#df4b60}
 @media(max-width:900px){.filters,.info-grid,.editor-grid{grid-template-columns:1fr 1fr}.service-add{grid-template-columns:1fr}.receipt-top-grid,.receipt-bottom-grid{grid-template-columns:1fr}}
 @media(max-width:650px){.filters,.info-grid,.editor-grid{grid-template-columns:1fr}.brand span{display:none}.page-head{flex-direction:column}.header{padding:0 12px}.header-actions .btn{padding:9px}.receipt{padding:18px}}
-@media print{
- body *{visibility:hidden}
- #receiptOverlay,#receiptOverlay *{visibility:visible}
- #receiptOverlay{position:absolute;inset:0;display:block;background:#fff;padding:0}
- .receipt{width:100%;max-height:none;overflow:visible;border-radius:0;padding:15px}
- .receipt-actions{display:none}
-}
+
 </style>
 </head>
 <body>
@@ -189,7 +444,7 @@ tr:hover td{background:#fbfdff}
    <h1 id="rCompany">Clinic</h1>
    <div class="receipt-address" id="rCompanyInfo"></div>
   </div>
-  <div class="receipt-title"><h2>PATIENT MEMO</h2></div>
+  <div class="receipt-title"><h2>MEMO</h2></div>
   <div class="receipt-top-grid">
    <div class="receipt-panel">
     <div class="receipt-section-title">Patient Information</div>
@@ -218,7 +473,7 @@ tr:hover td{background:#fbfdff}
     <div class="receipt-box" id="rPaymentDetails"></div>
    </div>
   </div>
-  <div class="receipt-nonrefundable">This memo is non-refundable.</div>
+  <div class="receipt-nonrefundable">This memo is non refundable.</div>
   <div class="receipt-actions">
    <button class="btn btn-blue" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button>
    <button class="btn btn-red" onclick="closeReceipt()">Close</button>
