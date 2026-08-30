@@ -5,7 +5,7 @@ import sql from '../lib/db.js';
    HELPERS
 ========================================================= */
 
-const txt = value =>
+const text = value =>
     String(value ?? '').trim();
 
 
@@ -19,7 +19,10 @@ async function verifyUser(userId) {
         Number(userId);
 
 
-    if (!id) {
+    if (
+        !Number.isInteger(id) ||
+        id <= 0
+    ) {
         return null;
     }
 
@@ -31,8 +34,14 @@ async function verifyUser(userId) {
                 username,
                 full_name,
                 role,
-                approved,
-                active
+                COALESCE(
+                    approved,
+                    FALSE
+                ) AS approved,
+                COALESCE(
+                    active,
+                    FALSE
+                ) AS active
 
             FROM users
 
@@ -43,13 +52,13 @@ async function verifyUser(userId) {
 
 
     const user =
-        rows[0];
+        rows[0] || null;
 
 
     if (
         !user ||
-        !user.approved ||
-        !user.active
+        user.approved !== true ||
+        user.active !== true
     ) {
         return null;
     }
@@ -60,7 +69,7 @@ async function verifyUser(userId) {
 
 
 /* =========================================================
-   COMPANY INFORMATION
+   GET COMPANY INFORMATION
 ========================================================= */
 
 async function getCompany() {
@@ -86,10 +95,11 @@ async function getCompany() {
 
         return rows[0] || {};
 
+
     } catch (error) {
 
         console.error(
-            'COMPANY SETTINGS ERROR:',
+            'REPORT COMPANY ERROR:',
             error
         );
 
@@ -112,27 +122,35 @@ export default async function handler(
 
 
         /* =====================================================
-           ONLY GET REQUESTS
+           ONLY ALLOW GET
         ===================================================== */
 
         if (
             req.method !== 'GET'
         ) {
 
+            res.setHeader(
+                'Allow',
+                'GET'
+            );
+
+
             return res
                 .status(405)
                 .json({
 
-                    success: false,
+                    success:
+                        false,
 
                     message:
                         'Method not allowed.'
+
                 });
         }
 
 
         /* =====================================================
-           VERIFY USER
+           VERIFY LOGGED-IN USER
         ===================================================== */
 
         const user =
@@ -147,26 +165,28 @@ export default async function handler(
                 .status(403)
                 .json({
 
-                    success: false,
+                    success:
+                        false,
 
                     message:
-                        'User access denied.'
+                        'Your login is not valid, approved, or active.'
+
                 });
         }
 
 
         /* =====================================================
-           PARAMETERS
+           REQUEST PARAMETERS
         ===================================================== */
 
         const mode =
-            txt(
+            text(
                 req.query.mode
             );
 
 
         const reportDate =
-            txt(
+            text(
                 req.query.date
             );
 
@@ -184,10 +204,12 @@ export default async function handler(
                 .status(400)
                 .json({
 
-                    success: false,
+                    success:
+                        false,
 
                     message:
-                        'Valid report date is required.'
+                        'A valid report date is required.'
+
                 });
         }
 
@@ -216,19 +238,24 @@ export default async function handler(
 
                         COALESCE(
                             p.full_name,
-                            m.patient_name
+                            m.patient_name,
+                            'Unknown Patient'
                         )
                         AS patient_name,
 
 
                         COALESCE(
                             du.full_name,
-                            d.full_name
+                            d.full_name,
+                            'Unassigned'
                         )
                         AS doctor_name,
 
 
-                        ic.company_name
+                        COALESCE(
+                            ic.company_name,
+                            ''
+                        )
                         AS insurance_name,
 
 
@@ -282,48 +309,65 @@ export default async function handler(
                         AS balance_amount,
 
 
-                        pm.method_name
+                        COALESCE(
+                            pm.method_name,
+                            ''
+                        )
                         AS payment_method_name,
 
 
-                        m.status
+                        COALESCE(
+                            m.status,
+                            ''
+                        )
+                        AS status
 
 
                     FROM memos m
 
 
                     LEFT JOIN patients p
+
                         ON p.id =
                             m.patient_id
 
 
                     LEFT JOIN users du
+
                         ON du.id =
                             m.doctor_user_id
 
 
                     LEFT JOIN doctors d
+
                         ON d.id =
                             m.doctor_id
 
 
                     LEFT JOIN insurance_companies ic
+
                         ON ic.id =
                             m.primary_insurance_id
 
 
                     LEFT JOIN payment_methods pm
+
                         ON pm.id =
                             m.payment_method_id
 
 
                     WHERE
+
                         m.memo_date =
-                            ${reportDate}::date
+                            CAST(
+                                ${reportDate}
+                                AS date
+                            )
 
 
                     ORDER BY
-                        m.id
+
+                        m.id ASC
                 `;
 
 
@@ -341,6 +385,7 @@ export default async function handler(
 
                     company:
                         await getCompany()
+
                 });
         }
 
@@ -356,10 +401,10 @@ export default async function handler(
 
 
             /* =================================================
-               MAIN DAILY TOTALS
+               MAIN SUMMARY
             ================================================= */
 
-            const summary =
+            const summaryRows =
                 await sql`
                     SELECT
 
@@ -368,14 +413,24 @@ export default async function handler(
 
 
                         COALESCE(
-                            SUM(subtotal),
+                            SUM(
+                                COALESCE(
+                                    subtotal,
+                                    0
+                                )
+                            ),
                             0
                         )
                         AS gross_charges,
 
 
                         COALESCE(
-                            SUM(discount_amount),
+                            SUM(
+                                COALESCE(
+                                    discount_amount,
+                                    0
+                                )
+                            ),
                             0
                         )
                         AS total_discount,
@@ -383,7 +438,10 @@ export default async function handler(
 
                         COALESCE(
                             SUM(
-                                primary_insurance_cover
+                                COALESCE(
+                                    primary_insurance_cover,
+                                    0
+                                )
                             ),
                             0
                         )
@@ -392,7 +450,10 @@ export default async function handler(
 
                         COALESCE(
                             SUM(
-                                government_insurance_cover
+                                COALESCE(
+                                    government_insurance_cover,
+                                    0
+                                )
                             ),
                             0
                         )
@@ -414,7 +475,10 @@ export default async function handler(
 
                         COALESCE(
                             SUM(
-                                paid_amount
+                                COALESCE(
+                                    paid_amount,
+                                    0
+                                )
                             ),
                             0
                         )
@@ -423,7 +487,10 @@ export default async function handler(
 
                         COALESCE(
                             SUM(
-                                balance_amount
+                                COALESCE(
+                                    balance_amount,
+                                    0
+                                )
                             ),
                             0
                         )
@@ -432,7 +499,9 @@ export default async function handler(
 
                         COUNT(*)
                         FILTER (
+
                             WHERE
+
                                 UPPER(
                                     COALESCE(
                                         status,
@@ -441,13 +510,16 @@ export default async function handler(
                                 )
                                 =
                                 'PAID'
+
                         )::int
                         AS paid_count,
 
 
                         COUNT(*)
                         FILTER (
+
                             WHERE
+
                                 UPPER(
                                     COALESCE(
                                         status,
@@ -456,6 +528,7 @@ export default async function handler(
                                 )
                                 =
                                 'PARTIAL'
+
                         )::int
                         AS partial_count
 
@@ -464,8 +537,12 @@ export default async function handler(
 
 
                     WHERE
+
                         memo_date =
-                            ${reportDate}::date
+                            CAST(
+                                ${reportDate}
+                                AS date
+                            )
                 `;
 
 
@@ -490,7 +567,10 @@ export default async function handler(
 
                         COALESCE(
                             SUM(
-                                m.paid_amount
+                                COALESCE(
+                                    m.paid_amount,
+                                    0
+                                )
                             ),
                             0
                         )
@@ -501,13 +581,18 @@ export default async function handler(
 
 
                     LEFT JOIN payment_methods pm
+
                         ON pm.id =
                             m.payment_method_id
 
 
                     WHERE
+
                         m.memo_date =
-                            ${reportDate}::date
+                            CAST(
+                                ${reportDate}
+                                AS date
+                            )
 
 
                     GROUP BY
@@ -519,7 +604,10 @@ export default async function handler(
 
 
                     ORDER BY
-                        collected DESC
+
+                        collected DESC,
+
+                        method_name ASC
                 `;
 
 
@@ -544,7 +632,10 @@ export default async function handler(
 
                         COALESCE(
                             SUM(
-                                m.primary_insurance_cover
+                                COALESCE(
+                                    m.primary_insurance_cover,
+                                    0
+                                )
                             ),
                             0
                         )
@@ -555,13 +646,18 @@ export default async function handler(
 
 
                     LEFT JOIN insurance_companies ic
+
                         ON ic.id =
                             m.primary_insurance_id
 
 
                     WHERE
+
                         m.memo_date =
-                            ${reportDate}::date
+                            CAST(
+                                ${reportDate}
+                                AS date
+                            )
 
 
                     GROUP BY
@@ -573,7 +669,10 @@ export default async function handler(
 
 
                     ORDER BY
-                        cover_amount DESC
+
+                        cover_amount DESC,
+
+                        insurance_name ASC
                 `;
 
 
@@ -599,7 +698,14 @@ export default async function handler(
 
                         COALESCE(
                             SUM(
-                                m.total_amount
+                                COALESCE(
+                                    m.total_amount,
+
+                                    m.subtotal -
+                                    m.discount_amount,
+
+                                    0
+                                )
                             ),
                             0
                         )
@@ -610,18 +716,24 @@ export default async function handler(
 
 
                     LEFT JOIN users du
+
                         ON du.id =
                             m.doctor_user_id
 
 
                     LEFT JOIN doctors d
+
                         ON d.id =
                             m.doctor_id
 
 
                     WHERE
+
                         m.memo_date =
-                            ${reportDate}::date
+                            CAST(
+                                ${reportDate}
+                                AS date
+                            )
 
 
                     GROUP BY
@@ -634,7 +746,10 @@ export default async function handler(
 
 
                     ORDER BY
-                        net_charges DESC
+
+                        net_charges DESC,
+
+                        doctor_name ASC
                 `;
 
 
@@ -656,7 +771,10 @@ export default async function handler(
 
                         COALESCE(
                             SUM(
-                                mi.quantity
+                                COALESCE(
+                                    mi.quantity,
+                                    0
+                                )
                             ),
                             0
                         )
@@ -680,13 +798,18 @@ export default async function handler(
 
 
                     INNER JOIN memos m
+
                         ON m.id =
                             mi.memo_id
 
 
                     WHERE
+
                         m.memo_date =
-                            ${reportDate}::date
+                            CAST(
+                                ${reportDate}
+                                AS date
+                            )
 
 
                     GROUP BY
@@ -699,12 +822,15 @@ export default async function handler(
 
 
                     ORDER BY
-                        amount DESC
+
+                        amount DESC,
+
+                        service_name ASC
                 `;
 
 
             /* =================================================
-               RETURN DAILY SUMMARY
+               RETURN SUMMARY
             ================================================= */
 
             return res
@@ -717,19 +843,27 @@ export default async function handler(
                     date:
                         reportDate,
 
+
                     summary:
-                        summary[0] || {},
+                        summaryRows[0] ||
+                        {},
+
 
                     paymentMethods,
 
+
                     insurance,
+
 
                     doctors,
 
+
                     services,
+
 
                     company:
                         await getCompany()
+
                 });
         }
 
@@ -747,6 +881,7 @@ export default async function handler(
 
                 message:
                     'Invalid report mode.'
+
             });
 
 
@@ -754,7 +889,7 @@ export default async function handler(
 
 
         /* =====================================================
-           ERROR
+           API ERROR
         ===================================================== */
 
         console.error(
@@ -771,8 +906,9 @@ export default async function handler(
                     false,
 
                 message:
-                    error.message ||
+                    error?.message ||
                     'Unable to load report.'
+
             });
     }
 }
