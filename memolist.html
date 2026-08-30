@@ -57,17 +57,36 @@ tr:hover td{background:#fbfdff}
 .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
 .receipt-overlay{display:none;position:fixed;inset:0;padding:20px;align-items:center;justify-content:center;background:rgba(13,30,52,.55);z-index:5000}
 .receipt-overlay.show{display:flex}
-.receipt{width:min(760px,100%);max-height:95vh;overflow:auto;background:#fff;border-radius:16px;padding:28px}
-.receipt-company{text-align:center;padding-bottom:16px;border-bottom:2px solid #12213f}.receipt-company h1{font-size:23px;margin-bottom:5px}.receipt-company div{font-size:9px;line-height:1.5}
-.receipt-title{text-align:center;padding:13px 0}.receipt-title h2{font-size:13px}
-.receipt-two{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:20px}
-.receipt-section-title{padding-bottom:5px;margin-bottom:8px;border-bottom:1px solid #e1e6ec;color:#68778d;font-size:9px;font-weight:800;text-transform:uppercase}
-.receipt-patient-name{margin-bottom:9px;font-size:15px;font-weight:800}
-.receipt-line{display:grid;grid-template-columns:105px 1fr;gap:8px;padding:3px 0;font-size:9px}.receipt-line span{color:#6e7b8f}
-.receipt-table{width:100%;min-width:0;margin-bottom:15px}.receipt-table th,.receipt-table td{font-size:9px}
-.receipt-summary{margin-left:auto;width:330px;max-width:100%}.receipt-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.receipt{width:min(820px,100%);max-height:95vh;overflow:auto;background:#fff;border-radius:16px;padding:30px;color:#17233b}
+.receipt-company{text-align:center;padding-bottom:14px;border-bottom:2px solid #17233b}
+.receipt-company h1{font-size:25px;margin-bottom:5px;letter-spacing:.2px}
+.receipt-company .receipt-address{font-size:10px;line-height:1.55;color:#4c5b70}
+.receipt-title{text-align:center;padding:12px 0 16px}
+.receipt-title h2{font-size:13px;letter-spacing:.7px}
+.receipt-top-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:18px}
+.receipt-panel{min-width:0}
+.receipt-section-title{padding-bottom:6px;margin-bottom:8px;border-bottom:1px solid #dfe6ee;color:#59697f;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.4px}
+.receipt-patient-name{margin-bottom:8px;font-size:15px;font-weight:900}
+.receipt-line{display:grid;grid-template-columns:108px 1fr;gap:8px;padding:3px 0;font-size:9px;line-height:1.45}
+.receipt-line span{color:#6e7b8f}
+.receipt-line strong{color:#17233b;word-break:break-word}
+.receipt-services{margin-top:4px}
+.receipt-table{width:100%;min-width:0;margin:0 0 18px;border-collapse:collapse}
+.receipt-table th{background:#f3f7fb;color:#53647a;font-weight:900;border-top:1px solid #dce4ec;border-bottom:1px solid #dce4ec}
+.receipt-table th,.receipt-table td{padding:8px 7px;font-size:9px;text-align:left}
+.receipt-table td{border-bottom:1px solid #edf1f5}
+.receipt-bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;margin-top:5px}
+.receipt-box{border:1px solid #dfe6ee;border-radius:10px;padding:12px;background:#fbfdff}
+.receipt-box .sum-row{font-size:9px;padding:5px 0}
+.receipt-box .sum-total{font-size:12px}
+.receipt-payment-line{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px dashed #d9e1e9;font-size:9px}
+.receipt-payment-line:last-child{border-bottom:0}
+.receipt-payment-line span{color:#6e7b8f}
+.receipt-payment-line strong{text-align:right}
+.receipt-nonrefundable{margin-top:22px;padding-top:10px;border-top:1px solid #dfe6ee;text-align:center;font-size:9px;font-weight:900;letter-spacing:.2px;text-transform:uppercase;color:#394962}
+.receipt-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
 .toast{position:fixed;right:20px;bottom:20px;max-width:400px;padding:14px 18px;border-radius:12px;color:#fff;font-size:10px;font-weight:700;opacity:0;transform:translateY(100px);transition:.25s;z-index:9999}.toast.show{opacity:1;transform:translateY(0)}.toast.success{background:#10a978}.toast.error{background:#df4b60}
-@media(max-width:900px){.filters,.info-grid,.editor-grid{grid-template-columns:1fr 1fr}.service-add{grid-template-columns:1fr}.receipt-two{grid-template-columns:1fr}}
+@media(max-width:900px){.filters,.info-grid,.editor-grid{grid-template-columns:1fr 1fr}.service-add{grid-template-columns:1fr}.receipt-top-grid,.receipt-bottom-grid{grid-template-columns:1fr}}
 @media(max-width:650px){.filters,.info-grid,.editor-grid{grid-template-columns:1fr}.brand span{display:none}.page-head{flex-direction:column}.header{padding:0 12px}.header-actions .btn{padding:9px}.receipt{padding:18px}}
 @media print{
  body *{visibility:hidden}
@@ -166,15 +185,44 @@ tr:hover td{background:#fbfdff}
 
 <div class="receipt-overlay" id="receiptOverlay">
  <div class="receipt">
-  <div class="receipt-company"><h1 id="rCompany">Clinic</h1><div id="rCompanyInfo"></div></div>
-  <div class="receipt-title"><h2>PATIENT MEMO / RECEIPT</h2></div>
-  <div class="receipt-two">
-   <div><div class="receipt-section-title">Patient Information</div><div class="receipt-patient-name" id="rPatientName"></div><div id="rPatientInfo"></div></div>
-   <div><div class="receipt-section-title">Memo Information</div><div id="rMemoInfo"></div></div>
+  <div class="receipt-company">
+   <h1 id="rCompany">Clinic</h1>
+   <div class="receipt-address" id="rCompanyInfo"></div>
   </div>
-  <table class="receipt-table"><thead><tr><th>Service</th><th>Qty</th><th>Rate</th><th>Discount</th><th>Total</th></tr></thead><tbody id="rItems"></tbody></table>
-  <div class="receipt-summary" id="rSummary"></div>
-  <div class="receipt-actions"><button class="btn btn-blue" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button><button class="btn btn-red" onclick="closeReceipt()">Close</button></div>
+  <div class="receipt-title"><h2>PATIENT MEMO</h2></div>
+  <div class="receipt-top-grid">
+   <div class="receipt-panel">
+    <div class="receipt-section-title">Patient Information</div>
+    <div class="receipt-patient-name" id="rPatientName"></div>
+    <div id="rPatientInfo"></div>
+   </div>
+   <div class="receipt-panel">
+    <div class="receipt-section-title">Memo Information</div>
+    <div id="rMemoInfo"></div>
+   </div>
+  </div>
+  <div class="receipt-services">
+   <div class="receipt-section-title">Services</div>
+   <table class="receipt-table">
+    <thead><tr><th>Service</th><th>Qty</th><th>Rate</th><th>Discount</th><th>Total</th></tr></thead>
+    <tbody id="rItems"></tbody>
+   </table>
+  </div>
+  <div class="receipt-bottom-grid">
+   <div>
+    <div class="receipt-section-title">Charge Summary</div>
+    <div class="receipt-box" id="rSummary"></div>
+   </div>
+   <div>
+    <div class="receipt-section-title">Payment Details</div>
+    <div class="receipt-box" id="rPaymentDetails"></div>
+   </div>
+  </div>
+  <div class="receipt-nonrefundable">This memo is non-refundable.</div>
+  <div class="receipt-actions">
+   <button class="btn btn-blue" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button>
+   <button class="btn btn-red" onclick="closeReceipt()">Close</button>
+  </div>
  </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -336,489 +384,94 @@ async function saveEdit(){
  }catch(e){toast(e.message,'error')}finally{btn.disabled=false}
 }
 function showReceipt(m) {
+    const c = m.company || setup.company || {};
+    const p = m.patient || {};
 
-    const c =
-        m.company ||
-        setup.company ||
-        {};
-
-    const p =
-        m.patient ||
-        {};
-
-
-    /* =============================================
-       COMPANY
-    ============================================= */
-
-    $('rCompany').textContent =
-        c.company_name ||
-        c.name ||
-        'Clinic';
-
+    $('rCompany').textContent = c.company_name || c.name || 'Clinic';
 
     const companyInfo = [];
+    const companyAddress = c.company_address || c.address;
+    if (companyAddress) companyInfo.push(companyAddress);
+    const companyPhone = c.company_phone || c.phone;
+    const companyEmail = c.company_email || c.email;
+    if (companyPhone && companyEmail) companyInfo.push(companyPhone + ' • ' + companyEmail);
+    else if (companyPhone) companyInfo.push(companyPhone);
+    else if (companyEmail) companyInfo.push(companyEmail);
+    const registrationNo = c.company_registration_no || c.registrationNo;
+    if (registrationNo) companyInfo.push('Registration No: ' + registrationNo);
+    $('rCompanyInfo').innerHTML = companyInfo.map(esc).join('<br>');
 
-    if (
-        c.company_address ||
-        c.address
-    ) {
-        companyInfo.push(
-            c.company_address ||
-            c.address
-        );
-    }
-
-    if (
-        c.company_phone ||
-        c.phone
-    ) {
-        companyInfo.push(
-            c.company_phone ||
-            c.phone
-        );
-    }
-
-    if (
-        c.company_email ||
-        c.email
-    ) {
-        companyInfo.push(
-            c.company_email ||
-            c.email
-        );
-    }
-
-    const registrationNo =
-        c.company_registration_no ||
-        c.registrationNo;
-
-    if (registrationNo) {
-
-        companyInfo.push(
-            'Reg: ' +
-            registrationNo
-        );
-    }
-
-
-    $('rCompanyInfo').innerHTML =
-        companyInfo
-            .map(esc)
-            .join('<br>');
-
-
-    /* =============================================
-       PATIENT
-    ============================================= */
-
-    $('rPatientName').textContent =
-        p.full_name ||
-        p.name ||
-        m.patient_name ||
-        '-';
-
-
-    const patientDOB =
-        p.date_of_birth ||
-        p.dateOfBirth ||
-        null;
-
-
+    $('rPatientName').textContent = p.full_name || p.name || m.patient_name || '-';
+    const patientDOB = p.date_of_birth || p.dateOfBirth || null;
     const patientLines = [
+        ['Patient No.', p.patient_no || p.patientNo],
+        ['ID / Passport', idText(p)],
+        ['DOB', patientDOB ? date(patientDOB) : null],
+        ['Age', patientDOB ? age(patientDOB) : null],
+        ['Nationality', p.nationality],
+        ['Contact', p.phone || p.contact],
+        ['Address', p.address],
+        ['Email', p.email]
+    ].filter(item => item[1] && item[1] !== '-');
+    $('rPatientInfo').innerHTML = patientLines.map(item => `
+        <div class="receipt-line"><span>${esc(item[0])}</span><strong>${esc(item[1])}</strong></div>
+    `).join('');
 
-        [
-            'Patient No.',
-            p.patient_no ||
-            p.patientNo
-        ],
-
-        [
-            'ID / Passport',
-            idText(p)
-        ],
-
-        [
-            'DOB',
-            patientDOB
-                ? date(patientDOB)
-                : null
-        ],
-
-        [
-            'Age',
-            patientDOB
-                ? age(patientDOB)
-                : null
-        ],
-
-        [
-            'Nationality',
-            p.nationality
-        ],
-
-        [
-            'Contact',
-            p.phone ||
-            p.contact
-        ],
-
-        [
-            'Address',
-            p.address
-        ],
-
-        [
-            'Email',
-            p.email
-        ]
-
-    ].filter(
-        item =>
-            item[1] &&
-            item[1] !== '-'
-    );
-
-
-    $('rPatientInfo').innerHTML =
-        patientLines
-            .map(
-                item => `
-                    <div class="receipt-line">
-                        <span>${esc(item[0])}</span>
-                        <strong>${esc(item[1])}</strong>
-                    </div>
-                `
-            )
-            .join('');
-
-
-    /* =============================================
-       MEMO INFORMATION
-    ============================================= */
-
-    const memoDate =
-        m.memo_date ||
-        m.memoDate;
-
-
+    const memoDate = m.memo_date || m.memoDate;
+    const insuranceName = m.primary_insurance_name || m.primaryInsuranceName || null;
     const memoLines = [
-
-        [
-            'Receipt No.',
-            m.receipt_no ||
-            m.receiptNo
-        ],
-
-        [
-            'Memo No.',
-            m.memo_no
-        ],
-
-        [
-            'Date',
-            memoDate
-                ? date(memoDate)
-                : '-'
-        ],
-
-        [
-            'Doctor',
-            m.doctor_name ||
-            m.doctorName
-        ],
-
-        [
-            'Insurance',
-            m.primary_insurance_name ||
-            m.primaryInsuranceName
-        ],
-
-        [
-            'Payment',
-            m.payment_method_name ||
-            m.paymentMethodName
-        ]
-
-    ].filter(
-        item =>
-            item[1]
-    );
-
-
-    $('rMemoInfo').innerHTML =
-        memoLines
-            .map(
-                item => `
-                    <div class="receipt-line">
-                        <span>${esc(item[0])}</span>
-                        <strong>${esc(item[1])}</strong>
-                    </div>
-                `
-            )
-            .join('');
-
-
-    /* =============================================
-       MEMO ITEMS
-    ============================================= */
-
-    const items =
-        Array.isArray(m.items)
-            ? m.items
-            : [];
-
-
-    $('rItems').innerHTML =
-        items
-            .map(
-                item => {
-
-                    const serviceName =
-                        item.service_name ||
-                        item.serviceName ||
-                        item.description ||
-                        '-';
-
-
-                    const quantity =
-                        Number(
-                            item.quantity ??
-                            item.qty ??
-                            1
-                        );
-
-
-                    const rate =
-                        Number(
-                            item.unit_price ??
-                            item.price ??
-                            item.base_price ??
-                            0
-                        );
-
-
-                    const discountAmount =
-                        Number(
-                            item.discount_amount ??
-                            item.discountAmount ??
-                            0
-                        );
-
-
-                    const lineTotal =
-                        Number(
-                            item.line_total ??
-                            item.lineTotal ??
-                            item.amount ??
-                            0
-                        );
-
-
-                    return `
-                        <tr>
-                            <td>${esc(serviceName)}</td>
-                            <td>${quantity}</td>
-                            <td>MVR ${money(rate)}</td>
-                            <td>${
-                                discountAmount > 0
-                                    ? 'MVR ' +
-                                      money(discountAmount)
-                                    : '-'
-                            }</td>
-                            <td>MVR ${money(lineTotal)}</td>
-                        </tr>
-                    `;
-                }
-            )
-            .join('');
-
-
-    /* =============================================
-       SUMMARY VALUES
-    ============================================= */
-
-    const subtotal =
-        Number(
-            m.subtotal ??
-            0
-        );
-
-
-    const serviceDiscount =
-        Number(
-            m.service_discount ??
-            m.serviceDiscount ??
-            0
-        );
-
-
-    const billDiscount =
-        Number(
-            m.bill_discount_amount ??
-            m.billDiscountAmount ??
-            0
-        );
-
-
-    const primaryInsurance =
-        Number(
-            m.primary_insurance_cover ??
-            m.primaryInsuranceCover ??
-            0
-        );
-
-
-    const governmentInsurance =
-        Number(
-            m.government_insurance_cover ??
-            m.governmentInsuranceCover ??
-            0
-        );
-
-
-    const patientPayable =
-        Number(
-            m.patient_payable ??
-            m.patientPayable ??
-            m.patient_amount ??
-            0
-        );
-
-
-    const paidAmount =
-        Number(
-            m.paid_amount ??
-            m.paidAmount ??
-            0
-        );
-
-
-    const balanceAmount =
-        Number(
-            m.balance_amount ??
-            m.balanceAmount ??
-            0
-        );
-
-
-    const insuranceName =
-        m.primary_insurance_name ||
-        m.primaryInsuranceName ||
-        'Insurance';
-
-
-    /* =============================================
-       SUMMARY HTML
-    ============================================= */
-
-    let summaryHTML = `
-        <div class="sum-row">
-            <span>Subtotal</span>
-            <b>MVR ${money(subtotal)}</b>
-        </div>
-    `;
-
-
-    if (
-        serviceDiscount >
-        0
-    ) {
-
-        summaryHTML += `
-            <div class="sum-row">
-                <span>Service Discount</span>
-                <b>- MVR ${money(serviceDiscount)}</b>
-            </div>
-        `;
-    }
-
-
-    if (
-        billDiscount >
-        0
-    ) {
-
-        summaryHTML += `
-            <div class="sum-row">
-                <span>Bill Discount</span>
-                <b>- MVR ${money(billDiscount)}</b>
-            </div>
-        `;
-    }
-
-
-    if (
-        primaryInsurance >
-        0
-    ) {
-
-        summaryHTML += `
-            <div class="sum-row">
-                <span>${esc(insuranceName)}</span>
-                <b>- MVR ${money(primaryInsurance)}</b>
-            </div>
-        `;
-    }
-
-
-    if (
-        governmentInsurance >
-        0
-    ) {
-
-        summaryHTML += `
-            <div class="sum-row">
-                <span>Aasandha</span>
-                <b>- MVR ${money(governmentInsurance)}</b>
-            </div>
-        `;
-    }
-
-
-    summaryHTML += `
-        <div class="sum-row sum-total">
-            <span>Patient Payable</span>
-            <b>MVR ${money(patientPayable)}</b>
-        </div>
-    `;
-
-
-    if (
-        paidAmount >
-        0
-    ) {
-
-        summaryHTML += `
-            <div class="sum-row">
-                <span>Paid</span>
-                <b>MVR ${money(paidAmount)}</b>
-            </div>
-        `;
-    }
-
-
-    if (
-        balanceAmount >
-        0
-    ) {
-
-        summaryHTML += `
-            <div class="sum-row">
-                <span>Balance</span>
-                <b>MVR ${money(balanceAmount)}</b>
-            </div>
-        `;
-    }
-
-
-    $('rSummary').innerHTML =
-        summaryHTML;
-
-
-    $('receiptOverlay')
-        .classList
-        .add('show');
+        ['Date', memoDate ? date(memoDate) : '-'],
+        ['Memo No.', m.memo_no || m.memoNo || '-'],
+        ['Receipt No.', m.receipt_no || m.receiptNo || '-'],
+        ['Doctor', m.doctor_name || m.doctorName || '-'],
+        ['Insurance', insuranceName || 'Self / None']
+    ];
+    $('rMemoInfo').innerHTML = memoLines.map(item => `
+        <div class="receipt-line"><span>${esc(item[0])}</span><strong>${esc(item[1])}</strong></div>
+    `).join('');
+
+    const items = Array.isArray(m.items) ? m.items : [];
+    $('rItems').innerHTML = items.length ? items.map(item => {
+        const serviceName = item.service_name || item.serviceName || item.description || '-';
+        const quantity = Number(item.quantity ?? item.qty ?? 1);
+        const rate = Number(item.unit_price ?? item.price ?? item.base_price ?? 0);
+        const discountAmount = Number(item.discount_amount ?? item.discountAmount ?? 0);
+        const lineTotal = Number(item.line_total ?? item.lineTotal ?? item.amount ?? 0);
+        return `<tr>
+            <td>${esc(serviceName)}</td><td>${quantity}</td><td>MVR ${money(rate)}</td>
+            <td>${discountAmount > 0 ? 'MVR ' + money(discountAmount) : '-'}</td>
+            <td>MVR ${money(lineTotal)}</td>
+        </tr>`;
+    }).join('') : '<tr><td colspan="5" style="text-align:center;color:#718099;">No services</td></tr>';
+
+    const subtotal = Number(m.subtotal ?? 0);
+    const serviceDiscount = Number(m.service_discount ?? m.serviceDiscount ?? 0);
+    const billDiscount = Number(m.bill_discount_amount ?? m.billDiscountAmount ?? 0);
+    const primaryInsurance = Number(m.primary_insurance_cover ?? m.primaryInsuranceCover ?? 0);
+    const governmentInsurance = Number(m.government_insurance_cover ?? m.governmentInsuranceCover ?? 0);
+    const patientPayable = Number(m.patient_payable ?? m.patientPayable ?? m.patient_amount ?? 0);
+    const paidAmount = Number(m.paid_amount ?? m.paidAmount ?? 0);
+    const balanceAmount = Number(m.balance_amount ?? m.balanceAmount ?? 0);
+
+    let summaryHTML = `<div class="sum-row"><span>Subtotal</span><b>MVR ${money(subtotal)}</b></div>`;
+    if (serviceDiscount > 0) summaryHTML += `<div class="sum-row"><span>Service Discount</span><b>- MVR ${money(serviceDiscount)}</b></div>`;
+    if (billDiscount > 0) summaryHTML += `<div class="sum-row"><span>Bill Discount</span><b>- MVR ${money(billDiscount)}</b></div>`;
+    if (primaryInsurance > 0) summaryHTML += `<div class="sum-row"><span>${esc(insuranceName || 'Insurance')}</span><b>- MVR ${money(primaryInsurance)}</b></div>`;
+    if (governmentInsurance > 0) summaryHTML += `<div class="sum-row"><span>Aasandha</span><b>- MVR ${money(governmentInsurance)}</b></div>`;
+    summaryHTML += `<div class="sum-row sum-total"><span>Patient Payable</span><b>MVR ${money(patientPayable)}</b></div>`;
+    $('rSummary').innerHTML = summaryHTML;
+
+    const paymentMethodName = m.payment_method_name || m.paymentMethodName || (patientPayable <= 0 ? 'Not Required' : '-');
+    const paymentReference = m.payment_reference || m.paymentReference || '-';
+    const paymentStatus = m.status || (balanceAmount > 0 ? 'PARTIAL' : 'PAID');
+    let paymentHTML = `<div class="receipt-payment-line"><span>Payment Method</span><strong>${esc(paymentMethodName)}</strong></div>`;
+    if (paymentReference !== '-') paymentHTML += `<div class="receipt-payment-line"><span>Reference</span><strong>${esc(paymentReference)}</strong></div>`;
+    paymentHTML += `<div class="receipt-payment-line"><span>Paid Amount</span><strong>MVR ${money(paidAmount)}</strong></div>`;
+    paymentHTML += `<div class="receipt-payment-line"><span>Balance</span><strong>MVR ${money(balanceAmount)}</strong></div>`;
+    paymentHTML += `<div class="receipt-payment-line"><span>Status</span><strong>${esc(paymentStatus)}</strong></div>`;
+    $('rPaymentDetails').innerHTML = paymentHTML;
+
+    $('receiptOverlay').classList.add('show');
 }
 
 function closeReceipt(){$('receiptOverlay').classList.remove('show')}
