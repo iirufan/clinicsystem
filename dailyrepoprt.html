@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Reports</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:#f4f7fb;color:#172033}
+.top{background:white;border-bottom:1px solid #dfe6ee;padding:12px 18px;display:flex;justify-content:space-between;gap:12px;align-items:center;position:sticky;top:0;z-index:20}
+.brand{font-size:18px;font-weight:900}.actions{display:flex;gap:8px;flex-wrap:wrap}
+button,a.btn{border:0;border-radius:9px;padding:9px 13px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.blue{background:#2563eb;color:#fff}.light{background:#eaf1ff;color:#234d9c}.green{background:#e8f7ef;color:#08744f}.red{background:#feecec;color:#b42318}
+.container{max-width:1500px;margin:18px auto;padding:0 16px 30px}.card,.toolbar{background:#fff;border:1px solid #dfe6ee;border-radius:14px;box-shadow:0 4px 16px rgba(20,40,80,.04)}
+.toolbar{padding:14px;display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-bottom:12px}.field{display:flex;flex-direction:column;gap:5px}.field label{font-size:12px;font-weight:800;color:#667085}
+input{height:39px;border:1px solid #ced8e5;border-radius:8px;padding:0 10px}.tabs{display:flex;gap:8px;margin-bottom:12px}.tab{background:#e9eef7;color:#475467}.tab.active{background:#2563eb;color:#fff}
+.card{padding:16px}.hidden{display:none!important}.head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}.head h2{margin:0 0 4px;font-size:20px}.muted{font-size:12px;color:#667085}
+.metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:10px 0 15px}.metric{border:1px solid #dfe6ee;border-radius:11px;padding:11px;background:#fbfdff}.metric .k{font-size:11px;font-weight:800;color:#667085}.metric .v{font-size:19px;font-weight:900;margin-top:4px}
+.wrap{overflow:auto;border:1px solid #dfe6ee;border-radius:10px}table{width:100%;border-collapse:collapse;min-width:1100px}th,td{padding:8px;border-bottom:1px solid #edf1f5;font-size:12px;white-space:nowrap;text-align:left}th{background:#f7f9fc;color:#526174;font-weight:900}.num{text-align:right}.paid{color:#0f9f6e;font-weight:900}.partial{color:#ea580c;font-weight:900}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.box{border:1px solid #dfe6ee;border-radius:11px;padding:11px}.box h3{margin:0 0 8px;font-size:14px}.box table{min-width:0}.box th,.box td{font-size:11px;padding:7px}
+.print-company{display:none;text-align:center}.print-company h1{margin:0;font-size:22px}.print-company div{font-size:11px;line-height:1.45}
+@media(max-width:900px){.metrics{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}@media(max-width:560px){.metrics{grid-template-columns:1fr}.toolbar{align-items:stretch}.field{width:100%}}
+@page{size:A4 landscape;margin:8mm}
+@media print{
+ body{background:#fff}.top,.toolbar,.tabs{display:none!important}.container{max-width:none;margin:0;padding:0}.card{border:0;box-shadow:none;padding:0}
+ .print-company{display:block;margin-bottom:7mm}.metrics{grid-template-columns:repeat(5,1fr);gap:2mm;margin:3mm 0 5mm}.metric{padding:2mm;border-radius:0}.metric .k{font-size:7pt}.metric .v{font-size:10pt}
+ .wrap{overflow:visible;border:0}.wrap table{min-width:0;width:100%}th,td{font-size:6.5pt;padding:1.3mm 1mm;white-space:normal}
+ .grid2{grid-template-columns:1fr 1fr;gap:4mm}.box{border-radius:0;padding:2mm}.box h3{font-size:8pt}.box th,.box td{font-size:6.5pt;padding:1mm}
+}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="brand"><i class="fa-solid fa-chart-line"></i> Daily Reports</div>
+  <div class="actions">
+    <a href="dashboard.html" class="btn light"><i class="fa-solid fa-house"></i> Dashboard</a>
+    <button class="red" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="toolbar">
+    <div class="field"><label>Report Date</label><input type="date" id="reportDate"></div>
+    <button class="blue" onclick="loadReports()"><i class="fa-solid fa-rotate"></i> Load Report</button>
+    <button class="light" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button>
+    <button class="green" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+  </div>
+
+  <div class="tabs">
+    <button id="tabSales" class="tab active" onclick="showTab('sales')">Daily Sales Report</button>
+    <button id="tabSummary" class="tab" onclick="showTab('summary')">Daily Summary Report</button>
+  </div>
+
+  <div class="print-company"><h1 id="companyName">Clinic</h1><div id="companyInfo"></div></div>
+
+  <section id="salesSection" class="card">
+    <div class="head"><div><h2>Daily Sales Report</h2><div class="muted" id="salesDate"></div></div><div id="memoCountText"></div></div>
+    <div class="metrics">
+      <div class="metric"><div class="k">Memos</div><div class="v" id="mCount">0</div></div>
+      <div class="metric"><div class="k">Gross Charges</div><div class="v" id="mGross">MVR 0.00</div></div>
+      <div class="metric"><div class="k">Insurance Cover</div><div class="v" id="mIns">MVR 0.00</div></div>
+      <div class="metric"><div class="k">Patient Payable</div><div class="v" id="mPayable">MVR 0.00</div></div>
+      <div class="metric"><div class="k">Collected</div><div class="v" id="mPaid">MVR 0.00</div></div>
+    </div>
+    <div class="wrap"><table>
+      <thead><tr><th>Date</th><th>Receipt</th><th>Memo</th><th>Patient</th><th>Doctor</th><th>Insurance</th><th class="num">Subtotal</th><th class="num">Discount</th><th class="num">Private Ins.</th><th class="num">Aasandha</th><th class="num">Patient Payable</th><th class="num">Paid</th><th class="num">Balance</th><th>Payment</th><th>Status</th></tr></thead>
+      <tbody id="salesBody"></tbody>
+    </table></div>
+  </section>
+
+  <section id="summarySection" class="card hidden">
+    <div class="head"><div><h2>Daily Summary Report</h2><div class="muted" id="summaryDate"></div></div></div>
+    <div class="metrics">
+      <div class="metric"><div class="k">Total Memos</div><div class="v" id="sCount">0</div></div>
+      <div class="metric"><div class="k">Gross Charges</div><div class="v" id="sGross">MVR 0.00</div></div>
+      <div class="metric"><div class="k">Total Discount</div><div class="v" id="sDiscount">MVR 0.00</div></div>
+      <div class="metric"><div class="k">Patient Payable</div><div class="v" id="sPayable">MVR 0.00</div></div>
+      <div class="metric"><div class="k">Collected</div><div class="v" id="sCollected">MVR 0.00</div></div>
+      <div class="metric"><div class="k">Private Insurance</div><div class="v" id="sPrivate">MVR 0.00</div></div>
+      <div class="metric"><div class="k">Aasandha</div><div class="v" id="sGovt">MVR 0.00</div></div>
+      <div class="metric"><div class="k">Outstanding</div><div class="v" id="sBalance">MVR 0.00</div></div>
+      <div class="metric"><div class="k">Paid Memos</div><div class="v" id="sPaidCount">0</div></div>
+      <div class="metric"><div class="k">Partial Memos</div><div class="v" id="sPartialCount">0</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="box"><h3>Payment Method Summary</h3><table><thead><tr><th>Method</th><th class="num">Memos</th><th class="num">Collected</th></tr></thead><tbody id="paymentBreak"></tbody></table></div>
+      <div class="box"><h3>Insurance Summary</h3><table><thead><tr><th>Insurance</th><th class="num">Memos</th><th class="num">Cover</th></tr></thead><tbody id="insuranceBreak"></tbody></table></div>
+      <div class="box"><h3>Doctor Summary</h3><table><thead><tr><th>Doctor</th><th class="num">Memos</th><th class="num">Net Charges</th></tr></thead><tbody id="doctorBreak"></tbody></table></div>
+      <div class="box"><h3>Service Summary</h3><table><thead><tr><th>Service</th><th class="num">Qty</th><th class="num">Amount</th></tr></thead><tbody id="serviceBreak"></tbody></table></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const currentUser=JSON.parse(sessionStorage.getItem('clinic_user')||'null');
+if(!currentUser?.id) location.href='index.html';
+
+let activeTab='sales', salesRows=[], summaryData=null, company={};
+
+const esc=v=>String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;");
+const money=v=>Number(v||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+function fmtDate(v){if(!v)return'-';const d=new Date(String(v).length===10?v+'T00:00:00':v);return Number.isNaN(d.getTime())?v:d.toLocaleDateString('en-GB')}
+function localDate(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function logout(){sessionStorage.removeItem('clinic_user');location.href='index.html'}
+function showTab(t){activeTab=t;$('salesSection').classList.toggle('hidden',t!=='sales');$('summarySection').classList.toggle('hidden',t!=='summary');$('tabSales').classList.toggle('active',t==='sales');$('tabSummary').classList.toggle('active',t==='summary')}
+async function getJSON(url){const r=await fetch(url);const d=await r.json().catch(()=>({}));if(!r.ok||d.success===false)throw new Error(d.message||'Unable to load report');return d}
+
+async function loadReports(){
+  const date=$('reportDate').value;if(!date)return alert('Select a date.');
+  try{
+    const uid=encodeURIComponent(currentUser.id), dt=encodeURIComponent(date);
+    const [sales,summary]=await Promise.all([
+      getJSON(`/api/reports?mode=daily-sales&date=${dt}&userId=${uid}`),
+      getJSON(`/api/reports?mode=daily-summary&date=${dt}&userId=${uid}`)
+    ]);
+    salesRows=sales.rows||[];summaryData=summary;company=summary.company||sales.company||{};
+    renderCompany();renderSales(date);renderSummary(date);
+  }catch(e){console.error(e);alert(e.message)}
+}
+
+function renderCompany(){
+  $('companyName').textContent=company.company_name||'Clinic';
+  $('companyInfo').innerHTML=[company.company_address,company.company_phone,company.company_email,company.company_registration_no?`Reg: ${company.company_registration_no}`:''].filter(Boolean).map(esc).join('<br>');
+}
+
+function renderSales(date){
+  $('salesDate').textContent='Date: '+fmtDate(date);$('memoCountText').textContent=salesRows.length+' memo(s)';
+  const t=salesRows.reduce((a,r)=>{a.g+=+r.subtotal||0;a.i+=(+r.primary_insurance_cover||0)+(+r.government_insurance_cover||0);a.p+=+r.patient_payable||0;a.c+=+r.paid_amount||0;return a},{g:0,i:0,p:0,c:0});
+  $('mCount').textContent=salesRows.length;$('mGross').textContent='MVR '+money(t.g);$('mIns').textContent='MVR '+money(t.i);$('mPayable').textContent='MVR '+money(t.p);$('mPaid').textContent='MVR '+money(t.c);
+  $('salesBody').innerHTML=salesRows.length?salesRows.map(r=>`<tr>
+    <td>${esc(fmtDate(r.memo_date))}</td><td>${esc(r.receipt_no||'-')}</td><td>${esc(r.memo_no||'-')}</td><td>${esc(r.patient_name||'-')}</td><td>${esc(r.doctor_name||'-')}</td><td>${esc(r.insurance_name||'-')}</td>
+    <td class="num">${money(r.subtotal)}</td><td class="num">${money(r.discount_amount)}</td><td class="num">${money(r.primary_insurance_cover)}</td><td class="num">${money(r.government_insurance_cover)}</td><td class="num">${money(r.patient_payable)}</td><td class="num">${money(r.paid_amount)}</td><td class="num">${money(r.balance_amount)}</td>
+    <td>${esc(r.payment_method_name||'-')}</td><td class="${String(r.status).toUpperCase()==='PAID'?'paid':'partial'}">${esc(r.status||'-')}</td></tr>`).join(''):`<tr><td colspan="15" style="text-align:center;padding:28px;color:#667085">No memos found for this date.</td></tr>`;
+}
+
+function renderSummary(date){
+  const s=summaryData?.summary||{};$('summaryDate').textContent='Date: '+fmtDate(date);
+  $('sCount').textContent=s.memo_count||0;$('sGross').textContent='MVR '+money(s.gross_charges);$('sDiscount').textContent='MVR '+money(s.total_discount);$('sPayable').textContent='MVR '+money(s.patient_payable);$('sCollected').textContent='MVR '+money(s.collected);$('sPrivate').textContent='MVR '+money(s.private_insurance);$('sGovt').textContent='MVR '+money(s.aasandha);$('sBalance').textContent='MVR '+money(s.outstanding);$('sPaidCount').textContent=s.paid_count||0;$('sPartialCount').textContent=s.partial_count||0;
+
+  const pm=summaryData?.paymentMethods||[];$('paymentBreak').innerHTML=pm.length?pm.map(r=>`<tr><td>${esc(r.method_name)}</td><td class="num">${r.memo_count}</td><td class="num">${money(r.collected)}</td></tr>`).join(''):'<tr><td colspan="3">No data</td></tr>';
+  const ins=summaryData?.insurance||[];$('insuranceBreak').innerHTML=ins.length?ins.map(r=>`<tr><td>${esc(r.insurance_name)}</td><td class="num">${r.memo_count}</td><td class="num">${money(r.cover_amount)}</td></tr>`).join(''):'<tr><td colspan="3">No data</td></tr>';
+  const doc=summaryData?.doctors||[];$('doctorBreak').innerHTML=doc.length?doc.map(r=>`<tr><td>${esc(r.doctor_name)}</td><td class="num">${r.memo_count}</td><td class="num">${money(r.net_charges)}</td></tr>`).join(''):'<tr><td colspan="3">No data</td></tr>';
+  const srv=summaryData?.services||[];$('serviceBreak').innerHTML=srv.length?srv.map(r=>`<tr><td>${esc(r.service_name)}</td><td class="num">${Number(r.quantity||0)}</td><td class="num">${money(r.amount)}</td></tr>`).join(''):'<tr><td colspan="3">No data</td></tr>';
+}
+
+function exportCSV(){
+  if(activeTab==='summary'){
+    if(!summaryData)return alert('Load report first.');
+    const s=summaryData.summary||{}, rows=[
+      ['Daily Summary Report',$('reportDate').value],['Total Memos',s.memo_count||0],['Gross Charges',s.gross_charges||0],['Total Discount',s.total_discount||0],
+      ['Private Insurance',s.private_insurance||0],['Aasandha',s.aasandha||0],['Patient Payable',s.patient_payable||0],['Collected',s.collected||0],['Outstanding',s.outstanding||0]
+    ];return saveCSV(rows,'daily-summary-'+$('reportDate').value+'.csv');
+  }
+  const rows=[['Date','Receipt','Memo','Patient','Doctor','Insurance','Subtotal','Discount','Private Insurance','Aasandha','Patient Payable','Paid','Balance','Payment','Status'],...salesRows.map(r=>[r.memo_date,r.receipt_no,r.memo_no,r.patient_name,r.doctor_name,r.insurance_name,r.subtotal,r.discount_amount,r.primary_insurance_cover,r.government_insurance_cover,r.patient_payable,r.paid_amount,r.balance_amount,r.payment_method_name,r.status])];
+  saveCSV(rows,'daily-sales-'+$('reportDate').value+'.csv');
+}
+function saveCSV(rows,name){
+  const content=rows.map(r=>r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n');
+  const blob=new Blob([content],{type:'text/csv;charset=utf-8;'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);
+}
+$('reportDate').value=localDate();loadReports();
+</script>
+</body>
+</html>
