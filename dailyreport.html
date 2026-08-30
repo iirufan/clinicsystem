@@ -4,167 +4,610 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Daily Reports</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style id="dynamicPrintPage">
+@page{size:A4 landscape;margin:8mm}
+</style>
 
 <style>
 *{box-sizing:border-box}
+
 :root{
-  --primary:#2563eb;
-  --bg:#f4f7fb;
-  --card:#fff;
-  --text:#172033;
-  --muted:#667085;
-  --border:#dfe6ee;
+    --primary:#2563eb;
+    --primary-dark:#1d4ed8;
+    --bg:#f4f7fb;
+    --card:#ffffff;
+    --text:#172033;
+    --muted:#667085;
+    --border:#dfe6ee;
 }
-body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+
+body{
+    margin:0;
+    font-family:Inter,"Segoe UI",Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
 .topbar{
-  background:#fff;border-bottom:1px solid var(--border);
-  padding:12px 18px;display:flex;justify-content:space-between;align-items:center;
-  gap:12px;position:sticky;top:0;z-index:20
+    background:#fff;
+    border-bottom:1px solid var(--border);
+    padding:12px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    position:sticky;
+    top:0;
+    z-index:20;
 }
-.brand{font-size:18px;font-weight:900}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
-button,a.btn{
-  border:0;border-radius:9px;padding:9px 13px;font-weight:800;cursor:pointer;
-  text-decoration:none;display:inline-flex;align-items:center;gap:7px
+
+.brand{
+    font-size:18px;
+    font-weight:900;
 }
+
+.actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+button,
+a.btn{
+    border:0;
+    border-radius:9px;
+    padding:9px 13px;
+    font-weight:800;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+}
+
 .blue{background:#2563eb;color:#fff}
 .light{background:#eaf1ff;color:#234d9c}
 .green{background:#e8f7ef;color:#08744f}
 .red{background:#feecec;color:#b42318}
 
-.container{max-width:1450px;margin:18px auto;padding:0 16px 30px}
-.toolbar,.card{
-  background:#fff;border:1px solid var(--border);border-radius:14px;
-  box-shadow:0 4px 16px rgba(20,40,80,.04)
+.container{
+    max-width:1450px;
+    margin:18px auto;
+    padding:0 16px 30px;
 }
+
+.toolbar,
+.card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:14px;
+    box-shadow:0 4px 16px rgba(20,40,80,.04);
+}
+
 .toolbar{
-  padding:14px;display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-bottom:12px
+    padding:14px;
+    display:flex;
+    gap:10px;
+    align-items:end;
+    flex-wrap:wrap;
+    margin-bottom:12px;
 }
-.field{display:flex;flex-direction:column;gap:5px}
-.field label{font-size:12px;font-weight:800;color:var(--muted)}
-input{height:39px;border:1px solid #ced8e5;border-radius:8px;padding:0 10px}
 
-.tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-.tab{background:#e9eef7;color:#475467}
-.tab.active{background:#2563eb;color:#fff}
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
 
-.card{padding:16px}
-.hidden{display:none!important}
-.head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
-.head h2{margin:0 0 4px;font-size:20px}
-.muted{font-size:12px;color:var(--muted)}
+.field label{
+    font-size:12px;
+    font-weight:800;
+    color:var(--muted);
+}
+
+input{
+    height:39px;
+    border:1px solid #ced8e5;
+    border-radius:8px;
+    padding:0 10px;
+}
+
+.tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:12px;
+    flex-wrap:wrap;
+}
+
+.tab{
+    background:#e9eef7;
+    color:#475467;
+}
+
+.tab.active{
+    background:#2563eb;
+    color:#fff;
+}
+
+.card{
+    padding:16px;
+}
+
+.hidden{
+    display:none!important;
+}
+
+.head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    margin-bottom:12px;
+}
+
+.head h2{
+    margin:0 0 4px;
+    font-size:20px;
+}
+
+.muted{
+    font-size:12px;
+    color:var(--muted);
+}
+
+.wrap{
+    overflow:auto;
+    border:1px solid var(--border);
+    border-radius:10px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,
+td{
+    padding:9px 8px;
+    border-bottom:1px solid #edf1f5;
+    font-size:12px;
+    white-space:nowrap;
+    text-align:left;
+}
+
+th{
+    background:#f7f9fc;
+    color:#526174;
+    font-weight:900;
+}
+
+.num{
+    text-align:right;
+}
+
+/* =========================================================
+   DETAIL REPORT BOTTOM SUMMARY
+========================================================= */
+
+.detail-summary{
+    margin-top:14px;
+    border-top:2px solid #dbe5f4;
+    padding-top:12px;
+}
+
+.detail-summary-title{
+    font-size:13px;
+    font-weight:900;
+    margin-bottom:8px;
+}
+
+.detail-summary-grid{
+    display:grid;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    gap:8px;
+}
+
+.detail-total{
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px;
+    background:#fbfdff;
+}
+
+.detail-total .label{
+    font-size:10px;
+    color:var(--muted);
+    font-weight:800;
+    margin-bottom:5px;
+}
+
+.detail-total .value{
+    font-size:15px;
+    font-weight:900;
+}
+
+/* =========================================================
+   SUMMARY PAGE
+========================================================= */
 
 .metrics{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;
-  margin:12px 0 18px
-}
-.metric{
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:15px;
-  background:linear-gradient(180deg,#fff,#fbfdff)
-}
-.metric .label{
-  font-size:13px;
-  font-weight:900;
-  color:#475467;
-  display:flex;
-  align-items:center;
-  gap:7px
-}
-.metric .value{
-  font-size:23px;
-  font-weight:900;
-  margin-top:7px;
-  letter-spacing:-.3px
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:12px;
+    margin:12px 0 18px;
 }
 
-.wrap{overflow:auto;border:1px solid var(--border);border-radius:10px}
-table{width:100%;border-collapse:collapse;min-width:1100px}
-th,td{padding:8px;border-bottom:1px solid #edf1f5;font-size:12px;white-space:nowrap;text-align:left}
-th{background:#f7f9fc;color:#526174;font-weight:900}
-.num{text-align:right}
-.paid{color:#0f9f6e;font-weight:900}
-.partial{color:#ea580c;font-weight:900}
+.metric{
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:15px;
+    background:linear-gradient(180deg,#fff,#fbfdff);
+}
+
+.metric .label{
+    font-size:13px;
+    font-weight:900;
+    color:#475467;
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.metric .value{
+    font-size:23px;
+    font-weight:900;
+    margin-top:7px;
+}
 
 .summary-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
 }
+
 .summary-box{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:14px;
-  overflow:hidden
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:14px;
+    overflow:hidden;
 }
+
 .summary-box h3{
-  margin:0;
-  padding:14px 15px;
-  font-size:15px;
-  border-bottom:1px solid #edf1f5;
-  background:#fbfdff
+    margin:0;
+    padding:14px 15px;
+    font-size:15px;
+    border-bottom:1px solid #edf1f5;
+    background:#fbfdff;
 }
-.summary-list{padding:4px 15px}
+
+.summary-list{
+    padding:4px 15px;
+}
+
 .summary-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  padding:13px 0;
-  border-bottom:1px solid #edf1f5
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    padding:13px 0;
+    border-bottom:1px solid #edf1f5;
 }
-.summary-row:last-child{border-bottom:0}
-.summary-name{font-weight:850;font-size:13px}
-.summary-amount{font-weight:900;text-align:right}
+
+.summary-row:last-child{
+    border-bottom:0;
+}
+
+.summary-name{
+    font-weight:850;
+    font-size:13px;
+}
+
+.summary-amount{
+    font-weight:900;
+    text-align:right;
+}
+
 .summary-count{
-  color:var(--muted);
-  font-size:11px;
-  font-weight:800;
-  margin-left:6px
+    color:var(--muted);
+    font-size:11px;
+    font-weight:800;
+    margin-left:6px;
 }
 
-.message{display:none;margin-bottom:12px;padding:11px 13px;border-radius:10px;font-size:13px;font-weight:700}
-.message.error{display:block;background:#fff1f1;color:#b42318;border:1px solid #fecaca}
-.message.info{display:block;background:#eef6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.message{
+    display:none;
+    margin-bottom:12px;
+    padding:11px 13px;
+    border-radius:10px;
+    font-size:13px;
+    font-weight:700;
+}
 
-.print-company{display:none;text-align:center}
-.print-company h1{margin:0;font-size:22px}
-.print-company div{font-size:11px;line-height:1.45}
+.message.error{
+    display:block;
+    background:#fff1f1;
+    color:#b42318;
+    border:1px solid #fecaca;
+}
+
+.message.info{
+    display:block;
+    background:#eef6ff;
+    color:#1d4ed8;
+    border:1px solid #bfdbfe;
+}
+
+.print-company{
+    display:none;
+    text-align:center;
+}
+
+.print-company h1{
+    margin:0;
+    font-size:22px;
+}
+
+.print-company div{
+    font-size:11px;
+    line-height:1.45;
+}
 
 @media(max-width:900px){
-  .metrics{grid-template-columns:repeat(2,1fr)}
-  .summary-grid{grid-template-columns:1fr}
-}
-@media(max-width:560px){
-  .metrics{grid-template-columns:1fr}
-  .toolbar{align-items:stretch}
-  .field{width:100%}
+    .metrics{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .summary-grid{
+        grid-template-columns:1fr;
+    }
+
+    .detail-summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 }
 
-@page{size:A4 landscape;margin:8mm}
+@media(max-width:560px){
+    .metrics{
+        grid-template-columns:1fr;
+    }
+
+    .toolbar{
+        align-items:stretch;
+    }
+
+    .field{
+        width:100%;
+    }
+
+    .detail-summary-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+
+/* =========================================================
+   PRINT
+========================================================= */
+
 @media print{
-  body{background:#fff}
-  .topbar,.toolbar,.tabs,.message{display:none!important}
-  .container{max-width:none;margin:0;padding:0}
-  .card{border:0;box-shadow:none;padding:0}
-  .print-company{display:block;margin-bottom:7mm}
-  .metrics{grid-template-columns:repeat(3,1fr);gap:3mm;margin:3mm 0 5mm}
-  .metric{padding:3mm;border-radius:0}
-  .metric .label{font-size:8pt}
-  .metric .value{font-size:12pt}
-  .wrap{overflow:visible;border:0}
-  .wrap table{min-width:0;width:100%}
-  th,td{font-size:6.5pt;padding:1.3mm 1mm;white-space:normal}
-  .summary-grid{grid-template-columns:1fr 1fr;gap:4mm}
-  .summary-box{border-radius:0}
-  .summary-box h3{font-size:9pt;padding:2.5mm}
-  .summary-row{padding:2.5mm 0}
-  .summary-name,.summary-amount{font-size:8pt}
-  .summary-count{font-size:7pt}
+
+    html,
+    body{
+        background:#fff;
+    }
+
+    .topbar,
+    .toolbar,
+    .tabs,
+    .message{
+        display:none!important;
+    }
+
+    .container{
+        max-width:none;
+        margin:0;
+        padding:0;
+    }
+
+    .print-company{
+        display:block;
+        margin-bottom:5mm;
+    }
+
+    .card{
+        border:0;
+        box-shadow:none;
+        padding:0;
+    }
+
+
+    /* -----------------------------------------------------
+       DAILY DETAIL - A4 LANDSCAPE
+    ----------------------------------------------------- */
+
+    body.print-sales #summarySection{
+        display:none!important;
+    }
+
+    body.print-sales #salesSection{
+        display:block!important;
+    }
+
+    body.print-sales .head h2{
+        font-size:13pt;
+    }
+
+    body.print-sales .head{
+        margin-bottom:3mm;
+    }
+
+    body.print-sales .wrap{
+        overflow:visible;
+        border:0;
+        border-radius:0;
+    }
+
+    body.print-sales table{
+        width:100%;
+        table-layout:fixed;
+    }
+
+    body.print-sales th,
+    body.print-sales td{
+        font-size:7.3pt;
+        padding:1.5mm 1.2mm;
+        white-space:normal;
+        overflow-wrap:anywhere;
+    }
+
+    body.print-sales th:nth-child(1),
+    body.print-sales td:nth-child(1){
+        width:12%;
+    }
+
+    body.print-sales th:nth-child(2),
+    body.print-sales td:nth-child(2){
+        width:10%;
+    }
+
+    body.print-sales th:nth-child(3),
+    body.print-sales td:nth-child(3){
+        width:13%;
+    }
+
+    body.print-sales th:nth-child(4),
+    body.print-sales td:nth-child(4){
+        width:12%;
+    }
+
+    body.print-sales th:nth-child(5),
+    body.print-sales td:nth-child(5),
+    body.print-sales th:nth-child(6),
+    body.print-sales td:nth-child(6),
+    body.print-sales th:nth-child(7),
+    body.print-sales td:nth-child(7),
+    body.print-sales th:nth-child(8),
+    body.print-sales td:nth-child(8),
+    body.print-sales th:nth-child(9),
+    body.print-sales td:nth-child(9){
+        width:10.6%;
+    }
+
+    body.print-sales .detail-summary{
+        margin-top:4mm;
+        padding-top:3mm;
+        page-break-inside:avoid;
+    }
+
+    body.print-sales .detail-summary-grid{
+        grid-template-columns:repeat(6,1fr);
+        gap:2mm;
+    }
+
+    body.print-sales .detail-total{
+        border-radius:0;
+        padding:2mm;
+    }
+
+    body.print-sales .detail-total .label{
+        font-size:6.8pt;
+    }
+
+    body.print-sales .detail-total .value{
+        font-size:9pt;
+    }
+
+
+    /* -----------------------------------------------------
+       DAILY SUMMARY - A5 LANDSCAPE
+    ----------------------------------------------------- */
+
+    body.print-summary #salesSection{
+        display:none!important;
+    }
+
+    body.print-summary #summarySection{
+        display:block!important;
+    }
+
+    body.print-summary .print-company{
+        margin-bottom:3mm;
+    }
+
+    body.print-summary .print-company h1{
+        font-size:14pt;
+    }
+
+    body.print-summary .print-company div{
+        font-size:7pt;
+    }
+
+    body.print-summary .head{
+        margin-bottom:2mm;
+    }
+
+    body.print-summary .head h2{
+        font-size:11pt;
+    }
+
+    body.print-summary .muted{
+        font-size:7pt;
+    }
+
+    body.print-summary .metrics{
+        grid-template-columns:repeat(3,1fr);
+        gap:2mm;
+        margin:2mm 0 3mm;
+    }
+
+    body.print-summary .metric{
+        border-radius:0;
+        padding:2.2mm;
+    }
+
+    body.print-summary .metric .label{
+        font-size:7pt;
+    }
+
+    body.print-summary .metric .value{
+        font-size:10.5pt;
+        margin-top:1mm;
+    }
+
+    body.print-summary .summary-grid{
+        grid-template-columns:1fr 1fr;
+        gap:3mm;
+    }
+
+    body.print-summary .summary-box{
+        border-radius:0;
+    }
+
+    body.print-summary .summary-box h3{
+        font-size:8pt;
+        padding:2mm;
+    }
+
+    body.print-summary .summary-list{
+        padding:0 2.5mm;
+    }
+
+    body.print-summary .summary-row{
+        padding:1.8mm 0;
+    }
+
+    body.print-summary .summary-name,
+    body.print-summary .summary-amount{
+        font-size:7.3pt;
+    }
+
+    body.print-summary .summary-count{
+        font-size:6.5pt;
+    }
 }
 </style>
 </head>
@@ -172,710 +615,1804 @@ th{background:#f7f9fc;color:#526174;font-weight:900}
 <body>
 
 <div class="topbar">
-  <div class="brand"><i class="fa-solid fa-chart-line"></i> Daily Reports</div>
-  <div class="actions">
-    <a class="btn light" href="dashboard.html"><i class="fa-solid fa-house"></i> Dashboard</a>
-    <button class="red" type="button" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
-  </div>
+
+    <div class="brand">
+        <i class="fa-solid fa-chart-line"></i>
+        Daily Reports
+    </div>
+
+    <div class="actions">
+
+        <a class="btn light"
+           href="dashboard.html">
+
+            <i class="fa-solid fa-house"></i>
+            Dashboard
+
+        </a>
+
+        <button class="red"
+                type="button"
+                onclick="logout()">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+
+        </button>
+
+    </div>
+
 </div>
+
 
 <div class="container">
 
-  <div id="messageBox" class="message"></div>
+    <div id="messageBox"
+         class="message"></div>
 
-  <div class="toolbar">
-    <div class="field">
-      <label for="reportDate">Report Date</label>
-      <input type="date" id="reportDate">
-    </div>
 
-    <button class="blue" type="button" onclick="loadReports()">
-      <i class="fa-solid fa-rotate"></i> Load Report
-    </button>
+    <div class="toolbar">
 
-    <button class="light" type="button" onclick="window.print()">
-      <i class="fa-solid fa-print"></i> Print
-    </button>
+        <div class="field">
 
-    <button class="green" type="button" onclick="exportCSV()">
-      <i class="fa-solid fa-file-csv"></i> Export CSV
-    </button>
-  </div>
+            <label for="reportDate">
+                Report Date
+            </label>
 
-  <div class="tabs">
-    <button id="tabSales" class="tab active" type="button" onclick="showTab('sales')">
-      Daily Sales Report
-    </button>
-    <button id="tabSummary" class="tab" type="button" onclick="showTab('summary')">
-      Daily Summary Report
-    </button>
-  </div>
+            <input type="date"
+                   id="reportDate">
 
-  <div class="print-company">
-    <h1 id="companyName">Clinic</h1>
-    <div id="companyInfo"></div>
-  </div>
+        </div>
 
-  <!-- DAILY SALES -->
-  <section id="salesSection" class="card">
-    <div class="head">
-      <div>
-        <h2>Daily Sales Report</h2>
-        <div class="muted" id="salesDate">-</div>
-      </div>
-      <div id="memoCountText">0 memo(s)</div>
-    </div>
 
-    <div class="wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Receipt</th>
-            <th>Memo</th>
-            <th>Patient</th>
-            <th>Doctor</th>
-            <th>Insurance</th>
-            <th class="num">Subtotal</th>
-            <th class="num">Discount</th>
-            <th class="num">Private Ins.</th>
-            <th class="num">Aasandha</th>
-            <th class="num">Patient Payable</th>
-            <th class="num">Paid</th>
-            <th class="num">Balance</th>
-            <th>Payment</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="salesBody"></tbody>
-      </table>
-    </div>
-  </section>
+        <button class="blue"
+                type="button"
+                onclick="loadReports()">
 
-  <!-- DAILY SUMMARY -->
-  <section id="summarySection" class="card hidden">
+            <i class="fa-solid fa-rotate"></i>
+            Load Report
 
-    <div class="head">
-      <div>
-        <h2>Daily Summary Report</h2>
-        <div class="muted" id="summaryDate">-</div>
-      </div>
-    </div>
+        </button>
 
-    <div class="metrics">
 
-      <div class="metric">
-        <div class="label">💰 Revenue</div>
-        <div class="value" id="sRevenue">MVR 0.00</div>
-      </div>
+        <button class="light"
+                type="button"
+                onclick="printReport()">
 
-      <div class="metric">
-        <div class="label">🏥 Insurance</div>
-        <div class="value" id="sInsurance">MVR 0.00</div>
-      </div>
+            <i class="fa-solid fa-print"></i>
+            Print
 
-      <div class="metric">
-        <div class="label">💵 Patient Payable</div>
-        <div class="value" id="sPayable">MVR 0.00</div>
-      </div>
+        </button>
 
-      <div class="metric">
-        <div class="label">📊 Gross Total</div>
-        <div class="value" id="sGross">MVR 0.00</div>
-      </div>
 
-      <div class="metric">
-        <div class="label">🎟️ Discounts</div>
-        <div class="value" id="sDiscount">MVR 0.00</div>
-      </div>
+        <button class="green"
+                type="button"
+                onclick="exportCSV()">
 
-      <div class="metric">
-        <div class="label">🧑‍⚕️ Patients</div>
-        <div class="value" id="sPatients">0</div>
-      </div>
+            <i class="fa-solid fa-file-csv"></i>
+            Export CSV
+
+        </button>
 
     </div>
 
-    <div class="summary-grid">
 
-      <div class="summary-box">
-        <h3>Insurance by Company</h3>
-        <div id="insuranceBreak" class="summary-list"></div>
-      </div>
+    <div class="tabs">
 
-      <div class="summary-box">
-        <h3>Payment Methods</h3>
-        <div id="paymentBreak" class="summary-list"></div>
-      </div>
+        <button id="tabSales"
+                class="tab active"
+                type="button"
+                onclick="showTab('sales')">
+
+            Daily Detail Report
+
+        </button>
+
+
+        <button id="tabSummary"
+                class="tab"
+                type="button"
+                onclick="showTab('summary')">
+
+            Daily Summary Report
+
+        </button>
 
     </div>
 
-  </section>
+
+    <div class="print-company">
+
+        <h1 id="companyName">
+            Clinic
+        </h1>
+
+        <div id="companyInfo"></div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DAILY DETAIL
+    ====================================================== -->
+
+    <section id="salesSection"
+             class="card">
+
+        <div class="head">
+
+            <div>
+
+                <h2>
+                    Daily Detail Report
+                </h2>
+
+                <div class="muted"
+                     id="salesDate">
+                    -
+                </div>
+
+            </div>
+
+
+            <div id="memoCountText">
+                0 memo(s)
+            </div>
+
+        </div>
+
+
+        <div class="wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Memo</th>
+
+                        <th>Date</th>
+
+                        <th>Patient ID</th>
+
+                        <th class="num">
+                            Services Gross
+                        </th>
+
+                        <th class="num">
+                            Insurance
+                        </th>
+
+                        <th class="num">
+                            Patient Pay
+                        </th>
+
+                        <th class="num">
+                            Collected
+                        </th>
+
+                        <th>
+                            Pay Type
+                        </th>
+
+                        <th class="num">
+                            Disc.
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="salesBody"></tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- DETAIL SUMMARY AT BOTTOM -->
+
+        <div class="detail-summary">
+
+            <div class="detail-summary-title">
+                Daily Totals
+            </div>
+
+
+            <div class="detail-summary-grid">
+
+                <div class="detail-total">
+
+                    <div class="label">
+                        Memos
+                    </div>
+
+                    <div class="value"
+                         id="detailMemos">
+                        0
+                    </div>
+
+                </div>
+
+
+                <div class="detail-total">
+
+                    <div class="label">
+                        Services Gross
+                    </div>
+
+                    <div class="value"
+                         id="detailGross">
+                        MVR 0.00
+                    </div>
+
+                </div>
+
+
+                <div class="detail-total">
+
+                    <div class="label">
+                        Insurance
+                    </div>
+
+                    <div class="value"
+                         id="detailInsurance">
+                        MVR 0.00
+                    </div>
+
+                </div>
+
+
+                <div class="detail-total">
+
+                    <div class="label">
+                        Patient Pay
+                    </div>
+
+                    <div class="value"
+                         id="detailPatientPay">
+                        MVR 0.00
+                    </div>
+
+                </div>
+
+
+                <div class="detail-total">
+
+                    <div class="label">
+                        Collected
+                    </div>
+
+                    <div class="value"
+                         id="detailCollected">
+                        MVR 0.00
+                    </div>
+
+                </div>
+
+
+                <div class="detail-total">
+
+                    <div class="label">
+                        Discounts
+                    </div>
+
+                    <div class="value"
+                         id="detailDiscount">
+                        MVR 0.00
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DAILY SUMMARY
+    ====================================================== -->
+
+    <section id="summarySection"
+             class="card hidden">
+
+        <div class="head">
+
+            <div>
+
+                <h2>
+                    Daily Summary Report
+                </h2>
+
+                <div class="muted"
+                     id="summaryDate">
+                    -
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="metrics">
+
+            <div class="metric">
+
+                <div class="label">
+                    💰 Revenue
+                </div>
+
+                <div class="value"
+                     id="sRevenue">
+                    MVR 0.00
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="label">
+                    🏥 Insurance
+                </div>
+
+                <div class="value"
+                     id="sInsurance">
+                    MVR 0.00
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="label">
+                    💵 Patient Payable
+                </div>
+
+                <div class="value"
+                     id="sPayable">
+                    MVR 0.00
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="label">
+                    📊 Gross Total
+                </div>
+
+                <div class="value"
+                     id="sGross">
+                    MVR 0.00
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="label">
+                    🎟️ Discounts
+                </div>
+
+                <div class="value"
+                     id="sDiscount">
+                    MVR 0.00
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="label">
+                    🧑‍⚕️ Patients
+                </div>
+
+                <div class="value"
+                     id="sPatients">
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-grid">
+
+            <div class="summary-box">
+
+                <h3>
+                    Insurance by Company
+                </h3>
+
+                <div id="insuranceBreak"
+                     class="summary-list"></div>
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <h3>
+                    Payment Methods
+                </h3>
+
+                <div id="paymentBreak"
+                     class="summary-list"></div>
+
+            </div>
+
+        </div>
+
+    </section>
 
 </div>
+
 
 <script>
 'use strict';
 
-const $ = id => document.getElementById(id);
+const $ =
+    id =>
+        document.getElementById(id);
 
-let currentUser = null;
-let activeTab = 'sales';
-let salesRows = [];
-let summaryData = null;
-let company = {};
+
+let currentUser =
+    null;
+
+
+let activeTab =
+    'sales';
+
+
+let salesRows =
+    [];
+
+
+let summaryData =
+    null;
+
+
+let company =
+    {};
+
+
+/* =========================================================
+   USER SESSION
+========================================================= */
 
 function parseJSON(raw){
-  try{
-    return raw ? JSON.parse(raw) : null;
-  }catch(_){
-    return null;
-  }
+
+    try{
+
+        return raw
+            ?
+            JSON.parse(raw)
+            :
+            null;
+
+    }catch(_){
+
+        return null;
+    }
 }
+
 
 function normalizeUser(value){
-  if(!value || typeof value !== 'object') return null;
 
-  const source =
-    value.user && typeof value.user === 'object'
-      ? value.user
-      : value;
+    if(
+        !value ||
+        typeof value !== 'object'
+    ){
+        return null;
+    }
 
-  const id = Number(
-    source.id ??
-    source.userId ??
-    source.user_id
-  );
 
-  if(!Number.isInteger(id) || id <= 0){
-    return null;
-  }
+    const source =
+        value.user &&
+        typeof value.user === 'object'
+            ?
+            value.user
+            :
+            value;
 
-  return {...source,id};
+
+    const id =
+        Number(
+            source.id ??
+            source.userId ??
+            source.user_id
+        );
+
+
+    if(
+        !Number.isInteger(id) ||
+        id <= 0
+    ){
+        return null;
+    }
+
+
+    return {
+        ...source,
+        id
+    };
 }
+
 
 function readCurrentUser(){
-  const keys = [
-    'clinic_user',
-    'currentUser',
-    'loggedInUser',
-    'user'
-  ];
 
-  for(const key of keys){
-    const user = normalizeUser(
-      parseJSON(
-        sessionStorage.getItem(key)
-      )
-    );
+    const keys =
+        [
+            'clinic_user',
+            'currentUser',
+            'loggedInUser',
+            'user'
+        ];
 
-    if(user){
-      sessionStorage.setItem(
-        'clinic_user',
-        JSON.stringify(user)
-      );
-      return user;
+
+    for(
+        const key
+        of keys
+    ){
+
+        const user =
+            normalizeUser(
+                parseJSON(
+                    sessionStorage
+                        .getItem(key)
+                )
+            );
+
+
+        if(user){
+
+            sessionStorage
+                .setItem(
+                    'clinic_user',
+                    JSON.stringify(user)
+                );
+
+
+            return user;
+        }
     }
-  }
 
-  for(const key of keys){
-    const user = normalizeUser(
-      parseJSON(
-        localStorage.getItem(key)
-      )
-    );
 
-    if(user){
-      sessionStorage.setItem(
-        'clinic_user',
-        JSON.stringify(user)
-      );
-      return user;
+    for(
+        const key
+        of keys
+    ){
+
+        const user =
+            normalizeUser(
+                parseJSON(
+                    localStorage
+                        .getItem(key)
+                )
+            );
+
+
+        if(user){
+
+            sessionStorage
+                .setItem(
+                    'clinic_user',
+                    JSON.stringify(user)
+                );
+
+
+            return user;
+        }
     }
-  }
 
-  return null;
+
+    return null;
 }
 
-function showMessage(message,type='error'){
-  const box = $('messageBox');
-  box.textContent = message || '';
-  box.className = 'message ' + type;
+
+/* =========================================================
+   GENERAL
+========================================================= */
+
+function showMessage(
+    message,
+    type = 'error'
+){
+
+    const box =
+        $('messageBox');
+
+
+    box.textContent =
+        message || '';
+
+
+    box.className =
+        'message ' + type;
 }
+
 
 function clearMessage(){
-  const box = $('messageBox');
-  box.textContent = '';
-  box.className = 'message';
+
+    const box =
+        $('messageBox');
+
+
+    box.textContent =
+        '';
+
+
+    box.className =
+        'message';
 }
+
 
 function esc(value){
-  return String(value ?? '')
-    .replaceAll('&','&amp;')
-    .replaceAll('<','&lt;')
-    .replaceAll('>','&gt;')
-    .replaceAll('"','&quot;')
-    .replaceAll("'","&#039;");
+
+    return String(
+        value ?? ''
+    )
+    .replaceAll(
+        '&',
+        '&amp;'
+    )
+    .replaceAll(
+        '<',
+        '&lt;'
+    )
+    .replaceAll(
+        '>',
+        '&gt;'
+    )
+    .replaceAll(
+        '"',
+        '&quot;'
+    )
+    .replaceAll(
+        "'",
+        '&#039;'
+    );
 }
+
 
 function money(value){
-  return Number(value || 0).toLocaleString(
-    undefined,
-    {
-      minimumFractionDigits:2,
-      maximumFractionDigits:2
-    }
-  );
+
+    return Number(
+        value || 0
+    )
+    .toLocaleString(
+        undefined,
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
 }
+
 
 function fmtDate(value){
-  if(!value) return '-';
 
-  const raw = String(value).slice(0,10);
-  const p = raw.split('-');
+    if(!value){
+        return '-';
+    }
 
-  return p.length === 3
-    ? `${p[2]}/${p[1]}/${p[0]}`
-    : raw;
+
+    const raw =
+        String(value)
+            .slice(
+                0,
+                10
+            );
+
+
+    const p =
+        raw.split('-');
+
+
+    return p.length === 3
+        ?
+        `${p[2]}/${p[1]}/${p[0]}`
+        :
+        raw;
 }
+
 
 function localDate(){
-  const d = new Date();
 
-  return [
-    d.getFullYear(),
-    String(d.getMonth()+1).padStart(2,'0'),
-    String(d.getDate()).padStart(2,'0')
-  ].join('-');
+    const d =
+        new Date();
+
+
+    return [
+        d.getFullYear(),
+        String(
+            d.getMonth() + 1
+        ).padStart(
+            2,
+            '0'
+        ),
+        String(
+            d.getDate()
+        ).padStart(
+            2,
+            '0'
+        )
+    ].join('-');
 }
+
 
 function logout(){
-  [
-    'clinic_user',
-    'currentUser',
-    'loggedInUser',
-    'user'
-  ].forEach(key=>{
-    sessionStorage.removeItem(key);
-    localStorage.removeItem(key);
-  });
 
-  location.href = 'index.html';
+    [
+        'clinic_user',
+        'currentUser',
+        'loggedInUser',
+        'user'
+    ]
+    .forEach(
+        key => {
+
+            sessionStorage
+                .removeItem(key);
+
+            localStorage
+                .removeItem(key);
+        }
+    );
+
+
+    location.href =
+        'index.html';
 }
+
+
+/* =========================================================
+   TABS
+========================================================= */
 
 function showTab(tab){
-  activeTab = tab;
 
-  $('salesSection').classList.toggle(
-    'hidden',
-    tab !== 'sales'
-  );
+    activeTab =
+        tab;
 
-  $('summarySection').classList.toggle(
-    'hidden',
-    tab !== 'summary'
-  );
 
-  $('tabSales').classList.toggle(
-    'active',
-    tab === 'sales'
-  );
+    $('salesSection')
+        .classList
+        .toggle(
+            'hidden',
+            tab !== 'sales'
+        );
 
-  $('tabSummary').classList.toggle(
-    'active',
-    tab === 'summary'
-  );
+
+    $('summarySection')
+        .classList
+        .toggle(
+            'hidden',
+            tab !== 'summary'
+        );
+
+
+    $('tabSales')
+        .classList
+        .toggle(
+            'active',
+            tab === 'sales'
+        );
+
+
+    $('tabSummary')
+        .classList
+        .toggle(
+            'active',
+            tab === 'summary'
+        );
 }
+
+
+/* =========================================================
+   PRINT
+
+   Detail  = A4 landscape
+   Summary = A5 landscape
+========================================================= */
+
+function printReport(){
+
+    const style =
+        $('dynamicPrintPage');
+
+
+    document.body
+        .classList
+        .remove(
+            'print-sales',
+            'print-summary'
+        );
+
+
+    if(
+        activeTab ===
+        'summary'
+    ){
+
+        document.body
+            .classList
+            .add(
+                'print-summary'
+            );
+
+
+        style.textContent =
+            '@page{size:A5 landscape;margin:6mm}';
+
+    }else{
+
+        document.body
+            .classList
+            .add(
+                'print-sales'
+            );
+
+
+        style.textContent =
+            '@page{size:A4 landscape;margin:8mm}';
+    }
+
+
+    window.print();
+
+
+    setTimeout(
+        () => {
+
+            document.body
+                .classList
+                .remove(
+                    'print-sales',
+                    'print-summary'
+                );
+
+        },
+        300
+    );
+}
+
+
+/* =========================================================
+   FETCH
+========================================================= */
 
 async function getJSON(url){
-  const response = await fetch(
-    url,
-    {
-      method:'GET',
-      cache:'no-store'
+
+    const response =
+        await fetch(
+            url,
+            {
+                method:'GET',
+                cache:'no-store'
+            }
+        );
+
+
+    let data =
+        {};
+
+
+    try{
+
+        data =
+            await response.json();
+
+    }catch(_){}
+
+
+    if(
+        !response.ok ||
+        data.success === false
+    ){
+
+        throw new Error(
+            data.message ||
+            `Request failed (${response.status})`
+        );
     }
-  );
 
-  let data = {};
 
-  try{
-    data = await response.json();
-  }catch(_){}
-
-  if(!response.ok || data.success === false){
-    throw new Error(
-      data.message ||
-      `Request failed (${response.status})`
-    );
-  }
-
-  return data;
+    return data;
 }
+
+
+/* =========================================================
+   LOAD REPORTS
+========================================================= */
 
 async function loadReports(){
-  clearMessage();
 
-  currentUser = readCurrentUser();
+    clearMessage();
 
-  if(!currentUser || !currentUser.id){
-    showMessage(
-      'Login session was not found. Open the report from the dashboard after logging in.'
-    );
-    return;
-  }
-
-  const date = $('reportDate').value;
-
-  if(!date){
-    showMessage('Please select a report date.');
-    return;
-  }
-
-  try{
-    const uid = encodeURIComponent(
-      String(currentUser.id)
-    );
-
-    const dt = encodeURIComponent(date);
-
-    const [sales,summary] =
-      await Promise.all([
-        getJSON(
-          `/api/reports?mode=daily-sales&date=${dt}&userId=${uid}`
-        ),
-        getJSON(
-          `/api/reports?mode=daily-summary&date=${dt}&userId=${uid}`
-        )
-      ]);
-
-    salesRows = Array.isArray(sales.rows)
-      ? sales.rows
-      : [];
-
-    summaryData = summary || {};
-
-    company =
-      summary.company ||
-      sales.company ||
-      {};
-
-    renderCompany();
-    renderSales(date);
-    renderSummary(date);
-
-  }catch(error){
-    console.error(
-      'REPORT LOAD ERROR:',
-      error
-    );
-
-    showMessage(
-      error.message ||
-      'Unable to load the report.'
-    );
-  }
-}
-
-function renderCompany(){
-  $('companyName').textContent =
-    company.company_name ||
-    'Clinic';
-
-  const lines = [
-    company.company_address,
-    company.company_phone,
-    company.company_email,
-    company.company_registration_no
-      ? 'Reg: ' + company.company_registration_no
-      : ''
-  ].filter(Boolean);
-
-  $('companyInfo').innerHTML =
-    lines.map(esc).join('<br>');
-}
-
-function renderSales(date){
-  $('salesDate').textContent =
-    'Date: ' + fmtDate(date);
-
-  $('memoCountText').textContent =
-    salesRows.length + ' memo(s)';
-
-  if(!salesRows.length){
-    $('salesBody').innerHTML = `
-      <tr>
-        <td colspan="15"
-            style="text-align:center;padding:28px;color:#667085">
-          No memos found for this date.
-        </td>
-      </tr>
-    `;
-    return;
-  }
-
-  $('salesBody').innerHTML =
-    salesRows.map(row=>{
-      const status =
-        String(row.status || '')
-          .toUpperCase();
-
-      return `
-        <tr>
-          <td>${esc(fmtDate(row.memo_date))}</td>
-          <td>${esc(row.receipt_no || '-')}</td>
-          <td>${esc(row.memo_no || '-')}</td>
-          <td>${esc(row.patient_name || '-')}</td>
-          <td>${esc(row.doctor_name || '-')}</td>
-          <td>${esc(row.insurance_name || '-')}</td>
-          <td class="num">${money(row.subtotal)}</td>
-          <td class="num">${money(row.discount_amount)}</td>
-          <td class="num">${money(row.primary_insurance_cover)}</td>
-          <td class="num">${money(row.government_insurance_cover)}</td>
-          <td class="num">${money(row.patient_payable)}</td>
-          <td class="num">${money(row.paid_amount)}</td>
-          <td class="num">${money(row.balance_amount)}</td>
-          <td>${esc(row.payment_method_name || '-')}</td>
-          <td class="${status === 'PAID' ? 'paid' : 'partial'}">
-            ${esc(row.status || '-')}
-          </td>
-        </tr>
-      `;
-    }).join('');
-}
-
-function renderSummary(date){
-  const s =
-    summaryData &&
-    summaryData.summary
-      ? summaryData.summary
-      : {};
-
-  $('summaryDate').textContent =
-    'Date: ' + fmtDate(date);
-
-  $('sRevenue').textContent =
-    'MVR ' + money(s.revenue);
-
-  $('sInsurance').textContent =
-    'MVR ' + money(s.insurance_total);
-
-  $('sPayable').textContent =
-    'MVR ' + money(s.patient_payable);
-
-  $('sGross').textContent =
-    'MVR ' + money(s.gross_total);
-
-  $('sDiscount').textContent =
-    'MVR ' + money(s.total_discount);
-
-  $('sPatients').textContent =
-    Number(s.patient_count || 0);
-
-  const insurance =
-    Array.isArray(summaryData.insurance)
-      ? summaryData.insurance
-      : [];
-
-  $('insuranceBreak').innerHTML =
-    insurance.length
-      ? insurance.map(row=>`
-          <div class="summary-row">
-            <div class="summary-name">
-              ${esc(row.insurance_name || 'Insurance')}
-            </div>
-            <div class="summary-amount">
-              MVR ${money(row.amount)}
-              <span class="summary-count">
-                (${Number(row.memo_count || 0)})
-              </span>
-            </div>
-          </div>
-        `).join('')
-      : `
-          <div class="summary-row">
-            <div class="summary-name">No insurance claims</div>
-            <div class="summary-amount">MVR 0.00</div>
-          </div>
-        `;
-
-  const payments =
-    Array.isArray(summaryData.paymentMethods)
-      ? summaryData.paymentMethods
-      : [];
-
-  $('paymentBreak').innerHTML =
-    payments.length
-      ? payments.map(row=>`
-          <div class="summary-row">
-            <div class="summary-name">
-              ${esc(row.method_name || 'Unspecified')}
-            </div>
-            <div class="summary-amount">
-              MVR ${money(row.collected)}
-              <span class="summary-count">
-                (${Number(row.memo_count || 0)})
-              </span>
-            </div>
-          </div>
-        `).join('')
-      : `
-          <div class="summary-row">
-            <div class="summary-name">No payments</div>
-            <div class="summary-amount">MVR 0.00</div>
-          </div>
-        `;
-}
-
-function csv(value){
-  return '"' +
-    String(value ?? '')
-      .replaceAll('"','""') +
-    '"';
-}
-
-function saveCSV(rows,filename){
-  const content =
-    rows.map(
-      row=>row.map(csv).join(',')
-    ).join('\n');
-
-  const blob =
-    new Blob(
-      [content],
-      {
-        type:'text/csv;charset=utf-8;'
-      }
-    );
-
-  const url =
-    URL.createObjectURL(blob);
-
-  const link =
-    document.createElement('a');
-
-  link.href = url;
-  link.download = filename;
-
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-
-  URL.revokeObjectURL(url);
-}
-
-function exportCSV(){
-  const date = $('reportDate').value;
-
-  if(activeTab === 'summary'){
-    if(!summaryData){
-      showMessage('Load the report first.');
-      return;
-    }
-
-    const s = summaryData.summary || {};
-
-    const rows = [
-      ['Daily Summary Report',date],
-      ['Revenue',s.revenue || 0],
-      ['Insurance',s.insurance_total || 0],
-      ['Patient Payable',s.patient_payable || 0],
-      ['Gross Total',s.gross_total || 0],
-      ['Discounts',s.total_discount || 0],
-      ['Patients',s.patient_count || 0],
-      [],
-      ['Insurance by Company','',''],
-      ['Company','Amount','Count'],
-      ...(summaryData.insurance || []).map(
-        r=>[
-          r.insurance_name,
-          r.amount,
-          r.memo_count
-        ]
-      ),
-      [],
-      ['Payment Methods','',''],
-      ['Method','Amount','Count'],
-      ...(summaryData.paymentMethods || []).map(
-        r=>[
-          r.method_name,
-          r.collected,
-          r.memo_count
-        ]
-      )
-    ];
-
-    saveCSV(
-      rows,
-      `daily-summary-${date}.csv`
-    );
-
-    return;
-  }
-
-  const rows = [[
-    'Date',
-    'Receipt',
-    'Memo',
-    'Patient',
-    'Doctor',
-    'Insurance',
-    'Subtotal',
-    'Discount',
-    'Private Insurance',
-    'Aasandha',
-    'Patient Payable',
-    'Paid',
-    'Balance',
-    'Payment',
-    'Status'
-  ]];
-
-  salesRows.forEach(row=>{
-    rows.push([
-      row.memo_date,
-      row.receipt_no,
-      row.memo_no,
-      row.patient_name,
-      row.doctor_name,
-      row.insurance_name,
-      row.subtotal,
-      row.discount_amount,
-      row.primary_insurance_cover,
-      row.government_insurance_cover,
-      row.patient_payable,
-      row.paid_amount,
-      row.balance_amount,
-      row.payment_method_name,
-      row.status
-    ]);
-  });
-
-  saveCSV(
-    rows,
-    `daily-sales-${date}.csv`
-  );
-}
-
-document.addEventListener(
-  'DOMContentLoaded',
-  ()=>{
-    $('reportDate').value =
-      localDate();
 
     currentUser =
-      readCurrentUser();
+        readCurrentUser();
 
-    if(!currentUser || !currentUser.id){
-      showMessage(
-        'Login session was not found. Open the report from the dashboard after logging in.',
-        'info'
-      );
-      return;
+
+    if(
+        !currentUser ||
+        !currentUser.id
+    ){
+
+        showMessage(
+            'Login session was not found. Open the report from the dashboard after logging in.'
+        );
+
+        return;
     }
 
-    loadReports();
-  }
+
+    const date =
+        $('reportDate').value;
+
+
+    if(!date){
+
+        showMessage(
+            'Please select a report date.'
+        );
+
+        return;
+    }
+
+
+    try{
+
+        const uid =
+            encodeURIComponent(
+                String(
+                    currentUser.id
+                )
+            );
+
+
+        const dt =
+            encodeURIComponent(
+                date
+            );
+
+
+        const [
+            sales,
+            summary
+        ] =
+            await Promise.all([
+
+                getJSON(
+                    `/api/reports?mode=daily-sales&date=${dt}&userId=${uid}`
+                ),
+
+                getJSON(
+                    `/api/reports?mode=daily-summary&date=${dt}&userId=${uid}`
+                )
+
+            ]);
+
+
+        salesRows =
+            Array.isArray(
+                sales.rows
+            )
+                ?
+                sales.rows
+                :
+                [];
+
+
+        summaryData =
+            summary ||
+            {};
+
+
+        company =
+            summary.company ||
+            sales.company ||
+            {};
+
+
+        renderCompany();
+
+        renderSales(
+            date
+        );
+
+        renderSummary(
+            date
+        );
+
+
+    }catch(error){
+
+        console.error(
+            'REPORT LOAD ERROR:',
+            error
+        );
+
+
+        showMessage(
+            error.message ||
+            'Unable to load the report.'
+        );
+    }
+}
+
+
+/* =========================================================
+   COMPANY
+========================================================= */
+
+function renderCompany(){
+
+    $('companyName')
+        .textContent =
+            company.company_name ||
+            'Clinic';
+
+
+    const lines =
+        [
+            company.company_address,
+            company.company_phone,
+            company.company_email,
+
+            company.company_registration_no
+                ?
+                'Reg: ' +
+                company.company_registration_no
+                :
+                ''
+        ]
+        .filter(Boolean);
+
+
+    $('companyInfo')
+        .innerHTML =
+            lines
+                .map(esc)
+                .join('<br>');
+}
+
+
+/* =========================================================
+   DAILY DETAIL
+========================================================= */
+
+function renderSales(date){
+
+    $('salesDate')
+        .textContent =
+            'Date: ' +
+            fmtDate(date);
+
+
+    $('memoCountText')
+        .textContent =
+            salesRows.length +
+            ' memo(s)';
+
+
+    let gross =
+        0;
+
+    let insurance =
+        0;
+
+    let patientPay =
+        0;
+
+    let collected =
+        0;
+
+    let discount =
+        0;
+
+
+    if(
+        !salesRows.length
+    ){
+
+        $('salesBody')
+            .innerHTML = `
+                <tr>
+                    <td colspan="9"
+                        style="
+                            text-align:center;
+                            padding:28px;
+                            color:#667085
+                        ">
+                        No memos found for this date.
+                    </td>
+                </tr>
+            `;
+
+    }else{
+
+        $('salesBody')
+            .innerHTML =
+                salesRows
+                    .map(
+                        row => {
+
+                            const rowGross =
+                                Number(
+                                    row.services_gross ||
+                                    0
+                                );
+
+
+                            const rowInsurance =
+                                Number(
+                                    row.insurance_total ||
+                                    0
+                                );
+
+
+                            const rowPatient =
+                                Number(
+                                    row.patient_payable ||
+                                    0
+                                );
+
+
+                            const rowCollected =
+                                Number(
+                                    row.paid_amount ||
+                                    0
+                                );
+
+
+                            const rowDiscount =
+                                Number(
+                                    row.discount_amount ||
+                                    0
+                                );
+
+
+                            gross +=
+                                rowGross;
+
+                            insurance +=
+                                rowInsurance;
+
+                            patientPay +=
+                                rowPatient;
+
+                            collected +=
+                                rowCollected;
+
+                            discount +=
+                                rowDiscount;
+
+
+                            return `
+                                <tr>
+
+                                    <td>
+                                        ${esc(
+                                            row.memo_no ||
+                                            row.receipt_no ||
+                                            '-'
+                                        )}
+                                    </td>
+
+                                    <td>
+                                        ${esc(
+                                            fmtDate(
+                                                row.memo_date
+                                            )
+                                        )}
+                                    </td>
+
+                                    <td>
+                                        ${esc(
+                                            row.patient_identifier ||
+                                            '-'
+                                        )}
+                                    </td>
+
+                                    <td class="num">
+                                        ${money(
+                                            rowGross
+                                        )}
+                                    </td>
+
+                                    <td class="num">
+                                        ${money(
+                                            rowInsurance
+                                        )}
+                                    </td>
+
+                                    <td class="num">
+                                        ${money(
+                                            rowPatient
+                                        )}
+                                    </td>
+
+                                    <td class="num">
+                                        ${money(
+                                            rowCollected
+                                        )}
+                                    </td>
+
+                                    <td>
+                                        ${esc(
+                                            row.payment_method_name ||
+                                            '-'
+                                        )}
+                                    </td>
+
+                                    <td class="num">
+                                        ${money(
+                                            rowDiscount
+                                        )}
+                                    </td>
+
+                                </tr>
+                            `;
+                        }
+                    )
+                    .join('');
+    }
+
+
+    $('detailMemos')
+        .textContent =
+            salesRows.length;
+
+
+    $('detailGross')
+        .textContent =
+            'MVR ' +
+            money(gross);
+
+
+    $('detailInsurance')
+        .textContent =
+            'MVR ' +
+            money(insurance);
+
+
+    $('detailPatientPay')
+        .textContent =
+            'MVR ' +
+            money(patientPay);
+
+
+    $('detailCollected')
+        .textContent =
+            'MVR ' +
+            money(collected);
+
+
+    $('detailDiscount')
+        .textContent =
+            'MVR ' +
+            money(discount);
+}
+
+
+/* =========================================================
+   DAILY SUMMARY
+========================================================= */
+
+function renderSummary(date){
+
+    const s =
+        summaryData &&
+        summaryData.summary
+            ?
+            summaryData.summary
+            :
+            {};
+
+
+    $('summaryDate')
+        .textContent =
+            'Date: ' +
+            fmtDate(date);
+
+
+    $('sRevenue')
+        .textContent =
+            'MVR ' +
+            money(
+                s.revenue
+            );
+
+
+    $('sInsurance')
+        .textContent =
+            'MVR ' +
+            money(
+                s.insurance_total
+            );
+
+
+    $('sPayable')
+        .textContent =
+            'MVR ' +
+            money(
+                s.patient_payable
+            );
+
+
+    $('sGross')
+        .textContent =
+            'MVR ' +
+            money(
+                s.gross_total
+            );
+
+
+    $('sDiscount')
+        .textContent =
+            'MVR ' +
+            money(
+                s.total_discount
+            );
+
+
+    $('sPatients')
+        .textContent =
+            Number(
+                s.patient_count ||
+                0
+            );
+
+
+    const insurance =
+        Array.isArray(
+            summaryData.insurance
+        )
+            ?
+            summaryData.insurance
+            :
+            [];
+
+
+    $('insuranceBreak')
+        .innerHTML =
+            insurance.length
+                ?
+                insurance
+                    .map(
+                        row => `
+                            <div class="summary-row">
+
+                                <div class="summary-name">
+                                    ${esc(
+                                        row.insurance_name ||
+                                        'Insurance'
+                                    )}
+                                </div>
+
+                                <div class="summary-amount">
+
+                                    MVR
+                                    ${money(
+                                        row.amount
+                                    )}
+
+                                    <span class="summary-count">
+                                        (${Number(
+                                            row.memo_count ||
+                                            0
+                                        )})
+                                    </span>
+
+                                </div>
+
+                            </div>
+                        `
+                    )
+                    .join('')
+                :
+                `
+                    <div class="summary-row">
+
+                        <div class="summary-name">
+                            No insurance claims
+                        </div>
+
+                        <div class="summary-amount">
+                            MVR 0.00
+                        </div>
+
+                    </div>
+                `;
+
+
+    const payments =
+        Array.isArray(
+            summaryData.paymentMethods
+        )
+            ?
+            summaryData.paymentMethods
+            :
+            [];
+
+
+    $('paymentBreak')
+        .innerHTML =
+            payments.length
+                ?
+                payments
+                    .map(
+                        row => `
+                            <div class="summary-row">
+
+                                <div class="summary-name">
+                                    ${esc(
+                                        row.method_name ||
+                                        'Unspecified'
+                                    )}
+                                </div>
+
+                                <div class="summary-amount">
+
+                                    MVR
+                                    ${money(
+                                        row.collected
+                                    )}
+
+                                    <span class="summary-count">
+                                        (${Number(
+                                            row.memo_count ||
+                                            0
+                                        )})
+                                    </span>
+
+                                </div>
+
+                            </div>
+                        `
+                    )
+                    .join('')
+                :
+                `
+                    <div class="summary-row">
+
+                        <div class="summary-name">
+                            No payments
+                        </div>
+
+                        <div class="summary-amount">
+                            MVR 0.00
+                        </div>
+
+                    </div>
+                `;
+}
+
+
+/* =========================================================
+   CSV
+========================================================= */
+
+function csv(value){
+
+    return '"' +
+        String(
+            value ??
+            ''
+        )
+        .replaceAll(
+            '"',
+            '""'
+        ) +
+        '"';
+}
+
+
+function saveCSV(
+    rows,
+    filename
+){
+
+    const content =
+        rows
+            .map(
+                row =>
+                    row
+                        .map(csv)
+                        .join(',')
+            )
+            .join('\n');
+
+
+    const blob =
+        new Blob(
+            [
+                content
+            ],
+            {
+                type:
+                    'text/csv;charset=utf-8;'
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            'a'
+        );
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        filename;
+
+
+    document.body
+        .appendChild(
+            link
+        );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+}
+
+
+function exportCSV(){
+
+    const date =
+        $('reportDate').value;
+
+
+    if(
+        activeTab ===
+        'summary'
+    ){
+
+        if(
+            !summaryData
+        ){
+
+            showMessage(
+                'Load the report first.'
+            );
+
+            return;
+        }
+
+
+        const s =
+            summaryData.summary ||
+            {};
+
+
+        const rows =
+            [
+
+                [
+                    'Daily Summary Report',
+                    date
+                ],
+
+                [
+                    'Revenue',
+                    s.revenue || 0
+                ],
+
+                [
+                    'Insurance',
+                    s.insurance_total || 0
+                ],
+
+                [
+                    'Patient Payable',
+                    s.patient_payable || 0
+                ],
+
+                [
+                    'Gross Total',
+                    s.gross_total || 0
+                ],
+
+                [
+                    'Discounts',
+                    s.total_discount || 0
+                ],
+
+                [
+                    'Patients',
+                    s.patient_count || 0
+                ],
+
+                [],
+
+                [
+                    'Insurance by Company',
+                    '',
+                    ''
+                ],
+
+                [
+                    'Company',
+                    'Amount',
+                    'Count'
+                ],
+
+                ...(
+                    summaryData.insurance ||
+                    []
+                )
+                .map(
+                    r => [
+                        r.insurance_name,
+                        r.amount,
+                        r.memo_count
+                    ]
+                ),
+
+                [],
+
+                [
+                    'Payment Methods',
+                    '',
+                    ''
+                ],
+
+                [
+                    'Method',
+                    'Amount',
+                    'Count'
+                ],
+
+                ...(
+                    summaryData.paymentMethods ||
+                    []
+                )
+                .map(
+                    r => [
+                        r.method_name,
+                        r.collected,
+                        r.memo_count
+                    ]
+                )
+            ];
+
+
+        saveCSV(
+            rows,
+            `daily-summary-${date}.csv`
+        );
+
+
+        return;
+    }
+
+
+    const rows =
+        [[
+
+            'Memo',
+
+            'Date',
+
+            'Patient ID',
+
+            'Services Gross',
+
+            'Insurance',
+
+            'Patient Pay',
+
+            'Collected',
+
+            'Pay Type',
+
+            'Disc.'
+
+        ]];
+
+
+    salesRows
+        .forEach(
+            row => {
+
+                rows.push([
+
+                    row.memo_no ||
+                    row.receipt_no,
+
+                    row.memo_date,
+
+                    row.patient_identifier,
+
+                    row.services_gross,
+
+                    row.insurance_total,
+
+                    row.patient_payable,
+
+                    row.paid_amount,
+
+                    row.payment_method_name,
+
+                    row.discount_amount
+
+                ]);
+            }
+        );
+
+
+    saveCSV(
+        rows,
+        `daily-detail-${date}.csv`
+    );
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+document.addEventListener(
+    'DOMContentLoaded',
+    () => {
+
+        $('reportDate')
+            .value =
+                localDate();
+
+
+        currentUser =
+            readCurrentUser();
+
+
+        if(
+            !currentUser ||
+            !currentUser.id
+        ){
+
+            showMessage(
+                'Login session was not found. Open the report from the dashboard after logging in.',
+                'info'
+            );
+
+            return;
+        }
+
+
+        loadReports();
+    }
 );
+
 </script>
+
 </body>
 </html>
